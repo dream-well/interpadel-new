@@ -14,6 +14,9 @@ module.exports = {
         "grey": "#4A4654",
         "grey-light": "#2C303A"
       },
+      fontFamily: {
+        Saira: ['Saira', 'sans-serif'],
+      }
     },
   },
   plugins: [],
