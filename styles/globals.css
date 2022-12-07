@@ -42,6 +42,10 @@ body {
   }
 }
 
+.rs-theme-dark {
+  --rs-text-secondary: white;
+}
+
 .rs-btn-primary {
   background-color: #3498ff;
   background-color: var(--rs-btn-primary-bg);

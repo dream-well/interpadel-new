@@ -101,11 +101,18 @@ function EasierForYou() {
           &nbsp;Easier For You
         </span>
       </div>
-      <div className='flex mt-[3.75rem]'>
-        <div>
-          <div className='w-[21.875rem] bg-grey-light h-[19rem] rounded-3xl'>
-
-          </div>
+      <div className='flex'>
+        <div className=' mt-[3.75rem]'>
+          <div className='rounded-full bg-grey-light border-dark border-[0.5rem] w-[6rem] h-[6rem]'></div>
+          <div className='w-[21.875rem] bg-grey-light h-[19rem] rounded-3xl'></div>
+        </div>
+        <div className=' mt-[3.75rem]'>
+          <div className='rounded-full bg-grey-light border-dark border-[0.5rem] w-[6rem] h-[6rem]'></div>
+          <div className='w-[21.875rem] bg-grey-light h-[19rem] rounded-3xl'></div>
+        </div>
+        <div className=' mt-[3.75rem]'>
+          <div className='rounded-full bg-grey-light border-dark border-[0.5rem] w-[6rem] h-[6rem]'></div>
+          <div className='w-[21.875rem] bg-grey-light h-[19rem] rounded-3xl'></div>
         </div>
       </div>
     </div>
