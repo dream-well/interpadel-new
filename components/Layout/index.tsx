@@ -13,8 +13,8 @@ export default function Layout({ children }) {
             }
             <div className='flex flex-col px-[8.5rem]'>
                 {children}
-                {showHeader && <Footer/> }
             </div>
+            {showHeader && <Footer/> }
         </div>
     )
 }
