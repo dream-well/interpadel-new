@@ -7,7 +7,7 @@ import { useAppSelector } from "store/hook";
 export default function Header({banner}) {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
     return (
-        <div className={cn('flex px-[8.5rem] bg-grey text-white', banner && 'h-[38rem] bg-[url(/images/banner.png)] bg-cover')}>
+        <div className={cn('flex flex-col px-[8.5rem] bg-grey text-white relative', banner && 'h-[38rem] bg-[url(/images/banner.png)] bg-cover')}>
             <div className='flex w-full justify-between h-[7.5rem]'>
                 <div className='flex items-center'>
                     <Link href={'/'}>
@@ -53,6 +53,9 @@ export default function Header({banner}) {
                         </div>
                     }
                 </div>
+            </div>
+            <div className='saira text-[4rem] mx-[12rem] absolute -translate-y-1/2 top-1/2 flex items-center text-center'>
+                Find where &amp; with whom to play Padel &amp; Tennis instantly
             </div>
         </div>
     )

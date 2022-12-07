@@ -7,7 +7,7 @@ export default function Layout({ children }) {
     const router = useRouter();
     const showHeader = !router.pathname.startsWith('/auth');
     return (
-        <div>
+        <div className='open-sans'>
             {
                 showHeader && 
                 <Header banner={router.pathname == '/home'}/>

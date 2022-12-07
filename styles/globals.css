@@ -2,13 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Saira&display=swap');
+
 html {
   font-size: 16px;
+  font-family: 'Saira';
+}
+
+.open-sans {
+  font-family: 'Open Sans';
+}
+
+.saira {
+  font-family: 'Saira';
 }
 
 body {
   font-size: unset;
   color: unset;
+  font-family: unset;
 }
 
 @media only screen and (max-width: 1900px) {
