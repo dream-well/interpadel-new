@@ -9,7 +9,7 @@ export default function Header({className=''}) {
         <div className={cn('flex items-center justify-between h-[7.5rem] px-[8.5rem] bg-grey text-white', className)}>
             <div className='flex items-center'>
                 <Link href={'/'}>
-                    <Image src='/images/logo.png' alt="logo" width="233" height="33"/>
+                    <img src='/images/logo.svg' alt="logo" className='h-[1.5rem] w-min'/>
                 </Link>
                 <ul className='ml-[5.5rem] flex space-x-12'>
                     {

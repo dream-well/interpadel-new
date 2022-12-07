@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Footer from "./Footer";
 import Header from "./Header";
+import cn from 'classnames';
 
 export default function Layout({ children }) {
     const router = useRouter();
@@ -11,7 +12,7 @@ export default function Layout({ children }) {
                 showHeader && 
                 <Header className={router.pathname == '/home' && 'bg-transparent'}/>
             }
-            <div className='flex flex-col px-[8.5rem]'>
+            <div className={cn('flex flex-col', showHeader && 'px-[8.5rem]')}>
                 {children}
             </div>
             {showHeader && <Footer/> }
