@@ -10,7 +10,7 @@ export default function Layout({ children }) {
         <div>
             {
                 showHeader && 
-                <Header className={router.pathname == '/home' && 'bg-transparent'}/>
+                <Header className={router.pathname == '/home' && '!bg-transparent'}/>
             }
             <div className={cn('flex flex-col', showHeader && 'px-[8.5rem]')}>
                 {children}

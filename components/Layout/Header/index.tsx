@@ -1,10 +1,11 @@
-import Image from "next/image";
 import { SelectPicker } from 'rsuite';
 import Link from "next/link";
-import { Button } from 'rsuite';
+import { Button, Badge } from 'rsuite';
 import cn from 'classnames'
+import { useAppSelector } from "store/hook";
 
 export default function Header({className=''}) {
+    const { firstname, lastname, image } = useAppSelector(state => state.auth);
     return (
         <div className={cn('flex items-center justify-between h-[7.5rem] px-[8.5rem] bg-grey text-white', className)}>
             <div className='flex items-center'>
@@ -30,12 +31,26 @@ export default function Header({className=''}) {
                     appearance='subtle'
                     cleanable={false}
                     searchable={false}
-                    className='w-[6.8rem]' 
+                    className='w-[7rem]' 
                 />
-                <Link href='/auth/login' className='ml-[2.5rem]'>Log in</Link>
-                <Button appearance="ghost" className='ml-[2.5rem] h-[3.5rem] w-[7.5rem] !border-green !text-green'>
-                    <Link href='/auth/login'>Sign Up</Link>
-                </Button>
+                {
+                    firstname ?
+                    
+                    <div className='flex items-center'>
+                        {firstname} {lastname}
+                        <div className='relative'>
+                            <img src={image} className='ml-3 w-[3rem] h-[3rem] rounded-full bg-white border'/>
+                            <Badge className='bg-green absolute right-0 bottom-1'/>
+                        </div>
+                    </div> :
+
+                    <div className='flex items-center'>
+                        <Link href='/auth/login' className='ml-[2.5rem]'>Log in</Link>
+                        <Button appearance="ghost" className='ml-[2.5rem] h-[3.5rem] w-[7.5rem] !border-green !text-green'>
+                            <Link href='/auth/login'>Sign Up</Link>
+                        </Button>
+                    </div>
+                }
             </div>
         </div>
     )
