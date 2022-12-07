@@ -11,7 +11,7 @@ export default function Layout({ children }) {
                 showHeader && 
                 <Header className={router.pathname == '/home' && 'bg-transparent'}/>
             }
-            <div className='flex flex-col px-[5rem]'>
+            <div className='flex flex-col px-[8.5rem]'>
                 {children}
                 {showHeader && <Footer/> }
             </div>
