@@ -6,29 +6,25 @@ import { Button } from 'rsuite';
 
 export default function Header() {
     return (
-        <div className='font-bold flex h-[100px] items-center justify-center'>
-            <Link href={'/'}>
-                <Image src='/images/logo.webp' alt="logo" width="233" height="33"/>
-            </Link>
-            <InputGroup inside className='ml-[100px] !w-[200px] rounded-full px-[10px] flex'>
-                <InputGroup.Button>
-                    <SearchIcon />
-                </InputGroup.Button>
-                <Input placeholder="Search" className='!outline-none'/>
-            </InputGroup>
-            <ul className='ml-[40px] flex space-x-4'>
-                {
-                    menus.map((menu, i) => (
-                        <li key={i}>
-                            <Link href={menu.href}>
-                                {menu.title}
-                            </Link>
-                        </li>
-                    ))
-                }
-            </ul>
-            <Button appearance="ghost" className='!text-[#0f0e36] !border-[#0f0e36] rounded-full ml-[40px] border-[2px] !font-bold'>
-                <Link href='/auth/login'>Login/Register</Link>
+        <div className='flex items-center justify-between h-[7.5rem] px-[8.5rem] bg-grey'>
+            <div className='flex items-center'>
+                <Link href={'/'}>
+                    <Image src='/images/logo.png' alt="logo" width="233" height="33"/>
+                </Link>
+                <ul className='ml-[5.5rem] flex space-x-12 text-white'>
+                    {
+                        menus.map((menu, i) => (
+                            <li key={i}>
+                                <Link href={menu.href}>
+                                    {menu.title}
+                                </Link>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+            <Button appearance="ghost" className='h-[3.5rem] w-[7.5rem] !border-green !text-green'>
+                <Link href='/auth/login'>Sign Up</Link>
             </Button>
         </div>
     )
