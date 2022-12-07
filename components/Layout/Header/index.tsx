@@ -29,6 +29,7 @@ export default function Header({className=''}) {
                     defaultValue={'en'} 
                     appearance='subtle'
                     cleanable={false}
+                    searchable={false}
                     className='w-[6.8rem]' 
                 />
                 <Link href='/auth/login' className='ml-[2.5rem]'>Log in</Link>
