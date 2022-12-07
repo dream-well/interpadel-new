@@ -7,7 +7,7 @@ export default function Footer() {
                 <div className='flex flex-col'>
                     <img src='/images/logo.png' className='h-[1.5rem] w-min'/>
                     <span className='text-light mt-[2.5rem]'>
-                        For us, it's about offering Padel for everyone! 
+                        For us, it&apos;s about offering Padel for everyone! 
                         We want to cultivate an environment and create enthusiasm for the sport throughout the country. 
                         Our goal is to become a leading padel chain in Norway.
                     </span>
