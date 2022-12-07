@@ -7,7 +7,10 @@ export default function Layout({ children }) {
     const showHeader = !router.pathname.startsWith('/auth');
     return (
         <div>
-            {showHeader && <Header/>}
+            {
+                showHeader && 
+                <Header className={router.pathname == '/home' && 'bg-transparent'}/>
+            }
             <div className='flex flex-col px-[5rem]'>
                 {children}
                 {showHeader && <Footer/> }
