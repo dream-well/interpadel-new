@@ -1,6 +1,6 @@
-import { Dropdown, SelectPicker, Whisper, Popover } from 'rsuite';
+import { SelectPicker } from 'rsuite';
 import Link from "next/link";
-import { Button, Badge } from 'rsuite';
+import { Button } from 'rsuite';
 import cn from 'classnames'
 import { useAppSelector } from "store/hook";
 import DropDownMenu from './DropDownMenu';
@@ -8,7 +8,7 @@ import DropDownMenu from './DropDownMenu';
 export default function Header({banner}) {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
     return (
-        <div className={cn('flex flex-col px-[8.5rem] bg-grey text-white relative', banner && 'h-[38rem] bg-[url(/images/banner.png)] bg-cover')}>
+        <div className={cn('flex flex-col px-[8.5rem] bg-dark text-white relative', banner && 'h-[38rem] bg-[url(/images/banner.png)] bg-cover')}>
             <div className='flex w-full justify-between h-[7.5rem]'>
                 <div className='flex items-center'>
                     <Link href={'/'}>
