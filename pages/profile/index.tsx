@@ -5,43 +5,46 @@ import CalendarIcon from '@rsuite/icons/Calendar';
 import LocationIcon from '@rsuite/icons/Location';
 import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
 import MinusIcon from '@rsuite/icons/Minus';
+import { useAppSelector } from 'store/hook';
 
 export default function Profile() {
-  return (
-    <div className='flex flex-col my-[6rem] space-y-[3rem]'>
-        <Summary
-            name='Tobias Ribba'
-            avatar='images/profile/avatar.png'
-            rate={5.0}
-        />
-        <div className='flex justify-between space-x-[3.813rem]'>
-            {/* left space */}
-            <div className='flex flex-col space-y-[2.5rem] w-[18.75rem]'>
-                <Collection name='Favorite Venues'>
-                    {favoriteVenues.map((favoriteVenue, key) =>(
-                        <FavoriteCard {...favoriteVenue} key={key}/>
-                    ))}
-                </Collection>
-                <Collection name='Memberships'>
-                    <span className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-                        You're not a member at any venue.
-                    </span>
-                </Collection>
-                <Collection name='Matching Players'>
-                    {matchingPlayers.map((matching, key) =>(
-                        <MatchingCard {...matching} key={key}/>
-                    ))}
-                </Collection>
-            </div>
-            {/* right space */}
-            <div className='flex flex-col space-y-[2.5rem] flex-grow'>
-                <UpcomingBooking />
-                <UpcomingActivity />
-                <TeamMembers />
+    const { firstname, lastname, image } = useAppSelector(state => state.auth);
+    
+    return (
+        <div className='flex flex-col my-[6rem] space-y-[3rem]'>
+            <Summary
+                name={firstname + ' ' + lastname}
+                avatar={image}
+                rate={5.0}
+            />
+            <div className='flex justify-between space-x-[3.813rem]'>
+                {/* left space */}
+                <div className='flex flex-col space-y-[2.5rem] w-[18.75rem]'>
+                    <Collection name='Favorite Venues'>
+                        {favoriteVenues.map((favoriteVenue, key) =>(
+                            <FavoriteCard {...favoriteVenue} key={key}/>
+                        ))}
+                    </Collection>
+                    <Collection name='Memberships'>
+                        <span className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
+                            You're not a member at any venue.
+                        </span>
+                    </Collection>
+                    <Collection name='Matching Players'>
+                        {matchingPlayers.map((matching, key) =>(
+                            <MatchingCard {...matching} key={key}/>
+                        ))}
+                    </Collection>
+                </div>
+                {/* right space */}
+                <div className='flex flex-col space-y-[2.5rem] flex-grow'>
+                    <UpcomingBooking />
+                    <UpcomingActivity />
+                    <TeamMembers />
+                </div>
             </div>
         </div>
-    </div>
-  )
+    )
 }
 
 const Summary = ({name, avatar, rate}) => {
@@ -52,7 +55,7 @@ const Summary = ({name, avatar, rate}) => {
                     <Badge content={rate.toFixed(1)} color={'green'}>
                         <Avatar src={avatar} alt='User Avatar' circle size='lg' className='w-[7.5rem] h-[7.5rem]' />
                     </Badge>
-                    <span className='font-bold text-[2.625rem] text-white'>{name}</span>
+                    <span className='font-bold text-[2.5rem] ml-2 text-white'>{name}</span>
                 </div>
                 <div className='flex flex-col rounded-3xl border-grey border-2 p-[2.5rem] space-y-[1rem]'>
                     <span className='font-bold text-white text-[1.5rem]'>Your next booking</span>
