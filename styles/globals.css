@@ -58,7 +58,7 @@ body {
 .rs-theme-dark {
   --rs-text-secondary: white;
   --rs-menuitem-active-bg: #1D1829;
-  --rs-bg-overlay: #1D1829;
+  /* --rs-bg-overlay: #1D1829; */
 }
 
 .rs-btn-primary {

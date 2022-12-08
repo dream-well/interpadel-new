@@ -18,7 +18,7 @@ module.exports = {
         "red": "#F63333",
       },
       fontFamily: {
-        Saira: ['Saira', 'sans-serif'],
+        saira: ['saira', 'sans-serif'],
       }
     },
   },

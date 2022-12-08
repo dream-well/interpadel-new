@@ -11,6 +11,7 @@ export default function Layout({ children }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const showHeader = !router.pathname.startsWith('/auth');
+    const isHome = router.pathname == '/home';
     
     useEffect(() => {
         const access_token = localStorage.getItem('access_token');
@@ -29,9 +30,9 @@ export default function Layout({ children }) {
         <div className='open-sans'>
             {
                 showHeader && 
-                <Header banner={router.pathname == '/home'}/>
+                <Header banner={isHome}/>
             }
-            <div className={cn('flex flex-col', showHeader && 'px-[8.5rem]')}>
+            <div className={cn('flex flex-col', showHeader && !isHome && 'px-[8.5rem]')}>
                 {children}
             </div>
             {showHeader && <Footer/> }
