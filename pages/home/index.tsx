@@ -23,21 +23,21 @@ export default function Home() {
 
 function Search() {
   return (
-    <div className="absolute left-[8.5rem] right-[8.5rem] rs-theme-light flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white p-[2rem] space-x-[2rem] font-saira">
+    <div className="absolute left-[8.5rem] right-[8.5rem] rs-theme-light flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white py-[2rem] space-x-[2rem] font-saira px-20">
       <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full">
-        <div className="font-semibold text-xl mb-[0.5rem]">Address</div>
+        <div className="font-semibold text-xl mb-[0.5rem] w-[30rem]">Address</div>
         <Input
           placeholder="Address, club name, city..."
           className="border-none"
         />
       </div>
-      <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full">
+      <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col">
         <div className="font-semibold text-xl mb-[0.5rem]">Date & Time</div>
-        <DatePicker className="w-full border-none" />
+        <DatePicker appearance="subtle"/>
       </div>
-      <div className="justify-center items-center flex w-full">
-        <Button appearance="primary" className="!bg-green !text-black">
-          Search <SearchIcon />
+      <div className="justify-center items-center flex">
+        <Button appearance="primary" className="!bg-green !text-black h-[3.75rem] px-8">
+          Search<SearchIcon className="ml-2"/>
         </Button>
       </div>
     </div>
