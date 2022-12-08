@@ -5,13 +5,13 @@ import LocationIcon from '@rsuite/icons/Location';
 import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
 import Link from 'next/link';
 
-export default function Matching() {
+export default function Favorites() {
     const [activePage, setActivePage] = useState(1)
 
     return (
         <div className='flex flex-col space-y-[3.5rem] my-[4.375rem]'>
-            <span className='flex text-[3rem] font-bold saria justify-center'>Your Favorite List</span>
-            <Favorites favorites={favorites} />
+            <span className='flex text-[3rem] font-bold saira justify-center'>Your Favorite List</span>
+            <FavoritesSection favorites={favorites} />
             <Paginator
                 activePage={activePage}
                 setActivePage={setActivePage}
@@ -62,8 +62,8 @@ const favorites = [
 const FavoriteCard = ({avatar, name, location, bookableCourts, description}) => (
     <div className='flex text-white items-center'>
         <img src={avatar} alt='Center' className='w-[16.875rem] h-[16.875rem] rounded-4 absolute justify-start' />
-        <div className='flex flex-col flex-grow bg-dark px-[5.5rem] py-[3rem] space-y-[1rem] ml-[13.25rem]'>
-            <span className='text-[2rem] font-bold saria'>{name}</span>
+        <div className='flex flex-col flex-grow bg-dark px-[7rem] py-[3rem] space-y-[1rem] ml-[13.25rem]'>
+            <span className='text-[2rem] font-bold saira'>{name}</span>
             <span>{description}</span>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
@@ -81,7 +81,7 @@ const FavoriteCard = ({avatar, name, location, bookableCourts, description}) => 
     </div>
 )
 
-const Favorites = ({ favorites }) => {
+const FavoritesSection = ({ favorites }) => {
     return (
         <div className='flex flex-col space-y-[2.5rem]'>
             {favorites.map((favorite, i) => (
