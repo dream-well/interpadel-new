@@ -8,31 +8,31 @@ import { useState } from 'react';
 export default function Home() {
   return (
     <div>
-      <Search />
-      <SectionText />
-      <Section />
+      <Search       />
+      <SectionText  />
+      <Section      />
       <EasierForYou />
       <Trustedbythousands />
-      <Testimonial />
-      <Download />
-      <FAQ />
-      <GetStarted />
+      <Testimonial  />
+      <Download     />
+      <FAQ          />
+      <GetStarted   />
     </div>
   )
 }
 
 function Search() {
   return (
-    <div className="absolute left-[8.5rem] right-[8.5rem] rs-theme-light flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white p-[2.5rem] space-x-[2rem]">
-      <div className='rounded-2xl border px-[1.5rem] py-[1rem] flex-col grow'>
+    <div className="absolute left-[8.5rem] right-[8.5rem] rs-theme-light flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white p-[2rem] space-x-[2rem] font-saira">
+      <div className='rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full'>
         <div className="font-semibold text-xl mb-[0.5rem]">Address</div>
-        <Input placeholder='Address, club name, city...' className='text-base'/>
+        <Input placeholder='Address, club name, city...' className='border-none'/>
       </div>
-      <div className='rounded-2xl border px-[1.5rem] py-[1rem] flex-col grow'>
+      <div className='rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full'>
         <div className="font-semibold text-xl mb-[0.5rem]">Date & Time</div>
-        <DatePicker />
+        <DatePicker className='w-full border-none'/>
       </div>
-      <div className='justify-center items-center flex grow'>
+      <div className='justify-center items-center flex w-full'>
         <Button appearance='primary' className='!bg-green !text-black'>Search <SearchIcon/></Button>
       </div>
     </div>
@@ -82,7 +82,7 @@ function Section() {
           key % 2 == 0 ?
           <div className='text-white flex my-[2.5rem] px-[8.5rem]' key={key}>
             <img src={item.url} className="w-[48.125rem] h-[31.25rem]"></img>
-            <div className='bg-dark rounded-3xl pt-[2rem] px-[4rem] pb-[3rem] h-[18rem] -ml-[5rem] mt-[6rem]'>
+            <div className='bg-dark rounded-3xl pt-[2rem] px-[4rem] pb-[3rem] h-[18rem] -ml-[6.25rem] mt-[6rem] w-[35.625rem]'>
               <div className='flex justify-between'>
                 <div className='font-saira text-[2rem] font-semibold'>{item.name}</div>
                 <img src="/images/home/Direction.png"></img>
@@ -99,7 +99,7 @@ function Section() {
           </div>
           :
           <div className='text-white flex my-[2.5rem] px-[8.5rem]' key={key}>
-            <div className='z-10 bg-dark rounded-3xl pt-[2rem] px-[4rem] pb-[3rem] h-[18rem] mt-[6rem]'>
+            <div className='z-10 bg-dark rounded-3xl pt-[2rem] px-[4rem] pb-[3rem] h-[18rem] mt-[6rem] w-[35.625rem]'>
               <div className='flex justify-between'>
                 <div className='font-saira text-[2rem] font-semibold'>{item.name}</div>
                 <img src="/images/home/Direction.png"></img>
@@ -113,7 +113,7 @@ function Section() {
                 <Button appearance='primary' className='!bg-green !text-black w-full h-[2.5rem]'>Book Now</Button>
               </div>
             </div>
-            <img src={item.url} className='-ml-[5rem] w-[48.125rem] h-[31.25rem]'></img>
+            <img src={item.url} className='-ml-[6.25rem] w-[48.125rem] h-[31.25rem]'></img>
           </div>
         ))
       }
@@ -267,7 +267,6 @@ function FAQ() {
       answer: "Customer satisfaction is important to us. We aim to provide you with a pleasant customer service experience process. We offer a one month risk free service."
     }
   ];
-  const [isOpen, onisOpen] = useState(1);
   return (
     <div className="flex flex-col items-center justify-center">
       <div className='text-[3rem] font-semibold mt-[8.75rem] font-saira'>
@@ -283,16 +282,7 @@ function FAQ() {
         <div>
             {
               data.map((item, key) => (
-                <div className='w-[41.875rem] mb-6'>
-                  <div key={key} className="font-saira font-semibold rounded-xl hover:bg-dark hover:text-white bg-light h-[4.875rem] flex items-center px-[2rem]  mb-[1rem]">
-                    <MinusIcon className='mr-4'/>{item.question}
-                  </div>
-                  { isOpen &&
-                    <div className='px-[2rem]'>
-                      {item.answer}
-                    </div>
-                  }
-                </div>
+                <Accordion question={item.question} answer={item.answer} isOpenType={key == 0 ? true : false} key={key}/>
               ))
             }
         </div>
@@ -300,10 +290,27 @@ function FAQ() {
     </div>
   );
 }
+function Accordion({question, answer, isOpenType}) {
+  const [isOpen, onisOpen] = useState(isOpenType);
+  return (
+    <div className='w-[41.875rem] mb-6'>
+      <div className="font-saira font-semibold rounded-xl hover:bg-dark hover:text-white bg-light h-[4.875rem] flex items-center px-[2rem]  mb-[1rem]" onClick={() => onisOpen(!isOpen)}>
+        {isOpen && <MinusIcon className='mr-4'/>}
+        {isOpen || <PlusIcon className='mr-4'/>}
+        {question}
+      </div>
+      {isOpen &&
+      <div className='px-[2rem] duration-1000 transition ease-in-out'>
+        {answer}
+      </div>
+}
+    </div>
+  );
+}
 
 function GetStarted() {
   return (
-    <div className='bg-dark text-white flex mt-[16rem] mx-[8.5rem] py-[3rem] rounded-3xl mb-[8.75rem]'>
+    <div className='bg-dark text-white flex mt-[16rem] mx-[8.5rem] pt-[3rem] rounded-3xl mb-[8.75rem]'>
       <img src="images/home/getstarted.png" className='-mt-[7.3rem] ml-8 w-[26rem] h-[35.625rem]'/>
       <div className='flex flex-col ml-8'>
         <div className='font-semibold text-[3rem] font-saira'>Your data security is our first priority, explore now!</div>
