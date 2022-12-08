@@ -1,9 +1,12 @@
 import { axios, fetcher } from "utils/helpers";
-import { Button, DatePicker, Modal, Placeholder, SelectPicker } from "rsuite";
+import { Button, DatePicker, Modal, Placeholder, Radio, RadioGroup, SelectPicker } from "rsuite";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import moment from "moment";
 import React, { useState } from "react";
+import TimeIcon from '@rsuite/icons/Time';
+import styles from './Center.module.scss';
+import cn from 'classnames';
 
 export default function Center() {
   
@@ -81,22 +84,46 @@ function SlotTable({ openAt, hours = 0, courts = [] }) {
           }
         </tbody>
       </table>
-      <DurationSelector open={open} setOpen={setOpen} />
+      <DurationDialog open={open} setOpen={setOpen} />
     </div>
   )
 }
 
-function DurationSelector({ open, setOpen}) {
+function DurationDialog({ open, setOpen}) {
+  const [duration, setDuration] = useState(1);
+  const router = useRouter();
+  const gotoPayment = () => {
+    router.push('/payment');
+  }
   return (
-    <Modal open={open} onClose={() => setOpen(false)}>
-      <Modal.Header className=''>
-        <Modal.Title>Court1</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className='bg-dark h-[2.8rem] rounded-[0.75rem]'>
-
+    <Modal open={open} onClose={() => setOpen(false)} size='xs' dialogClassName={styles.durationSelector}>
+      <Modal.Header as={() => (
+        <div className='w-full flex justify-between text-white'>
+            <span>Court1</span>
+            <span className='flex items-center'>
+              <TimeIcon className='text-[1.2rem] mr-1'/>
+              14:00
+            </span>
         </div>
+      )}/>
+      <Modal.Body className='space-y-5'>
+        <DurationSelector duration={duration} setValue={setDuration} value={1} />
+        <DurationSelector duration={duration} setValue={setDuration} value={1.5} />
+        <DurationSelector duration={duration} setValue={setDuration} value={2} />
+        <Button color='green' className='bg-green w-full text-dark' onClick={gotoPayment}>Continue-${duration * 8 + 0.4}</Button>
       </Modal.Body>
     </Modal>
+  )
+}
+
+function DurationSelector({ value, setValue, duration }) {
+  return (
+    <button 
+      className={cn('w-full bg-grey-light h-[2.8rem] rounded-[0.75rem] text-white flex items-center justify-between px-4', duration == value && 'opacity-50')}
+      onClick={() => setValue(value)}
+    >
+      <span>{Math.floor(value)}h {60 * (value - Math.floor(value))}min</span>
+      <span>${value * 8}</span>
+    </button> 
   )
 }
