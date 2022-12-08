@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Avatar, Button, Form, Pagination, Progress, SelectPicker } from 'rsuite'
 import AbTestIcon from '@rsuite/icons/AbTest';
 import LocationIcon from '@rsuite/icons/Location';
@@ -7,19 +7,26 @@ import Link from 'next/link';
 import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
 
+const ROW_PER_PAGE = 3;
+
 export default function Favorites() {
 
     const [activePage, setActivePage] = useState(1)
+    const [favorites, setFavorites] = useState([])
     const {data, error} = useSWR('/api/centers/favourite', fetcher);
+
+    useEffect(() => {        
+        setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+    }, [activePage])
     
     return (
         <div className='flex flex-col space-y-[3.5rem] my-[4.375rem]'>
             <span className='flex text-[3rem] font-bold saira justify-center'>Your Favorite List</span>
-            <FavoritesSection favorites={data} />
+            <FavoritesSection favorites={favorites} />
             <Paginator
                 activePage={activePage}
                 setActivePage={setActivePage}
-                rows={100}
+                rows={data?.length}
             />
         </div>
     )
@@ -69,7 +76,7 @@ const Paginator = ({activePage, setActivePage, rows}) => {
             first
             size="lg"
             total={rows}
-            limit={10}
+            limit={ROW_PER_PAGE}
             activePage={activePage}
             onChangePage={setActivePage}
         />
