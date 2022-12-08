@@ -13,7 +13,6 @@ export default function Favorites() {
     const [favorites, setFavorites] = useState([])
 
     const {data, error, mutate} = useSWR('/api/profile/favorite-centers', fetcher);
-    console.log(data);
     
     const toaster = useToaster();
 
@@ -28,8 +27,6 @@ export default function Favorites() {
     }, [activePage, data])
 
     const handleRemove = (id) => {
-        console.log(`removing favorite ${id}...`);
-        
         axios.delete(
             `/api/profile/favorite-centers/${id}`, 
         ).then(data => {
