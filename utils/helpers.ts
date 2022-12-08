@@ -1,5 +1,5 @@
 import axios from 'axios';
-/* eslint-disable */
+import jwt from 'jsonwebtoken';
 
 export const post = async (data: { key: string; }, url: string) => {
   const response = await axios.post(url, data).catch((err) => err.response);
@@ -59,6 +59,11 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use((res) => res.data);
 
+export function is_valid_access_token(access_token) {
+  const data = jwt.decode(access_token);
+  console.log(data);
+  return true;
+}
 
 export {
   axios

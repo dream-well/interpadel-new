@@ -32,7 +32,7 @@ export default function Header({banner}) {
                         appearance='subtle'
                         cleanable={false}
                         searchable={false}
-                        className='w-[7rem]' 
+                        className='w-[7rem] mr-2' 
                     />
                     {
                         firstname ?
@@ -54,7 +54,7 @@ export default function Header({banner}) {
                     }
                 </div>
             </div>
-            <div className='saira text-[4rem] mx-[12rem] absolute -translate-y-1/2 top-1/2 flex items-center text-center'>
+            <div className='saira font-bold text-[4rem] mx-[12rem] absolute -translate-y-1/2 top-1/2 flex items-center text-center'>
                 Find where &amp; with whom to play Padel &amp; Tennis instantly
             </div>
         </div>
