@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Avatar, Button, Form, Progress, SelectPicker } from 'rsuite'
+import { Avatar, Button, Form, Pagination, Progress, SelectPicker } from 'rsuite'
 import SearchIcon from '@rsuite/icons/Search';
 import LocationIcon from '@rsuite/icons/Location';
 import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
@@ -23,9 +23,10 @@ export default function Matching() {
             />
             <Matchings matchings={matchings}
             />
-            <Pagination
+            <Paginator
                 activePage={activePage}
                 setActivePage={setActivePage}
+                rows={100}
             />
         </div>
     )
@@ -186,8 +187,18 @@ const Matchings = ({ matchings }) => {
         </div>
     )
 }
-const Pagination = ({activePage, setActivePage}) => {
+const Paginator = ({activePage, setActivePage, rows}) => {
     return (
-        <div>Pagination</div>
+        <Pagination className='flex justify-center'
+            prev
+            last
+            next
+            first
+            size="lg"
+            total={rows}
+            limit={10}
+            activePage={activePage}
+            onChangePage={setActivePage}
+        />
     )
 }
