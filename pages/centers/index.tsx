@@ -1,6 +1,8 @@
 import LocationIcon from "@rsuite/icons/Location";
 import { Input, Button, DatePicker, InputPicker } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
+import cn from "classnames";
+
 export default function Centers() {
   return (
     <div className="rs-theme-light">
@@ -16,7 +18,7 @@ function Search() {
       <div className="flex mt-[6.25rem] justify-between">
         <InputPicker
           placeholder="In/out condition"
-          className="border-none w-[20rem]"
+          className="w-[20rem]"
           data={[]}
         />
         <Input placeholder="Find venue, city..." className="w-[20rem]" />
@@ -24,9 +26,9 @@ function Search() {
         <div>
           <Button
             appearance="primary"
-            className="!bg-green !text-black h-[2rem] w-[9rem]"
+            className="!bg-green !text-black h-[3rem] w-[9rem]"
           >
-            Search <SearchIcon />
+            Search <SearchIcon className="ml-2"/>
           </Button>
         </div>
       </div>
@@ -42,8 +44,8 @@ function Body() {
       </div>
       <div className="flex flex-wrap justify-between">
         {data.map((item, key) => (
-          <div key={key} className="mb-[1.5rem] flex flex-col grow mx-4">
-            <img src="images/centers/01.png" />
+          <div key={key} className="mb-[1.5rem] flex flex-col mx-2">
+            <img src="images/centers/01.png" className="w-[22rem]"/>
             <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
               <div className="font-Saira text-[1.75rem] font-semibold">
                 Sanset Padel
