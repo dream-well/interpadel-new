@@ -47,20 +47,18 @@ function CenterList({centers = []}) {
       </div>
       <div className="flex flex-wrap w-full">
         {centers.map((center, key) => (
-          // <Link key={key} href={`/centers/${center._id}`}>
-            <div className="mb-[1.5rem] flex flex-col px-4 w-1/3">
-              <img src={center.image} className='h-[20rem] object-center object-cover'/>
-              <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
-                <div className="saira text-[1.75rem] font-semibold">
-                  {center.name}
-                </div>
-                <div>
-                  <LocationIcon />
-                  Helsingborg
-                </div>
+          <Link key={key} href={`/centers/${center._id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
+            <img src={center.image} className='h-[20rem] object-center object-cover'/>
+            <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
+              <div className="saira text-[1.75rem] font-semibold">
+                {center.name}
+              </div>
+              <div>
+                <LocationIcon />
+                Helsingborg
               </div>
             </div>
-          // </Link>
+          </Link>
         ))}
       </div>
     </div>

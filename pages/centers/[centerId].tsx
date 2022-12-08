@@ -13,8 +13,9 @@ export default function Center() {
   const router = useRouter();
   const { centerId } = router.query;
   const { data: center } = useSWR(centerId ? `/api/centers/${centerId}` : null, fetcher);
-  const closeAt = moment.duration(center?.closeAt).hours();
-  const openAt = moment.duration(center?.openAt).hours();
+  let closeAt = moment.duration(center?.closeAt).hours();
+  let openAt = moment.duration(center?.openAt).hours();
+  if(center?.closeAt == '24:00:00') closeAt = 24;
   const hours = closeAt - openAt;
 
   return (
