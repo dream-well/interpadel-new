@@ -1,11 +1,38 @@
 import PaymentCard from "components/PaymentCard";
+import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import { axios } from "utils/helpers";
+
+const stripePromise = loadStripe(process.env.STRIPE_KEY);
+
+console.log('stripe key', process.env.STRIPE_KEY);
 
 export default function Payment() {
+  const [clientSecret, setClientSecret] = useState("");
+
+  useEffect(() => {
+    // Create PaymentIntent as soon as the page loads
+    axios.post("/api/payments", {})
+      .then((data:any) => {
+        console.log(data);
+        if(data)
+          setClientSecret(data.client_secret)
+      });
+  }, []);
+
+  console.log('client secret', clientSecret);
+
   return (
     <div className='py-[6rem] flex space-x-8 text-light'>
       <div className='bg-dark p-10 rounded-[1.5rem] w-1/2 flex flex-col h-min'>
-        <span className='text-[2rem] text-white'>Payment data</span>
-        <PaymentCard />
+        <span className='text-[2rem] text-white mb-[1.5rem]'>Payment data</span>
+        {
+          clientSecret &&
+          <Elements options={{clientSecret: clientSecret, appearance: { theme: 'night', labels: 'floating'}}} stripe={stripePromise}>
+            <PaymentCard />
+          </Elements>
+        }
       </div>
       <div className='bg-dark p-10 rounded-[1.5rem] w-1/2 flex flex-col'>
         <InformationCard />
