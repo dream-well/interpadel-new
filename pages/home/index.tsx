@@ -1,9 +1,10 @@
 import {Input, InputPicker, DatePicker, Button} from 'rsuite';
 import SearchIcon from '@rsuite/icons/Search';
+import LocationIcon from '@rsuite/icons/Location';
 
 export default function Home() {
   return (
-    <>
+    <div className='rs-theme-light'>
       <Search />
       <SectionText />
       <Section type="left" url="/images/home/book1.png"/>
@@ -15,14 +16,14 @@ export default function Home() {
       <Download />
       <FAQ />
       <GetStarted />
-    </>
+    </div>
   )
 }
 
 function Search() {
   const data = ["padel1", "padel2"].map(item => ({label: item, value: item}));
   return (
-    <div className="flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white p-[2.5rem]">
+    <div className="flex justify-between rounded-3xl shadow-2xl h-[11rem] -mt-[5.5rem] bg-white p-[2.5rem]">
       <div className='rounded-2xl border px-[1.5rem] py-[1rem]'>
         <div className="font-semibold text-[1.25rem] mb-[0.5rem]">Address</div>
         <Input placeholder='Address, club name, city...' className='text-[1rem]'/>
@@ -33,7 +34,7 @@ function Search() {
       </div>
       <div className='rounded-2xl border px-[1.5rem] py-[1rem]'>
         <div className="font-semibold text-[1.25rem] mb-[0.5rem]">Date & Time</div>
-        <DatePicker />
+        <DatePicker/>
       </div>
       <div className='justify-center items-center flex'>
         <Button appearance='primary' className='!bg-green !text-black'>Search <SearchIcon/></Button>
@@ -57,37 +58,37 @@ function SectionText() {
 function Section(props) {
   return(
     props.type == "left" ? 
-  <div className='text-white flex my-[2.5rem]'>
+    <div className='text-white flex my-[2.5rem]'>
       <img src={props.url}></img>
-      <div className='bg-dark rounded-3xl pt-[2.625rem] px-[6.25rem] pb-[3rem] h-[18.75rem] -ml-[10.625rem] mt-[6.25rem]'>
+      <div className='bg-dark rounded-3xl pt-[1.5rem] px-[6.25rem] pb-[3rem] h-[15rem] -ml-[10.625rem] mt-[6.25rem]'>
         <div className='flex justify-between'>
           <div className='font-Saira text-[2rem] font-semibol'>Sanset Padel</div>
           <img src="/images/home/Direction.png"></img>
         </div>
-        <div className='font-sans text-[1.25rem] font-normal mt-[1rem]'>Olympisch Stadion 23, Amsterdam</div>
-        <div className='flex mt-[1rem]'>
+        <div className='font-sans text-[1.25rem] font-normal mt-[1rem]'><LocationIcon/> &nbsp;Olympisch Stadion 23, Amsterdam</div>
+        <div className='flex mt-[0.5rem]'>
           <div className='text-[#869300]'>Open</div>
-          <div className='ml-[1rem]'>Cloese 11pm</div>
+          <div className='ml-[0.5rem]'>Cloese 11pm</div>
         </div>
-        <div className='mt-[1.5rem]'>
-          <Button appearance='primary' className='!bg-green !text-black w-full h-[3.75rem]'>Book Now</Button>
+        <div className='mt-[1rem]'>
+          <Button appearance='primary' className='!bg-green !text-black w-full h-[3rem]'>Book Now</Button>
         </div>
       </div>
     </div>
     :
     <div className='text-white flex my-[2.5rem]'>
-      <div className='bg-dark rounded-3xl z-10 pt-[2.625rem] px-[6.25rem] pb-[3rem] h-[18.75rem] mt-[6.25rem]'>
+      <div className='z-10 bg-dark rounded-3xl pt-[1.5rem] px-[6.25rem] pb-[3rem] h-[15rem] -ml-[10.625rem] mt-[6.25rem]'>
         <div className='flex justify-between'>
           <div className='font-Saira text-[2rem] font-semibol'>Sanset Padel</div>
           <img src="/images/home/Direction.png"></img>
         </div>
         <div className='font-sans text-[1.25rem] font-normal mt-[1rem]'>Olympisch Stadion 23, Amsterdam</div>
-        <div className='flex mt-[1rem]'>
+        <div className='flex mt-[0.5rem]'>
           <div className='text-[#869300]'>Open</div>
-          <div className='ml-[1rem]'>Cloese 11pm</div>
+          <div className='ml-[0.5rem]'>Cloese 11pm</div>
         </div>
-        <div className='mt-[1.5rem]'>
-          <Button appearance='primary' className='!bg-green !text-black w-full h-[3.75rem]'>Book Now</Button>
+        <div className='mt-[1rem]'>
+          <Button appearance='primary' className='!bg-green !text-black w-full h-[3rem]'>Book Now</Button>
         </div>
       </div>
       <img src={props.url} className='-ml-[10.625rem] '></img>
@@ -123,11 +124,11 @@ function EasierForYou() {
         {
           data.map((item, key) => (
             <div className='mt-[3.75rem] w-[23.125rem] flex flex-col justify-center items-center' key={key}>
-              <div className='z-10 rounded-full bg-grey-light border-dark border-[0.5rem] w-[6rem] h-[6rem] text-green flex items-center justify-center text-[3rem] font-semibold'>
+              <div className='z-10 rounded-full font-Saira bg-grey-light border-dark border-[0.5rem] w-[6rem] h-[6rem] text-green flex items-center justify-center text-[3rem] font-semibold'>
                 {"0"}{key + 1}
               </div>
               <div className=' bg-grey-light h-[19rem] rounded-3xl -mt-[3rem] flex flex-col justify-center items-center px-[1.75rem]'>
-                <div className='text-white text-[1.75rem] font-semibold mb-[1rem]'>{item.title}</div>
+                <div className='text-white text-[1.5rem] font-semibold mb-[1rem] font-Saira'>{item.title}</div>
                 <div className='text-white text-[1rem] font-normal text-center'>{item.text}</div>
               </div>
             </div>
@@ -142,7 +143,7 @@ function Trustedbythousands() {
   return (
     <div className='bg-green text-black py-[5rem]'>
       <div className='flex justify-between'>
-        <div className='text-[3rem] font-semibold'>
+        <div className='text-[3rem] font-semibold font-Saira'>
           Trusted by thousands
         </div>
         <div className='flex items-center space-x-[1.5rem]'>
@@ -185,7 +186,7 @@ function Testimonial() {
       </div>
       <div className='py-[7.5rem] pl-[13.375rem] pr-[2.75rem] text-white bg-dark -ml-[10.625rem] flex flex-col w-[45rem]'>
         <div>Testimonial</div>
-        <div className='text-[3rem] font-semibold'>Our Customer Says</div>
+        <div className='text-[3rem] font-semibold font-Saira'>Our Customer Says</div>
         <div>
           <img src="images/home/qutesMark.png"/>
         </div>
@@ -208,7 +209,7 @@ function Download() {
   return(
     <div className='flex bg-dark text-white py-[1.5rem]'>
       <div className='flex justify-center flex-col'>
-        <div className='font-semibold text-[3rem]'>Download our mobile app</div>
+        <div className='font-semibold text-[3rem] font-Saira'>Download our mobile app</div>
         <div className='w-[28.563rem] mt-[1.5rem]'>Disposable temporary email protects your real email address from spam, advertising mailings, malwares.
 </div>
         <div className='mt-[3.75rem] flex space-x-[2.215rem]'>
@@ -225,8 +226,8 @@ function Download() {
 
 function FAQ() {
   return (
-    <div className="flex flex-col text-white items-center justify-center">
-      <div className='text-[3rem] font-semibold mt-[8.75rem]'>
+    <div className="flex flex-col items-center justify-center">
+      <div className='text-[3rem] font-semibold mt-[8.75rem] font-Saira'>
         Frequently Asked Questions
       </div>
       <div className='w-[48.125rem] font-normal text-center mt-[1.5rem]'>
@@ -241,10 +242,10 @@ function FAQ() {
 
 function GetStarted() {
   return (
-    <div className='bg-white text-black flex mt-[16rem] px-[1.75rem] py-[3rem]'>
+    <div className='bg-dark text-white flex mt-[16rem] px-[1.75rem] py-[3rem] rounded-3xl mb-[8.75rem]'>
       <img src="images/home/getstarted.png" className='-mt-[7.3rem]'/>
       <div className='flex flex-col ml-[3rem]'>
-        <div className='font-semibold text-[3rem]'>Your data security is our first priority, explore now!</div>
+        <div className='font-semibold text-[3rem] font-Saira'>Your data security is our first priority, explore now!</div>
         <div className='mt-[1.5rem] opacity-70 w-[28.1rem]'>Enjoy the most powerful cloud storage. Provide security for all your data</div>
         <div>
           <Button appearance='primary' className='!bg-green !text-black mt-[2.688rem] w-[12.125rem] h-[3.75rem]'>Get Started Now</Button>
