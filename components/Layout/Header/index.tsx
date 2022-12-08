@@ -1,6 +1,6 @@
-import { Dropdown, SelectPicker, Whisper, Popover } from 'rsuite';
+import { SelectPicker } from 'rsuite';
 import Link from "next/link";
-import { Button, Badge } from 'rsuite';
+import { Button } from 'rsuite';
 import cn from 'classnames'
 import { useAppSelector } from "store/hook";
 import DropDownMenu from './DropDownMenu';
