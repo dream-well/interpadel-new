@@ -43,7 +43,7 @@ export default function Signup() {
                 Create an account
             </span>
             <div className='flex flex-col w-full'>
-                <Form className='mt-[2rem] w-full space-y-[2.5rem]' fluid formValue={formValue} onChange={(value) => {setFormValue({...value})}}>
+                <Form className='mt-[2rem] w-full space-y-[2.5rem]' fluid formValue={formValue} onChange={setFormValue}>
                     <Form.Group controlId="firstname">
                         <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="firstname" type="text" placeholder="First Name"/>
                     </Form.Group>

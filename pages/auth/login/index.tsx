@@ -10,7 +10,10 @@ import { AxiosError } from 'axios';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
 
 export default function Login() {
-    const [formValue, setFormValue] = useState<any>({});
+    const [formValue, setFormValue] = useState({
+        email: '',
+        password: ''
+    });
     const [error, setError] = useState('');
     const dispatch = useDispatch();
     const router = useRouter();
@@ -39,7 +42,7 @@ export default function Login() {
                 Welcome to Interpadel
             </span>
             <div className='flex flex-col w-full'>
-                <Form className='mt-[2rem] w-full space-y-[2.5rem]' fluid formValue={formValue} onChange={(value) => {setFormValue({...value})}}>
+                <Form className='mt-[2rem] w-full space-y-[2.5rem]' fluid formValue={formValue} onChange={setFormValue}>
                     <Form.Group controlId="email">
                         <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
                     </Form.Group>
