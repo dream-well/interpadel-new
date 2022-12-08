@@ -19,6 +19,9 @@ html {
   font-family: 'Saira';
 }
 
+[role=dialog] {
+  z-index: 10;
+}
 body {
   font-size: unset;
   color: unset;
