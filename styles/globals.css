@@ -55,6 +55,10 @@ body {
   }
 }
 
+[role=dialog] {
+  z-index: 10;
+}
+
 .rs-theme-dark {
   --rs-text-secondary: white;
   --rs-menuitem-active-bg: #1D1829;
@@ -412,3 +416,4 @@ body {
   --rs-calendar-date-selected-text: #fff;
   --rs-popover-shadow: 0 1px 8px rgba(0, 0, 0, 0.12);
 }
+
