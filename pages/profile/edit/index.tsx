@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, InputPicker, DatePicker, Button, Input  } from 'rsuite';
+import { Form, SelectPicker, DatePicker, Button, Input  } from 'rsuite';
 
 export default function ProfileEdit() {
   const [formValue, setFormValue] = useState({});
@@ -43,8 +43,8 @@ export default function ProfileEdit() {
                     </Form.Group>
                     <Form.Group controlId="gender" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Gender</Form.ControlLabel>
-                        <InputPicker name="gender" placeholder='Select Gender' data={genderData}
-                            className='flex items-center h-[3.75rem]' 
+                        <SelectPicker size='lg' name="gender" placeholder='Select Gender' data={genderData} searchable={false}
+                            className='flex items-center !h-[3.75rem]'
                         />
                     </Form.Group>
                     <Form.Group controlId="birthday" className='!w-1/2 pr-[1.875rem]'>
@@ -55,8 +55,8 @@ export default function ProfileEdit() {
                     </Form.Group>
                     <Form.Group controlId="language" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Language</Form.ControlLabel>
-                        <InputPicker name="language" placeholder='Select Language' data={langData}
-                            className='flex items-center h-[3.75rem]' 
+                        <SelectPicker name="language" placeholder='Select Language' data={langData} searchable={false}
+                             className='flex items-center h-[3.75rem]'
                         />
                     </Form.Group>
                     <Form.Group controlId="address" className='!w-1/2 pr-[1.875rem]'>
@@ -90,7 +90,6 @@ export default function ProfileEdit() {
                                 className='flex items-center h-[3.75rem]' 
                             />
                         </Form.Group>
-
                         <Form.Group controlId="nationality" className='w-full pr-[1.875rem]'>
                             <Form.ControlLabel>Nationality</Form.ControlLabel>
                             <Form.Control name="nationality" placeholder='Norway' 
@@ -100,7 +99,7 @@ export default function ProfileEdit() {
                     </div>
                     <Form.Group controlId="description" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Description</Form.ControlLabel>
-                        <Input as="textarea" rows={10} placeholder="Bio" name="language"
+                        <Input as="textarea" rows={6} placeholder="Bio" name="language"
                             className='flex items-center h-[3.75rem]' 
                         />
                     </Form.Group>
