@@ -248,7 +248,7 @@ function Testimonial() {
           className="w-[35.625rem] h-[28.125rem]"
         />
       </div>
-      <div className="py-[7.5rem] pl-[13.375rem] pr-[2.75rem] text-white bg-dark -ml-[10.625rem] flex flex-col w-[45rem]">
+      <div className="py-[7.5rem] pl-[13.375rem] pr-[2.75rem] text-white bg-dark -ml-[10.625rem] flex flex-col w-[50rem]">
         <div>Testimonial</div>
         <div className="text-[3rem] font-semibold font-saira">
           Our Customer Says
