@@ -89,20 +89,14 @@ function SlotTable({ openAt, hours = 0, courts = [] }) {
 function DurationSelector({ open, setOpen}) {
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
-      <Modal.Header>
-        <Modal.Title>Modal Title</Modal.Title>
+      <Modal.Header className=''>
+        <Modal.Title>Court1</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Placeholder.Paragraph />
+        <div className='bg-dark h-[2.8rem] rounded-[0.75rem]'>
+
+        </div>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={() => setOpen(false)} appearance="primary">
-          Ok
-        </Button>
-        <Button onClick={() => setOpen(false)} appearance="subtle">
-          Cancel
-        </Button>
-      </Modal.Footer>
     </Modal>
   )
 }
