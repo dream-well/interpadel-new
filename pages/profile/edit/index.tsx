@@ -14,19 +14,19 @@ export default function ProfileEdit() {
                     <Form.Group controlId="firstname" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>First Name</Form.ControlLabel>
                         <Form.Control name="firstname" placeholder='John' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <Form.Group controlId="lastname" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Last Name</Form.ControlLabel>
                         <Form.Control name="lastname" placeholder='Doe' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <Form.Group controlId="email" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Email</Form.ControlLabel>
                         <Form.Control name="email" type='email' placeholder='john.doe@example.com' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                         <Form.HelpText tooltip /> Click to view the privacy policy
                     </Form.Group>
@@ -38,69 +38,69 @@ export default function ProfileEdit() {
                     <Form.Group controlId="mobile" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Mobile Phone</Form.ControlLabel>
                         <Form.Control name="mobile" type='mobile' placeholder='+12345678912' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <Form.Group controlId="gender" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Gender</Form.ControlLabel>
                         <SelectPicker size='lg' name="gender" placeholder='Select Gender' data={genderData} searchable={false}
-                            className='flex items-center !h-[3.75rem] placeholder-[#77747F]'
+                            className='flex items-center !h-[3.75rem] placeholder-grey7'
                         />
                     </Form.Group>
                     <Form.Group controlId="birthday" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Date of Birth</Form.ControlLabel>
                         <DatePicker name="birthday" placeholder='Select date of birth'
-                            className='flex items-center !h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center !h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <Form.Group controlId="language" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Language</Form.ControlLabel>
                         <SelectPicker name="language" placeholder='Select Language' data={langData} searchable={false}
-                             className='flex items-center h-[3.75rem] placeholder-[#77747F]'
+                             className='flex items-center h-[3.75rem] placeholder-grey7'
                         />
                     </Form.Group>
                     <Form.Group controlId="address" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Address</Form.ControlLabel>
                         <Form.Control name="address" placeholder='Ragnhilds vei 97' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <Form.Group controlId="postcode" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Postcode</Form.ControlLabel>
                         <Form.Control name="postcode" placeholder='43111' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <Form.Group controlId="city" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>City/District</Form.ControlLabel>
                         <Form.Control name="city" placeholder='HommersÅk' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <Form.Group controlId="municipality" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Municipality</Form.ControlLabel>
                         <Form.Control name="municipality" placeholder='Oslo' 
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                     <div className='w-1/2'>
                         <Form.Group controlId="country" className='w-full pr-[1.875rem]'>
                             <Form.ControlLabel>Country</Form.ControlLabel>
                             <Form.Control name="country" placeholder='Norway' 
-                                className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                                className='flex items-center h-[3.75rem] placeholder-grey7' 
                             />
                         </Form.Group>
                         <Form.Group controlId="nationality" className='w-full pr-[1.875rem]'>
                             <Form.ControlLabel>Nationality</Form.ControlLabel>
                             <Form.Control name="nationality" placeholder='Norway' 
-                                className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                                className='flex items-center h-[3.75rem] placeholder-grey7' 
                             />
                         </Form.Group>
                     </div>
                     <Form.Group controlId="description" className='!w-1/2 pr-[1.875rem]'>
                         <Form.ControlLabel>Description</Form.ControlLabel>
                         <Input as="textarea" rows={6} placeholder="Bio" name="language"
-                            className='flex items-center h-[3.75rem] placeholder-[#77747F]' 
+                            className='flex items-center h-[3.75rem] placeholder-grey7' 
                         />
                     </Form.Group>
                 </Form>
