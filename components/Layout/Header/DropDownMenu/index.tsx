@@ -12,7 +12,7 @@ import { logout } from 'store/slices/authSlice';
 
 export default function DropDownMenu({ name, image }) {
     return (
-        <Whisper placement="bottomEnd" trigger="click" speaker={renderMenu}>
+        <Whisper placement="bottomEnd" trigger="click" speaker={RenderMenu}>
             <div className='flex items-center rs-btn bg-transparent'>
                 {name}
                 <div className='relative flex'>
@@ -25,14 +25,14 @@ export default function DropDownMenu({ name, image }) {
     )
 }
 
-const renderMenu = ({ onClose, left, top, className }, ref) => {
+const RenderMenu = ({ onClose, left, top, className }, ref) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const handleSelect = eventKey => {
       onClose();
       if(eventKey == '/logout') {
         dispatch(logout());
-        router.replace('/');
+        router.replace('/home');
       } 
       else{
         router.push(eventKey);

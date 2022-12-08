@@ -42,7 +42,7 @@ export default function Header({banner}) {
                         <div className='flex items-center'>
                             <Link href='/auth/login' className='ml-[2.5rem]'>Log in</Link>
                             <Button appearance="ghost" className='ml-[2.5rem] h-[3.5rem] w-[7.5rem] !border-green !text-green'>
-                                <Link href='/auth/login'>Sign Up</Link>
+                                <Link href='/auth/signup'>Sign Up</Link>
                             </Button>
                         </div>
                     }

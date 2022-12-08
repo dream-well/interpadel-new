@@ -1,31 +1,35 @@
 import { Form, Button, InputGroup } from 'rsuite';
 import Link from 'next/link';
 import UnvisibleIcon from '@rsuite/icons/Unvisible';
-import { useDispatch } from 'react-redux';
 import { axios } from 'utils/helpers';
 import { useState } from 'react';
-import { login } from 'store/slices/authSlice';
 import { useRouter } from 'next/router';
 import { AxiosError } from 'axios';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
 
-export default function Login() {
+export default function Signup() {
     const [formValue, setFormValue] = useState<any>({});
     const [error, setError] = useState('');
-    const dispatch = useDispatch();
     const router = useRouter();
-    const signin = () => {
-        axios.post('/api/auth/login', {
-            email: formValue.email, 
-            password: formValue.password
+    const signup = () => {
+
+        if(formValue.password != formValue.repeat) {
+            setError('Password mismatch');
+            return;
+        }
+        const { repeat, ...formData} = formValue;
+        axios.post('/api/auth/signup', {
+            ...formData
         })
         .then(res => {
-            dispatch(login(res));
-            router.replace('/home');
+            router.replace('/auth/login');
         })
         .catch((e: AxiosError) => {
-            if(e.response?.status == 401) {
-                setError("Password you entered doesn't match");
+            if(e.response?.status == 400) {
+                if(e.response?.data['code'] == 11000) {
+                    setError('Already registered');
+                }
+
             }
         })
     }
@@ -36,10 +40,16 @@ export default function Login() {
                 <img src='/images/logo.svg' className='h-[2rem] w-min'/>
             </Link>
             <span className='text-[3rem] mt-[2rem]'>
-                Welcome to Interpadel
+                Create an account
             </span>
             <div className='flex flex-col w-full'>
                 <Form className='mt-[2rem] w-full space-y-[2.5rem]' fluid formValue={formValue} onChange={(value) => {setFormValue({...value})}}>
+                    <Form.Group controlId="firstname">
+                        <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="firstname" type="text" placeholder="First Name"/>
+                    </Form.Group>
+                    <Form.Group controlId="lastname">
+                        <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="lastname" type="text" placeholder="Last Name"/>
+                    </Form.Group>
                     <Form.Group controlId="email">
                         <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
                     </Form.Group>
@@ -50,26 +60,34 @@ export default function Login() {
                                 <UnvisibleIcon width='1.5rem' height='1.5rem'/>
                             </InputGroup.Addon>
                         </InputGroup>
+                    </Form.Group>
+                    <Form.Group controlId="repeat">
+                        <InputGroup inside>
+                            <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="repeat" type="password" autoComplete="off" placeholder="Confirm Password"/>
+                            <InputGroup.Addon className='h-full mr-[1rem]'>
+                                <UnvisibleIcon width='1.5rem' height='1.5rem'/>
+                            </InputGroup.Addon>
+                        </InputGroup>
+                        {
+                        error &&
                         <Form.HelpText className='text-sm text-red flex items-center'>
-                            {
-                                error && 
-                                <HelpOutlineIcon/>
-                            }
+                            <HelpOutlineIcon/>
                             {error}
                         </Form.HelpText>
+                        }
                     </Form.Group>
                     <Form.Group className='!mb-[1rem]'>
                         <Button appearance="primary" color="green" className='h-[3.75rem] w-full !bg-green !text-dark'
-                            onClick={signin}
+                            onClick={signup}
                         >
-                            Sign In
+                            Sign Up
                         </Button>
                     </Form.Group>
                 </Form>  
                 <Form.Group className='text-right '>
-                    <label className='pr-1'>Don’t have an account?</label>
-                    <Link href="/auth/signup" className='text-green'>
-                        Sign Up here
+                    <label className='pr-1'>Already have an account?</label>
+                    <Link href="/auth/login" className='text-green'>
+                        Login Here
                     </Link>
                 </Form.Group>
             </div>
