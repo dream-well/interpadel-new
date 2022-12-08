@@ -54,6 +54,8 @@ body {
 
 .rs-theme-dark {
   --rs-text-secondary: white;
+  --rs-menuitem-active-bg: #1D1829;
+  --rs-bg-overlay: #1D1829;
 }
 
 .rs-btn-primary {
@@ -76,3 +78,6 @@ body {
   font-size: unset;
 }
 
+.rs-dropdown-item.rs-dropdown-item-focus, .rs-dropdown-item:focus-visible {
+  background-color: #C2FF00;
+}

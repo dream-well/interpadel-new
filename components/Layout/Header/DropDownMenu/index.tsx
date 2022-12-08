@@ -43,7 +43,7 @@ const renderMenu = ({ onClose, left, top, className }, ref) => {
         <Dropdown.Menu onSelect={handleSelect}>
             {
                 dropDownMenu.map((menu, key) => (
-                    <Dropdown.Item icon={menu.icon} eventKey={menu.href}>{menu.title}</Dropdown.Item>
+                    <Dropdown.Item key={key} icon={menu.icon} eventKey={menu.href}>{menu.title}</Dropdown.Item>
                 ))
             }
         </Dropdown.Menu>
