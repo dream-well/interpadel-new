@@ -7,18 +7,20 @@ import {
   // declaring the types for our state
   export type AuthState = {
     access_token: string;
+    _id: string;
     email: string;
     firstname: string;
     lastname: string;
-    _id: string;
+    image: string;
   };
   
   const initialState: AuthState = {
     access_token: '',
+    _id: '',
     email: '',
     firstname: '',
     lastname: '',
-    _id: '',
+    image: '',
   };
   
   export const loginSlice = createSlice({
@@ -31,11 +33,12 @@ import {
       
       login: (state, action: PayloadAction<any>) => {
         state.access_token = action.payload['access_token'];
-        state.email = action.payload['email'];
-        state.firstname = action.payload['firstname'];
-        state.lastname = action.payload['lastname'];
-        state._id = action.payload['_id'];
-
+        state._id = action.payload.profile['_id'];
+        state.email = action.payload.profile['email'];
+        state.firstname = action.payload.profile['firstname'];
+        state.lastname = action.payload.profile['lastname'];
+        state.image = action.payload.profile['image'];
+        
         localStorage.setItem('access_token', state.access_token);
       },
 
