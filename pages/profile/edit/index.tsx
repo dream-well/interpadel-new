@@ -22,6 +22,11 @@ export default function ProfileEdit() {
         </Notification>
     )
 
+    const handleBack = (evt) => {
+        evt.preventDefault();
+        router.back();
+    }
+
     const handleSubmit = (evt) => {
         evt.preventDefault();
 
@@ -38,7 +43,7 @@ export default function ProfileEdit() {
                 notification({
                     title: "Profile",
                     description: "Updated profile successfully",
-                    type: "info",
+                    type: "success",
                 }),
                 {
                     placement: 'topEnd',
@@ -71,12 +76,18 @@ export default function ProfileEdit() {
                     <span className='text-[1.5rem] font-bold'>Optional</span>
                     <Optional formValue={optionalValue} setFormValue={setOptionalValue} />
                 </div>
-                <div>
+                <div className='flex space-x-2'>
                     <Button
-                        className='px-[1.5rem] py-[0.75rem] bg-[#C2FF00] text-[black]'
+                        className='px-[1.5rem] py-[0.75rem] bg-green text-[black]'
                         onClick={handleSubmit}
                     >
                         Save Information
+                    </Button>
+                    <Button
+                        className='px-[1.5rem] py-[0.75rem] bg-grey text-[black]'
+                        onClick={handleBack}
+                    >
+                        Back to Profile
                     </Button>
                 </div>
             </div>
