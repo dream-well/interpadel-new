@@ -27,7 +27,7 @@ export default function Profile() {
                     </Collection>
                     <Collection name='Memberships'>
                         <span className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-                            You're not a member at any venue.
+                            You are not a member at any venue.
                         </span>
                     </Collection>
                     <Collection name='Matching Players'>
