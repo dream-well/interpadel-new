@@ -17,6 +17,9 @@ module.exports = {
         "light": "#F4F3F4",
         "red": "#F63333",
       },
+      fontFamily: {
+        saira: ['saira', 'sans-serif'],
+      }
     },
   },
   plugins: [],
