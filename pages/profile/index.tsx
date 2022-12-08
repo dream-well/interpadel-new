@@ -65,7 +65,7 @@ const Summary = ({name, avatar, rate}) => {
                     </span>
                 </div>
                 <Button appearance="ghost" className='w-[15rem] h-[3rem] rounded-xl bg-[#c2ff00] !border-green text-black'>
-                    <Link href='/profile/edit'>+ Book New Time Slot</Link>
+                    <Link href='/centers'>+ Book New Time Slot</Link>
                 </Button>
             </div>
             <div className='flex flex-col items-end'>
