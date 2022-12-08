@@ -131,9 +131,9 @@ const MatchingCard = ({avatar, name, location, rate, matching, level}) => (
     <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center'>
         <Avatar size='md' src={avatar} alt='Venue' className='w-[6rem] h-[6rem] rounded-full'></Avatar>
         <div className='flex flex-col flex-grow space-y-2'>
-            <div className='flex space-x-2'>
+            <div className='flex space-x-5'>
                 <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
-                <span className='text-[#F4F3F4] items-center saira font-bold text-xl'>{name}</span>
+                <span className='text-[#F4F3F4] items-center'>{name}</span>
             </div>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
@@ -152,23 +152,22 @@ const MatchingCard = ({avatar, name, location, rate, matching, level}) => (
 const SearchSection = ({searchValues, setSearchValues, onSearch}) => {
     return (
         <Form
-            className='flex space-x-[1.875rem] justify-center'
+            className='flex space-x-[1.875rem] justify-center !h-[3.75rem]'
             onChange={setSearchValues} formValue={searchValues}
         >
             <Form.Group controlId="country">
                 <SelectPicker size='lg' name="country" placeholder='All Countries' data={countries}
-                    className='w-[12.75rem]'
+                    className='flex items-center text-black bg-white w-[12.75rem]'
                 />
             </Form.Group>
             <Form.Group controlId="municipalty">
                 <SelectPicker size='lg' name="municipalty" placeholder='All Municipalties' data={municipalties}
-                    className='w-[18.75rem]'
+                    className='flex items-center text-black bg-white w-[18.75rem]'
                 />
             </Form.Group>
             <Button
-                className='flex bg-green h-[3rem] px-[2.25rem] text-[black] items-center space-x-1 w-[10rem] text-xl'
+                className='flex bg-green py-[1.115rem] px-[2.25rem] text-[black] items-center space-x-1 w-[10rem]'
                 onClick={onSearch}
-                color='green'
             >
                 <span>Search</span>
                 <SearchIcon />
