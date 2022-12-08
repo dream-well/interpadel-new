@@ -38,7 +38,7 @@ export default function ProfileEdit() {
                 notification({
                     title: "Profile",
                     description: "Updated profile successfully",
-                    type: "info",
+                    type: "success",
                 }),
                 {
                     placement: 'topEnd',
