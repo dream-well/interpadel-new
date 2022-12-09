@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Avatar, Button, Form, Pagination, Progress, SelectPicker, Notification, useToaster } from 'rsuite'
+import { Avatar, Button, Form, Pagination, Progress, SelectPicker, useToaster } from 'rsuite'
 import AbTestIcon from '@rsuite/icons/AbTest';
 import LocationIcon from '@rsuite/icons/Location';
 import useSWR from 'swr';
-import { axios, fetcher } from 'utils/helpers';
+import { axios, fetcher, notification } from 'utils/helpers';
 
 const ROW_PER_PAGE = 3;
 
@@ -16,11 +16,7 @@ export default function Favorites() {
     
     const toaster = useToaster();
 
-    const notification = ({title, description, type}) => (
-        <Notification type={type} header={title} closable>
-            {description}
-        </Notification>
-    )
+    
 
     useEffect(() => {        
         setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
@@ -36,9 +32,7 @@ export default function Favorites() {
                     description: "Removed favorite successfully",
                     type: "success",
                 }),
-                {
-                    placement: 'topEnd',
-                }
+                { placement: 'topEnd', }
             )
             mutate();
         }).catch(() => {
@@ -48,9 +42,7 @@ export default function Favorites() {
                     description: "Could not remove from favorite list",
                     type: "error",
                 }),
-                {
-                    placement: 'topEnd',
-                }
+                { placement: 'topEnd', }
             )
         });
     }

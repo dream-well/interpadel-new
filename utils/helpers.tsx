@@ -1,5 +1,6 @@
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { Notification } from 'rsuite';
 
 export const post = async (data: { key: string; }, url: string) => {
   const response = await axios.post(url, data).catch((err) => err.response);
@@ -68,3 +69,9 @@ export function is_valid_access_token(access_token) {
 export {
   axios
 };
+
+export const notification = ({title, description, type}) => (
+  <Notification type={type} header={title} closable>
+      {description}
+  </Notification>
+)

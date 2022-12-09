@@ -1,5 +1,5 @@
 import LocationIcon from "@rsuite/icons/Location";
-import { Input, Button, DatePicker, InputPicker, Placeholder } from "rsuite";
+import { Input, Button, DatePicker, InputPicker, Placeholder, SelectPicker } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import useSWR from "swr";
 import { fetcher } from "utils/helpers";
@@ -17,23 +17,23 @@ export default function Centers() {
 
 function SearchBar() {
   return (
-    <div>
-      <div className="flex mt-[6.25rem] justify-between">
-        <InputPicker
-          placeholder="In/out condition"
-          className="border-none w-[20rem]"
-          data={[]}
-        />
-        <Input placeholder="Find venue, city..." className="w-[20rem]" />
-        <DatePicker className="w-[15rem]" size="lg" />
-        <div>
-          <Button
-            appearance="primary"
-            className="!bg-green !text-black h-[3rem] w-[9rem]"
-          >
-            Search <SearchIcon className="ml-2"/>
-          </Button>
-        </div>
+    <div className="flex mt-[6.25rem] justify-between items-center space-x-4">
+      <SelectPicker
+        placeholder="In / out condition"
+        className="w-[20rem]"
+        searchable={false}
+        cleanable={false}
+        data={[]}
+      />
+      <Input placeholder="Find venue, city..." className="w-[20rem] flex-grow" />
+      <DatePicker className="w-[12rem]"/>
+      <div>
+        <Button
+          appearance="primary"
+          className="!bg-green !text-black h-[2.5rem] w-[9rem]"
+        >
+          Search <SearchIcon className="ml-2"/>
+        </Button>
       </div>
     </div>
   );
