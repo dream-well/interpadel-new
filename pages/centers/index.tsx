@@ -29,9 +29,9 @@ function SearchBar() {
         <div>
           <Button
             appearance="primary"
-            className="!bg-green !text-black h-[2rem] w-[9rem]"
+            className="!bg-green !text-black h-[3rem] w-[9rem]"
           >
-            Search <SearchIcon />
+            Search <SearchIcon className="ml-2"/>
           </Button>
         </div>
       </div>
