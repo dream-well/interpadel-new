@@ -1,16 +1,54 @@
 import LocationIcon from "@rsuite/icons/Location";
-import { Input, Button, DatePicker, InputPicker, Placeholder, SelectPicker } from "rsuite";
+import { Input, Button, DatePicker, SelectPicker, useToaster } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import useSWR from "swr";
-import { fetcher } from "utils/helpers";
+import { axios, fetcher, notification } from "utils/helpers";
 import Link from 'next/link';
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { useAppSelector } from "store/hook";
+import { useDispatch } from "react-redux";
+import { updateFavorites } from "store/slices/authSlice";
 
 export default function Centers() {
-  const { data: centers } = useSWR('/api/centers', fetcher);
+
+  const dispatch = useDispatch();
+  const { data: centers, mutate } = useSWR('/api/centers', fetcher);
+  const toaster = useToaster();
+  const { favoriteCenters } = useAppSelector(state => state.auth);
+
+  const addToFavorite = (_id) => axios.post(`/api/profile/favorite-centers/${_id}`)
+  const removeFromFavorite = (_id) => axios.delete(`/api/profile/favorite-centers/${_id}`)
+
+  const handleToggleFavorite = (_id) => {
+    const currentStatus = favoriteCenters.indexOf(_id) !== -1;
+    (currentStatus ? removeFromFavorite(_id) : addToFavorite(_id))
+    .then(data => {
+      toaster.push(
+          notification({
+              title: "Favorite",
+              description: "Toggled favorite status successfully",
+              type: "success",
+          }),
+          { placement: 'topEnd', }
+      )
+      dispatch(updateFavorites(data))
+    })
+    .catch(err => {
+      toaster.push(
+        notification({
+            title: "Favorite",
+            description: "Could not toggle favorite status",
+            type: "error",
+        }),
+        { placement: 'topEnd', }
+      )
+    })
+  }
+
   return (
     <div className="px-[8.5rem] rs-theme-light">
       <SearchBar />
-      <CenterList centers={centers}/>
+      <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
     </div>
   );
 }
@@ -39,7 +77,7 @@ function SearchBar() {
   );
 }
 
-function CenterList({centers = []}) {
+function CenterList({centers = [], onToggleFavorite, favoriteCenters = []}) {
   return (
     <div>
       <div className="font-Saira text-[1.5rem] font-semibold my-[2rem]">
@@ -47,25 +85,36 @@ function CenterList({centers = []}) {
       </div>
       <div className="flex flex-wrap w-full">
         {centers.map((center, key) => (
-          <Center key={key} {...center} />
+          <Center key={key} {...center} onToggleFavorite={onToggleFavorite} isFavorite={favoriteCenters.indexOf(center._id) !== -1 } />
         ))}
       </div>
     </div>
   );
 }
 
-const Center = ({_id, name, image, city}) => (
-  <Link href={`/centers/${_id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
-    <img src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
-    {/* <Placeholder.Graph active={true} className='h-[20rem]' /> */}
-    <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
-      <div className="saira text-[1.75rem] font-semibold">
-        {name} 
+const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) => {
+  const toggleFavorite = (evt) => {
+    evt.preventDefault();
+    onToggleFavorite(_id);
+  }
+  return (
+    <Link href={`/centers/${_id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
+      <img src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
+      <div className="flex bg-dark text-white p-[1rem] rounded-b-2xl justify-between items-center">
+        <div className="flex flex-col">
+          <div className="saira text-[1.75rem] font-semibold">
+            {name} 
+          </div>
+          <div className='flex items-center space-x-1'>
+            <LocationIcon />
+            <span>{city}</span>
+          </div>
+        </div>
+        <div className='text-[2rem]'>
+          {isFavorite && <AiFillHeart onClick={toggleFavorite} />}
+          {!isFavorite && <AiOutlineHeart onClick={toggleFavorite} />}
+        </div>
       </div>
-      <div className='flex items-center space-x-1'>
-        <LocationIcon />
-        <span>{city}</span>
-      </div>
-    </div>
-  </Link>
-)
+    </Link>
+  )
+}
