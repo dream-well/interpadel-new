@@ -78,6 +78,7 @@ function Section() {
   return (
     <div>
       {center?.map((item, key) =>
+        key < 3 ?
         key % 2 == 0 ? (
           <div className="text-white flex my-[2.5rem] px-[8.5rem]" key={key}>
             <img src={item.image} className="w-[48.125rem] h-[31.25rem]"></img>
@@ -90,7 +91,7 @@ function Section() {
               </div>
               <div className="font-sans text-xl font-normal mt-[1rem]">
                 <LocationIcon />
-                &nbsp;{item.address}
+                &nbsp;{getAddress(item.address)}
               </div>
               <div className="flex mt-[0.5rem]">
                 <div className="text-[#869300]">
@@ -125,7 +126,7 @@ function Section() {
               </div>
               <div className="font-sans text-xl font-normal mt-[1rem]">
                 <LocationIcon />
-                &nbsp;{item.address}
+                &nbsp;{getAddress(item.address)}
               </div>
               <div className="flex mt-[0.5rem]">
                 <div className="text-[#869300]">
@@ -154,6 +155,7 @@ function Section() {
             ></img>
           </div>
         )
+        : <></>
       )}
     </div>
   );
@@ -165,6 +167,10 @@ function convertpm(val) {
   if (val == "12:00:00") temp = 12;
   if (val == "24:00:00") temp = 24;
   return temp + (closeAt < 12 ? "am" : "pm");
+}
+function getAddress(val) {
+  let temp = val.split(",");
+  return val.replaceAll("," + temp[temp.length-1], "");
 }
 function EasierForYou() {
   const data = [
