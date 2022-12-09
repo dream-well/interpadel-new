@@ -16,9 +16,8 @@ export default function Favorites() {
 
     const {data, error, mutate} = useSWR('/api/profile/favorite-centers', fetcher);
     
-    const toaster = useToaster();
+    const toaster = useToaster();    
 
-    
     useEffect(() => {        
         setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
     }, [activePage, data])
@@ -49,7 +48,7 @@ export default function Favorites() {
     }
     
     return (
-        <div className='flex flex-col space-y-[3.5rem] my-[4.375rem]'>
+        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
             <span className='flex text-[3rem] font-bold saira justify-center'>Your Favorite List</span>
             {data?.length > 0 && (
                 <FavoritesSection favorites={favorites} onRemove={handleRemove} />

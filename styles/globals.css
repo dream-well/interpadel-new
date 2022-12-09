@@ -92,6 +92,10 @@ body {
   background-color: #C2FF00;
 }
 
+.rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  color: white;  
+}
+
 .rs-picker-date-menu {
   --rs-gray-50: #f7f7fa;
   --rs-gray-100: #f2f2f5;

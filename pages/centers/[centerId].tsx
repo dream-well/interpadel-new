@@ -19,32 +19,34 @@ export default function Center() {
   const hours = closeAt - openAt;
 
   return (
-    <div className='py-[5rem] px-[10rem] flex flex-col justify-center'>
-      <div className='rounded-t-[1.5rem] w-full bg-green h-[4rem] flex items-center justify-center'>
-        <span className='text-[2rem] font-bold saira'>{center?.name}</span>
-      </div>
-      <div className='w-full bg-dark rounded-b-[1.5rem] pb-[3.5rem]'>
-        <div className='h-[5rem] p-6 justify-between w-full flex text-white items-center'>
-          <DatePicker cleanable={false} />
-          <div className='flex items-center'>
-            <img src='/images/icons/location.svg' className='h-5' />
-            <span className='ml-2'>Helsingborg</span>
-          </div>
+    <div className='bg-cover bg-center' style={{background: `url(${center?.image})`}}>
+      <div className='py-[5rem] px-[10rem] flex flex-col justify-center w-full flex flex-col bg-white/10 backdrop-blur'>
+        <div className='rounded-t-[1.5rem] w-full bg-green h-[4rem] flex items-center justify-center'>
+          <span className='text-[2rem] font-bold saira'>{center?.name}</span>
         </div>
-        <div className='px-6 text-light'>
-          <SlotTable openAt={openAt} hours={hours} courts={center?.courts} />
-          <div className='flex justify-end items-center text-sm mt-6 space-x-4'>
+        <div className='w-full bg-dark rounded-b-[1.5rem] pb-[3.5rem]'>
+          <div className='h-[5rem] p-6 justify-between w-full flex text-white items-center'>
+            <DatePicker cleanable={false} defaultValue={new Date}/>
             <div className='flex items-center'>
-              <div className='bg-dark border rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
-              Available
+              <img src='/images/icons/location.svg' className='h-5' />
+              <span className='ml-2'>{center?.city}</span>
             </div>
-            <div className='flex items-center'>
-              <div className='bg-grey rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
-              Not Available
-            </div>
-            <div className='flex items-center'>
-              <div className='bg-green rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
-              Your Booking
+          </div>
+          <div className='px-6 text-light'>
+            <SlotTable openAt={openAt} hours={hours} courts={center?.courts} />
+            <div className='flex justify-end items-center text-sm mt-6 space-x-4'>
+              <div className='flex items-center'>
+                <div className='bg-dark border rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
+                Available
+              </div>
+              <div className='flex items-center'>
+                <div className='bg-grey rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
+                Not Available
+              </div>
+              <div className='flex items-center'>
+                <div className='bg-green rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
+                Your Booking
+              </div>
             </div>
           </div>
         </div>
