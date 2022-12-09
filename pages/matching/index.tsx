@@ -143,7 +143,7 @@ const municipalties = [
 
 const MatchingCard = ({_id, avatar, name, location, rate, matching, level, onAddToTeam}) => (
     <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center'>
-        <Avatar src={avatar} alt='Venue'  className='w-[6rem] h-[6rem]' />
+        <Avatar src={avatar} alt={`Player ${name}`}  className='w-[6rem] h-[6rem]' />
         <div className='flex flex-col flex-grow space-y-2'>
             <div className='flex space-x-2'>
                 {/* <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span> */}
