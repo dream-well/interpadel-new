@@ -1,8 +1,8 @@
 import LocationIcon from "@rsuite/icons/Location";
-import { Input, Button, DatePicker, SelectPicker, useToaster } from "rsuite";
+import { Input, Button, DatePicker, SelectPicker } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import useSWR from "swr";
-import { axios, fetcher, notification } from "utils/helpers";
+import { axios, fetcher } from "utils/helpers";
 import Link from 'next/link';
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useAppSelector } from "store/hook";
@@ -12,8 +12,7 @@ import { updateFavorites } from "store/slices/authSlice";
 export default function Centers() {
 
   const dispatch = useDispatch();
-  const { data: centers, mutate } = useSWR('/api/centers', fetcher);
-  const toaster = useToaster();
+  const { data: centers } = useSWR('/api/centers', fetcher);
   const { favoriteCenters } = useAppSelector(state => state.auth);
 
   const addToFavorite = (_id) => axios.post(`/api/profile/favorite-centers/${_id}`)
@@ -23,25 +22,9 @@ export default function Centers() {
     const currentStatus = favoriteCenters.indexOf(_id) !== -1;
     (currentStatus ? removeFromFavorite(_id) : addToFavorite(_id))
     .then(data => {
-      toaster.push(
-          notification({
-              title: "Favorite",
-              description: "Toggled favorite status successfully",
-              type: "success",
-          }),
-          { placement: 'topEnd', }
-      )
       dispatch(updateFavorites(data))
     })
     .catch(err => {
-      toaster.push(
-        notification({
-            title: "Favorite",
-            description: "Could not toggle favorite status",
-            type: "error",
-        }),
-        { placement: 'topEnd', }
-      )
     })
   }
 
