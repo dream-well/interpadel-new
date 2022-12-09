@@ -12,6 +12,7 @@ import {
     firstname: string;
     lastname: string;
     image: string;
+    favoriteCenters: string[];
   };
   
   const initialState: AuthState = {
@@ -21,6 +22,7 @@ import {
     firstname: '',
     lastname: '',
     image: '',
+    favoriteCenters: [],
   };
   
   export const loginSlice = createSlice({
@@ -38,6 +40,7 @@ import {
         state.firstname = action.payload.profile['firstname'];
         state.lastname = action.payload.profile['lastname'];
         state.image = action.payload.profile['image'];
+        state.favoriteCenters = action.payload.profile['favoriteCenters'];
         
         localStorage.setItem('access_token', state.access_token);
       },
@@ -48,14 +51,20 @@ import {
         state.firstname = '';
         state.lastname = '';
         state._id = '';
+        state.favoriteCenters = [];
         localStorage.removeItem('access_token');
-      }
+      },
+
+      updateFavorites: (state, action: PayloadAction<any>) => {
+        state.favoriteCenters = action.payload;
+      },
     },
   });
   // Here we are just exporting the actions from this slice, so that we can call them anywhere in our app.
   export const {
     login,
-    logout
+    logout,
+    updateFavorites,
   } = loginSlice.actions;
   
   // exporting the reducer here, as we need to add this to the store
