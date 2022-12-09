@@ -58,6 +58,10 @@ body {
   }
 }
 
+[role=dialog] {
+  z-index: 10;
+}
+
 .rs-theme-dark {
   --rs-text-secondary: white;
   --rs-menuitem-active-bg: #1D1829;
@@ -86,6 +90,10 @@ body {
 
 .rs-dropdown-item.rs-dropdown-item-focus, .rs-dropdown-item:focus-visible {
   background-color: #C2FF00;
+}
+
+.rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  color: white;  
 }
 
 .rs-picker-date-menu {
@@ -415,3 +423,4 @@ body {
   --rs-calendar-date-selected-text: #fff;
   --rs-popover-shadow: 0 1px 8px rgba(0, 0, 0, 0.12);
 }
+

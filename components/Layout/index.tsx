@@ -32,14 +32,10 @@ export default function Layout({ children }) {
                 showHeader && 
                 <Header banner={isHome}/>
             }
-            <div className={cn('flex flex-col', showHeader && !isHome && 'px-[8.5rem]')}>
+            <div className={cn('flex flex-col', showHeader && !isHome && '')}>
                 {children}
             </div>
             {showHeader && <Footer/> }
         </div>
     )
-}
-
-function dispatch(arg0: any) {
-    throw new Error("Function not implemented.");
 }

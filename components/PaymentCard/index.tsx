@@ -62,7 +62,7 @@ export default function PaymentCard() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: location.origin + "/payment",
+        return_url: location.origin + "/profile",
       },
     });
 

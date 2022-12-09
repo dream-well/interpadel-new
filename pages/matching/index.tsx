@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Avatar, Button, Form, Pagination, Progress, SelectPicker } from 'rsuite'
+import { Button, Form, Pagination, Progress, SelectPicker } from 'rsuite'
 import SearchIcon from '@rsuite/icons/Search';
 import LocationIcon from '@rsuite/icons/Location';
 import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
 import Link from 'next/link';
+import Avatar from 'components/Avatar';
 
 export default function Matching() {
     const [searchValues, setSearchValues] = useState({})
@@ -15,7 +16,7 @@ export default function Matching() {
     }
 
     return (
-        <div className='flex flex-col space-y-[3.5rem] my-[4.375rem]'>
+        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
             <SearchSection
                 searchValues={searchValues}
                 setSearchValues={setSearchValues}
@@ -129,11 +130,11 @@ const municipalties = [
 
 const MatchingCard = ({avatar, name, location, rate, matching, level}) => (
     <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center'>
-        <Avatar size='md' src={avatar} alt='Venue' className='w-[6rem] h-[6rem] rounded-full'></Avatar>
+        <Avatar src={avatar} alt='Venue'  className='w-[6rem] h-[6rem]' />
         <div className='flex flex-col flex-grow space-y-2'>
-            <div className='flex space-x-5'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
-                <span className='text-[#F4F3F4] items-center'>{name}</span>
+            <div className='flex space-x-2'>
+                {/* <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span> */}
+                <span className='text-[#F4F3F4] items-center text-xl saira font-bold'>{name}</span>
             </div>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
@@ -152,21 +153,22 @@ const MatchingCard = ({avatar, name, location, rate, matching, level}) => (
 const SearchSection = ({searchValues, setSearchValues, onSearch}) => {
     return (
         <Form
-            className='flex space-x-[1.875rem] justify-center !h-[3.75rem]'
+            layout='inline'
+            className='flex justify-center items-center'
             onChange={setSearchValues} formValue={searchValues}
         >
             <Form.Group controlId="country">
-                <SelectPicker size='lg' name="country" placeholder='All Countries' data={countries}
-                    className='flex items-center text-black bg-white w-[12.75rem]'
+                <SelectPicker name="country" placeholder='All Countries' data={countries}
+                    className='w-[12.75rem]'
                 />
             </Form.Group>
             <Form.Group controlId="municipalty">
-                <SelectPicker size='lg' name="municipalty" placeholder='All Municipalties' data={municipalties}
-                    className='flex items-center text-black bg-white w-[18.75rem]'
+                <SelectPicker name="municipalty" placeholder='All Municipalties' data={municipalties}
+                    className='w-[18.75rem]'
                 />
             </Form.Group>
             <Button
-                className='flex bg-green py-[1.115rem] px-[2.25rem] text-[black] items-center space-x-1 w-[10rem]'
+                className='flex bg-green py-[1.115rem] px-[2.25rem] text-[black] items-center space-x-1 h-[2.4rem]'
                 onClick={onSearch}
             >
                 <span>Search</span>

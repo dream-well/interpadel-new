@@ -1,88 +1,71 @@
-import LocationIcon from '@rsuite/icons/Location';
-import { Input, Button, DatePicker, InputPicker } from 'rsuite';
-import SearchIcon from '@rsuite/icons/Search';
+import LocationIcon from "@rsuite/icons/Location";
+import { Input, Button, DatePicker, InputPicker, Placeholder, SelectPicker } from "rsuite";
+import SearchIcon from "@rsuite/icons/Search";
+import useSWR from "swr";
+import { fetcher } from "utils/helpers";
+import Link from 'next/link';
+
 export default function Centers() {
-    return (
-        <div className='rs-theme-light'>
-            <Search />
-            <Body />
-        </div>
-    );
+  const { data: centers } = useSWR('/api/centers', fetcher);
+  return (
+    <div className="px-[8.5rem] rs-theme-light">
+      <SearchBar />
+      <CenterList centers={centers}/>
+    </div>
+  );
 }
 
-function Search() {
-    return (
-        <div>
-            <div className='flex mt-[6.25rem]'>
-                <InputPicker placeholder="In/out condition" className='border-none' data={[]}/>
-                <InputPicker placeholder="Camera preference" className='border-none' data={[]}/>
-            </div>
-            <div className='flex justify-between space-x-8 mt-4'>
-                <Input placeholder='Find venue, city...' className='w-full'/>
-                <DatePicker className='w-full' size="lg"/>
-                <div><Button appearance='primary' className='!bg-green !text-black h-[2rem] w-[9rem]'>Search <SearchIcon/></Button></div>
-            </div>
-        </div>
-    );
+function SearchBar() {
+  return (
+    <div className="flex mt-[6.25rem] justify-between items-center space-x-4">
+      <SelectPicker
+        placeholder="In / out condition"
+        className="w-[20rem]"
+        searchable={false}
+        cleanable={false}
+        data={[]}
+      />
+      <Input placeholder="Find venue, city..." className="w-[20rem] flex-grow" />
+      <DatePicker className="w-[12rem]"/>
+      <div>
+        <Button
+          appearance="primary"
+          className="!bg-green !text-black h-[2.5rem] w-[9rem]"
+        >
+          Search <SearchIcon className="ml-2"/>
+        </Button>
+      </div>
+    </div>
+  );
 }
 
-function Body() {
-    return (
-        <div>
-            <div className="font-Saira text-[1.5rem] font-semibold my-[2rem]">
-                    18 found clubs, 12 with availability
-            </div>
-            <div className="flex flex-wrap justify-between">
-                {
-                    data.map((item, key) => (
-                        <div key={key} className="mb-[1.5rem] flex flex-col">
-                            <img src="images/centers/01.png" className='w-[20rem] h-[18rem]'/>
-                            <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
-                                <div className="font-Saira text-[1.75rem] font-semibold">Sanset Padel</div>
-                                <div><LocationIcon/>&nbsp;Helsingborg</div>
-                            </div>
-                        </div>
-                    ))
-                }
-            </div>
-        </div>
-    );
+function CenterList({centers = []}) {
+  return (
+    <div>
+      <div className="font-Saira text-[1.5rem] font-semibold my-[2rem]">
+        {centers.length} found clubs, {centers.length} with availability
+      </div>
+      <div className="flex flex-wrap w-full">
+        {centers.map((center, key) => (
+          <Center key={key} {...center} />
+        ))}
+      </div>
+    </div>
+  );
 }
-const data = [
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    },
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    },
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    },
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    },
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    },
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    }, 
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    },
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    },
-    {
-        name: "Sanset Padel",
-        location: "Helsingborg"
-    }, 
-];
+
+const Center = ({_id, name, image, city}) => (
+  <Link href={`/centers/${_id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
+    <img src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
+    {/* <Placeholder.Graph active={true} className='h-[20rem]' /> */}
+    <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
+      <div className="saira text-[1.75rem] font-semibold">
+        {name} 
+      </div>
+      <div className='flex items-center space-x-1'>
+        <LocationIcon />
+        <span>{city}</span>
+      </div>
+    </div>
+  </Link>
+)

@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Form, SelectPicker, DatePicker, Button, Input, Notification, useToaster  } from 'rsuite';
+import { Form, SelectPicker, DatePicker, Button, Input, useToaster } from 'rsuite';
 import { useAppSelector } from 'store/hook';
 import { login } from 'store/slices/authSlice';
-import { axios } from 'utils/helpers';
+import { axios, notification } from 'utils/helpers';
 
 export default function ProfileEdit() {
 
@@ -15,12 +15,6 @@ export default function ProfileEdit() {
     const { firstname, lastname, image, access_token } = useAppSelector(state => state.auth);
     const [mandatoryValue, setMandatoryValue] = useState({firstname, lastname});
     const [optionalValue, setOptionalValue] = useState({});
-
-    const notification = ({title, description, type}) => (
-        <Notification type={type} header={title} closable>
-            {description}
-        </Notification>
-    )
 
     const handleBack = (evt) => {
         evt.preventDefault();
@@ -45,9 +39,7 @@ export default function ProfileEdit() {
                     description: "Updated profile successfully",
                     type: "success",
                 }),
-                {
-                    placement: 'topEnd',
-                }
+                { placement: 'topEnd', }
             )
             router.back();
         }).catch(err => {
@@ -57,15 +49,13 @@ export default function ProfileEdit() {
                     description: "Could not update profile details",
                     type: "error",
                 }),
-                {
-                    placement: 'topEnd',
-                }
+                { placement: 'topEnd', }
             )
         });
     }
 
     return (
-        <div className='flex flex-col my-[6.25rem] bg-[#1d1829]'>
+        <div className='px-[8.5rem] flex flex-col my-[6.25rem] bg-[#1d1829]'>
             <span className='font-bold px-[4.375rem] py-[2.5rem] text-[#1D1829] text-[2rem] bg-[#c2ff00]'>My Profile Information</span>
             <div className='flex flex-col mx-[4.375rem] my-[2.75rem] space-y-[3.75rem] text-[white]'>
                 <div>
