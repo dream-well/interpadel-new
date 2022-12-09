@@ -1,11 +1,12 @@
 import Link from 'next/link'
-import { Button, Badge, Progress, Avatar } from 'rsuite'
+import { Button, Badge, Progress } from 'rsuite'
 import EmailIcon from '@rsuite/icons/Email';
 import CalendarIcon from '@rsuite/icons/Calendar';
 import LocationIcon from '@rsuite/icons/Location';
 import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
 import MinusIcon from '@rsuite/icons/Minus';
 import { useAppSelector } from 'store/hook';
+import Avatar from 'components/Avatar';
 
 export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
@@ -53,7 +54,7 @@ const Summary = ({name, avatar, rate}) => {
             <div className='flex flex-col w-1/3 space-y-[2rem]'>
                 <div className='flex justify-between items-center'>
                     <Badge content={rate.toFixed(1)} color={'green'}>
-                        <Avatar src={avatar} alt='User Avatar' circle size='lg' className='w-[7.5rem] h-[7.5rem]' />
+                        <Avatar src={avatar} className='w-[7.5rem] h-[7.5rem]' />
                     </Badge>
                     <span className='font-bold text-[2.5rem] ml-2 text-white'>{name}</span>
                 </div>
@@ -79,7 +80,7 @@ const Summary = ({name, avatar, rate}) => {
 
 const FavoriteCard = ({image, name, location}) => (
     <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-        <Avatar size='lg' src={image} alt='Venue' className='w-[3rem] h-[3rem] rounded-md border-1'></Avatar>
+        <img src={image} className='w-[3rem] h-[3rem] border-1'/>
         <div className='flex flex-col'>
             <span>{name}</span>
             <span className='flex space-x-2 items-center'>
@@ -92,7 +93,7 @@ const FavoriteCard = ({image, name, location}) => (
 
 const MatchingCard = ({avatar, name, location, rate, matching}) => (
     <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-        <Avatar size='md' src={avatar} alt='Venue' className='w-[2.5rem] h-[2.5rem] rounded-full'></Avatar>
+        <Avatar src={avatar} className='w-[2.5rem] h-[2.5rem]'/>
         <div className='flex flex-col flex-grow space-y-2'>
             <div className='flex space-x-5 justify-between'>
                 <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
@@ -146,7 +147,7 @@ const UpcomingActivity = () => {
 
 const TeamMember = ({avatar, name, location, rate, team}) => (
     <div className='flex bg-[#2c303a] space-x-[1rem] p-[2rem] text-white items-center rounded-xl'>
-        <Avatar src={avatar} size='lg' alt='Venue' className='w-[5rem] h-[5rem] rounded-full'></Avatar>
+        <Avatar src={avatar} className='w-[5rem] h-[5rem]'/>
         <div className='flex flex-col space-y-2'>
             <div className='flex space-x-5 justify-between'>
                 <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
