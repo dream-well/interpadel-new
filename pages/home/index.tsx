@@ -1,9 +1,13 @@
-import { Input, InputPicker, DatePicker, Button } from "rsuite";
+import { Input, DatePicker, Button } from "rsuite";
+import useSWR from "swr";
+import moment from "moment";
+import { fetcher } from "utils/helpers";
 import SearchIcon from "@rsuite/icons/Search";
 import LocationIcon from "@rsuite/icons/Location";
 import PlusIcon from "@rsuite/icons/Plus";
 import MinusIcon from "@rsuite/icons/Minus";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -25,7 +29,9 @@ function Search() {
   return (
     <div className="absolute left-[8.5rem] right-[8.5rem] rs-theme-light flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white py-[2rem] space-x-[2rem] font-saira px-20 items-center">
       <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col">
-        <div className="font-semibold text-xl mb-[0.5rem] w-[30rem]">Address</div>
+        <div className="font-semibold text-xl mb-[0.5rem] w-[30rem]">
+          Address
+        </div>
         <Input
           placeholder="Address, club name, city..."
           className="border-none"
@@ -33,11 +39,15 @@ function Search() {
       </div>
       <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full">
         <div className="font-semibold text-xl mb-[0.5rem]">Date & Time</div>
-        <DatePicker appearance="subtle"/>
+        <DatePicker appearance="subtle" />
       </div>
       <div className="justify-center items-center flex">
-        <Button appearance="primary" className="!bg-green !text-black h-[3.75rem] px-8">
-          Search<SearchIcon className="ml-2"/>
+        <Button
+          appearance="primary"
+          className="!bg-green !text-black h-[3.75rem] px-8"
+        >
+          Search
+          <SearchIcon className="ml-2" />
         </Button>
       </div>
     </div>
@@ -64,35 +74,13 @@ function SectionText() {
   );
 }
 function Section() {
-  const data = [
-    {
-      name: "Sanset Padel",
-      location: "Olympisch Stadion 23, Amsterdam",
-      type: "open",
-      openclose: "Cloese 11pm",
-      url: "images/home/book1.png",
-    },
-    {
-      name: "Sanset Padel",
-      location: "Olympisch Stadion 23, Amsterdam",
-      type: "open",
-      openclose: "Cloese 11pm",
-      url: "images/home/book2.png",
-    },
-    {
-      name: "Sanset Padel",
-      location: "Olympisch Stadion 23, Amsterdam",
-      type: "open",
-      openclose: "Cloese 11pm",
-      url: "images/home/book3.png",
-    },
-  ];
+  const { data: center } = useSWR(`/api/centers?search=Taktika`, fetcher);
   return (
     <div>
-      {data.map((item, key) =>
+      {center?.map((item, key) =>
         key % 2 == 0 ? (
           <div className="text-white flex my-[2.5rem] px-[8.5rem]" key={key}>
-            <img src={item.url} className="w-[48.125rem] h-[31.25rem]"></img>
+            <img src={item.image} className="w-[48.125rem] h-[31.25rem]"></img>
             <div className="bg-dark rounded-3xl pt-[2rem] px-[4rem] pb-[3rem] h-[18rem] -ml-[6.25rem] mt-[6rem] w-[35.625rem]">
               <div className="flex justify-between">
                 <div className="font-saira text-[2rem] font-semibold">
@@ -102,19 +90,27 @@ function Section() {
               </div>
               <div className="font-sans text-xl font-normal mt-[1rem]">
                 <LocationIcon />
-                &nbsp;{item.location}
+                &nbsp;{item.address}
               </div>
               <div className="flex mt-[0.5rem]">
-                <div className="text-[#869300]">{item.type}</div>
-                <div className="ml-[0.5rem]">{item.openclose}</div>
+                <div className="text-[#869300]">
+                  {item.status == "Active" ? "Open" : "Close"}
+                </div>
+                <div className="ml-[0.5rem]">
+                  {item.status == "Active"
+                    ? "Close " + convertpm(item.closeAt)
+                    : "Open " + convertpm(item.openAt)}
+                </div>
               </div>
               <div className="mt-[1rem]">
-                <Button
-                  appearance="primary"
-                  className="!bg-green !text-black w-full h-[2.5rem]"
-                >
-                  Book Now
-                </Button>
+                <Link href={`/centers/${item._id}`}>
+                  <Button
+                    appearance="primary"
+                    className="!bg-green !text-black w-full h-[2.5rem]"
+                  >
+                    Book Now
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -129,23 +125,31 @@ function Section() {
               </div>
               <div className="font-sans text-xl font-normal mt-[1rem]">
                 <LocationIcon />
-                &nbsp;{item.location}
+                &nbsp;{item.address}
               </div>
               <div className="flex mt-[0.5rem]">
-                <div className="text-[#869300]">{item.type}</div>
-                <div className="ml-[0.5rem]">{item.openclose}</div>
+                <div className="text-[#869300]">
+                  {item.status == "Active" ? "Open" : "Close"}
+                </div>
+                <div className="ml-[0.5rem]">
+                  {item.status == "Active"
+                    ? "Close " + convertpm(item.closeAt)
+                    : "Open " + convertpm(item.openAt)}
+                </div>
               </div>
               <div className="mt-[1rem]">
-                <Button
-                  appearance="primary"
-                  className="!bg-green !text-black w-full h-[2.5rem]"
-                >
-                  Book Now
-                </Button>
+                <Link href={`/centers/${item._id}`}>
+                  <Button
+                    appearance="primary"
+                    className="!bg-green !text-black w-full h-[2.5rem]"
+                  >
+                    Book Now
+                  </Button>
+                </Link>
               </div>
             </div>
             <img
-              src={item.url}
+              src={item.image}
               className="-ml-[6.25rem] w-[48.125rem] h-[31.25rem]"
             ></img>
           </div>
@@ -153,6 +157,14 @@ function Section() {
       )}
     </div>
   );
+}
+function convertpm(val) {
+  let closeAt = moment.duration(val).hours(),
+    temp;
+  if (closeAt > 12) temp = closeAt - 12;
+  if (val == "12:00:00") temp = 12;
+  if (val == "24:00:00") temp = 24;
+  return temp + (closeAt < 12 ? "am" : "pm");
 }
 function EasierForYou() {
   const data = [
