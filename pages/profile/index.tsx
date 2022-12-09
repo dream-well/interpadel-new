@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Button, Badge, Progress } from 'rsuite'
+import { Button, Badge, Progress, Calendar, Whisper, Popover } from 'rsuite'
 import EmailIcon from '@rsuite/icons/Email';
 import CalendarIcon from '@rsuite/icons/Calendar';
 import LocationIcon from '@rsuite/icons/Location';
@@ -105,7 +105,7 @@ const MatchingCard = ({avatar, name, location, rate, matching}) => (
                 <span>{location}</span>
             </span>
             <Progress.Line percent={matching} showInfo={false} className='px-0' />
-            <span className='0.875rem'>{name.split(' ')[0]} Matches your profile {matching}%</span>
+            <span className='0.875rem'>Match score: {matching}%</span>
         </div>
     </div>
 )
@@ -118,6 +118,62 @@ const Collection = ({name, children}) => (
 )
 
 const UpcomingBooking = () => {
+    function getTodoList(date) {
+        const day = date.getDate();
+      
+        switch (day) {
+          case 10:
+            return [
+              { time: '10:30 am', title: 'Meeting' },
+            ];
+          case 15:
+            return [
+              { time: '09:30 pm', title: 'Products Introduction' },
+            ];
+          default:
+            return [];
+        }
+    }
+
+    function renderCell(date) {
+        const list = getTodoList(date);
+        const displayList = list.filter((item, index) => index < 2);
+    
+        if (list.length) {
+            const moreCount = list.length - displayList.length;
+            const moreItem = (
+            <li>
+                <Whisper
+                    placement="top"
+                    trigger="click"
+                    speaker={
+                        <Popover>
+                        {list.map((item, index) => (
+                            <p key={index}>
+                            <b>{item.time}</b> - {item.title}
+                            </p>
+                        ))}
+                        </Popover>
+                    }
+                    >
+                    <a>{moreCount} more</a>
+                </Whisper>
+            </li>
+            );
+
+            return (
+                <ul className="calendar-todo-list">
+                    {displayList.map((item, index) => (
+                    <li key={index}>
+                        <Badge /> <b>{item.time}</b> - {item.title}
+                    </li>
+                    ))}
+                    {moreCount ? moreItem : null}
+                </ul>
+            );
+        }
+    }
+
     return (
         <div className='flex flex-col p-[2.5rem] bg-dark space-y-[3.313rem]'>
             <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
@@ -125,7 +181,8 @@ const UpcomingBooking = () => {
                 <span>Upcoming Booking</span>
             </span>
             <span className='flex text-white'>
-                You have no upcoming bookings. Search for available times above.
+                {/* You have no upcoming bookings. Search for available times above. */}
+                <Calendar bordered renderCell={renderCell} className='!w-[55rem]' />
             </span>
         </div>
     )
