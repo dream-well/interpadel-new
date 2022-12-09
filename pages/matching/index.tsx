@@ -1,15 +1,25 @@
 import { useState } from 'react'
-import { Button, Form, Pagination, Progress, SelectPicker } from 'rsuite'
+import cn from "classnames";
+import { Button, Form, Input, Modal, Pagination, Progress, SelectPicker } from 'rsuite'
 import SearchIcon from '@rsuite/icons/Search';
 import LocationIcon from '@rsuite/icons/Location';
 import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
-import Link from 'next/link';
 import Avatar from 'components/Avatar';
+
 
 export default function Matching() {
     const [searchValues, setSearchValues] = useState({})
     const [activePage, setActivePage] = useState(1)
-
+    const [open, setOpen] = useState(false)
+    const [currentUser, setCurrentUser] = useState(0)
+    
+    const handleOpen = ({_id}) => {
+        setCurrentUser(_id);
+        setOpen(true);
+    }
+    const handleClose = () => {
+        setOpen(false);
+    }
     const handleSearch = (evt) => {
         evt.preventDefault();
         console.log(searchValues);
@@ -22,13 +32,16 @@ export default function Matching() {
                 setSearchValues={setSearchValues}
                 onSearch={handleSearch}
             />
-            <Matchings matchings={matchings}
+            <Matchings
+                matchings={matchings}
+                onAddToTeam={handleOpen}
             />
             <Paginator
                 activePage={activePage}
                 setActivePage={setActivePage}
                 rows={100}
             />
+            <AddToTeamModal open={open} onClose={handleClose} />
         </div>
     )
 }
@@ -128,7 +141,7 @@ const municipalties = [
     },
 ]
 
-const MatchingCard = ({avatar, name, location, rate, matching, level}) => (
+const MatchingCard = ({_id, avatar, name, location, rate, matching, level, onAddToTeam}) => (
     <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center'>
         <Avatar src={avatar} alt='Venue'  className='w-[6rem] h-[6rem]' />
         <div className='flex flex-col flex-grow space-y-2'>
@@ -145,7 +158,7 @@ const MatchingCard = ({avatar, name, location, rate, matching, level}) => (
         </div>
         <span className='flex flex-grow justify-center'>Plays Padel at {level}</span>
         <Button className='flex rounded-xl bg-green text-black w-[12rem] h-[3rem] px-[1.5rem] py-[0.75rem] items-center justify-center space-x-2 text-[1.5rem]'>
-            <Link href={'#'}>Make a team</Link>
+            <span onClick={() => onAddToTeam({_id})}>Make a team</span>
             <CreditCardPlusIcon />
         </Button>
     </div>
@@ -177,13 +190,14 @@ const SearchSection = ({searchValues, setSearchValues, onSearch}) => {
         </Form>
     )
 }
-const Matchings = ({ matchings }) => {
+const Matchings = ({ matchings, onAddToTeam }) => {
     return (
         <div className='flex flex-col space-y-[2.5rem]'>
             {matchings.map((match, i) => (
                 <MatchingCard
                     {...match}
                     key={i}
+                    onAddToTeam={onAddToTeam}
                 />
             ))}
         </div>
@@ -202,5 +216,95 @@ const Paginator = ({activePage, setActivePage, rows}) => {
             activePage={activePage}
             onChangePage={setActivePage}
         />
+    )
+}
+
+function AddToTeamModal({ open, onClose }) {
+
+    const [currentTeam, setCurrentTeam] = useState(0)
+    const [showFooter, setShowFooter] = useState(false)
+    const [newTeamName, setNewTeamName] = useState('New Team Name')
+    const [teams, setTeams] = useState([
+        {
+            _id: 1234132,
+            name: 'Team 1',
+            members: 5,
+        },
+        {
+            _id: 2194875,
+            name: 'Team 2',
+            members: 7,
+        },
+    ])
+
+    const addNewTeam = () => {
+        setTeams([
+            ...teams,
+            {
+                _id: 234134,
+                name: newTeamName,
+                members: 0,
+            }
+        ])
+        setShowFooter(false)
+    }
+
+    const TeamCard = ({_id, name, members}) => (
+        <div
+            onClick={() => setCurrentTeam(_id)} 
+            className={cn(
+                'flex flex-col px-[2rem] py-[1rem] text-white bg-dark rounded-xl', 
+                currentTeam === _id ? 'border-2' : ''
+            )}
+        >
+            <span className='font-bold text-[1.25rem] saira'>{name}</span>
+            <span>{members} members</span>
+        </div>
+    )
+
+    return (
+        <Modal
+            keyboard={false} open={open} onClose={onClose} backdrop={'static'}
+            className='p-[2.5rem]'
+        >
+            <Modal.Header>
+                <Modal.Title>Add him to a team</Modal.Title>
+            </Modal.Header>
+
+            <Modal.Body className='flex flex-col space-y-[1rem]'>
+                {teams.map((team, index) => (
+                    <TeamCard
+                        {...team}
+                        key={index}
+                    />
+                ))}
+                <div className='flex justify-between space-x-4'>
+                    <Button 
+                        onClick={onClose}
+                        appearance="primary"
+                    >
+                        Add to team
+                    </Button>
+                    <Button 
+                        onClick={() => setShowFooter(true)}
+                        appearance="ghost" 
+                    >
+                        Create a new Team
+                    </Button>
+                </div>
+            </Modal.Body>
+            {showFooter && <Modal.Footer className='flex flex-col space-y-4'>
+                <hr />
+                <Input value={newTeamName} onChange={setNewTeamName} />
+                <div className='flex space-x-4'>
+                    <Button onClick={() => addNewTeam()} appearance="primary" className='items-start'>
+                        OK
+                    </Button>
+                    <Button onClick={() => setShowFooter(false)} appearance="ghost" className='items-end'>
+                        Cancel
+                    </Button>
+                </div>
+            </Modal.Footer>}
+        </Modal>
     )
 }
