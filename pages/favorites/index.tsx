@@ -18,7 +18,6 @@ export default function Favorites() {
     const toaster = useToaster();
 
     
-
     useEffect(() => {        
         setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
     }, [activePage, data])
