@@ -57,25 +57,19 @@ export default function Center() {
 
 function SlotTable({ openAt, hours = 0, courts = [] }) {
   const [open, setOpen] = useState(false);
-  const [court, setCourt] = useState({});
+  const [court, setCourt] = useState<any>({});
   const [startAt, setStartAt] = useState();
-
-  const onClickSlot = (_startAt, _court) => {
-    setStartAt(_startAt);
-    setCourt(_court);
-    setOpen(true);
-  }
 
   return (
     <div>
-      <table className='w-full saira'>
+      <table className='w-full saira table-fixed'>
         <tbody>
           <tr>
             <td className='border pl-4 py-2 w-[7.5rem]'>Time/Courts</td>
             {
-              courts.map((court, key) => (
-                <td key={key} className='border py-2 text-center'>
-                  { court.name }
+              courts.map((_court, key) => (
+                <td key={key} className={cn('border py-2 text-center', court._id == _court._id && 'bg-grey')}>
+                  { _court.name }
                 </td>
               ))
             }
@@ -83,10 +77,13 @@ function SlotTable({ openAt, hours = 0, courts = [] }) {
           {
           (new Array(hours)).fill(0).map((_, i) => (
             <tr key={i}>
-              <td className='border pl-4'>{moment(`2000-01-01 ${openAt + i}:00`).format('h:mm a')}</td>
+              <td className={cn('border pl-4', (openAt + i) == startAt && 'bg-grey')}>{moment(`2000-01-01 ${openAt + i}:00`).format('h:mm a')}</td>
               {
-              courts.map((court, key) => (
-                <td key={key} className='border py-2 text-center h-12' onClick={() => onClickSlot(openAt + i, court)}>
+              courts.map((_court, key) => (
+                <td key={key} 
+                  className={cn('cursor-pointer border py-2 text-center h-12', (startAt == openAt + i && court._id == _court._id && open) && 'bg-green')}
+                  onMouseEnter={() => { setCourt(_court), setStartAt(openAt + i)}}
+                  onClick={() => setOpen(true)}>
                   {/* { court.name } */}
                 </td>
               ))

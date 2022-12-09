@@ -2,7 +2,7 @@ import { Form, Button, InputGroup } from 'rsuite';
 import Link from 'next/link';
 import UnvisibleIcon from '@rsuite/icons/Unvisible';
 import { useDispatch } from 'react-redux';
-import { axios } from 'utils/helpers';
+import axios from 'axios';
 import { useState } from 'react';
 import { login } from 'store/slices/authSlice';
 import { useRouter } from 'next/router';

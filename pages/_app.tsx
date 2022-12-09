@@ -12,11 +12,13 @@ import axios from 'axios';
 import { AxiosError } from 'axios';
 import { logout } from 'store/slices/authSlice';
 
+setupAxiosInterceptors1();
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
   
   useEffect(() => {
-    setupAxiosInterceptors(router);
+    setupAxiosInterceptors2(router);
   }, [])
 
   return (
@@ -39,7 +41,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
 }
 
-function setupAxiosInterceptors(router) {
+function setupAxiosInterceptors1() {
   axios.interceptors.request.use((config) => {
     // Do something before request is sent
     if (config.url.startsWith("/api")) {
@@ -57,8 +59,14 @@ function setupAxiosInterceptors(router) {
     return Promise.reject(error);
   });
 
-  axios.interceptors.response.use(
-    res => res.data, 
+
+  axios.interceptors.response.use(res => res.data);
+}
+
+
+function setupAxiosInterceptors2(router) {
+
+  axios.interceptors.response.use(data => data, 
     (error: AxiosError) => {
       if(error.response.status == 401) {
         const token = localStorage.getItem('access_token');
