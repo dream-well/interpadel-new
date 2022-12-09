@@ -19,6 +19,9 @@ html {
   font-family: 'Saira';
 }
 
+[role=dialog] {
+  z-index: 10;
+}
 body {
   font-size: unset;
   color: unset;
@@ -53,6 +56,10 @@ body {
   html {
     font-size: 10px;
   }
+}
+
+[role=dialog] {
+  z-index: 10;
 }
 
 .rs-theme-dark {
@@ -412,3 +419,4 @@ body {
   --rs-calendar-date-selected-text: #fff;
   --rs-popover-shadow: 0 1px 8px rgba(0, 0, 0, 0.12);
 }
+

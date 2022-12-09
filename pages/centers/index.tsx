@@ -1,24 +1,27 @@
 import LocationIcon from "@rsuite/icons/Location";
-import { Input, Button, DatePicker, InputPicker } from "rsuite";
+import { Input, Button, DatePicker, InputPicker, Placeholder } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
-import cn from "classnames";
+import useSWR from "swr";
+import { fetcher } from "utils/helpers";
+import Link from 'next/link';
 
 export default function Centers() {
+  const { data: centers } = useSWR('/api/centers', fetcher);
   return (
     <div className="rs-theme-light">
-      <Search />
-      <Body />
+      <SearchBar />
+      <CenterList centers={centers}/>
     </div>
   );
 }
 
-function Search() {
+function SearchBar() {
   return (
     <div>
       <div className="flex mt-[6.25rem] justify-between">
         <InputPicker
           placeholder="In/out condition"
-          className="w-[20rem]"
+          className="border-none w-[20rem]"
           data={[]}
         />
         <Input placeholder="Find venue, city..." className="w-[20rem]" />
@@ -36,66 +39,29 @@ function Search() {
   );
 }
 
-function Body() {
+function CenterList({centers = []}) {
   return (
     <div>
       <div className="font-Saira text-[1.5rem] font-semibold my-[2rem]">
-        18 found clubs, 12 with availability
+        {centers.length} found clubs, {centers.length} with availability
       </div>
-      <div className="flex flex-wrap justify-between">
-        {data.map((item, key) => (
-          <div key={key} className="mb-[1.5rem] flex flex-col mx-2">
-            <img src="images/centers/01.png" className="w-[22rem]"/>
+      <div className="flex flex-wrap w-full">
+        {centers.map((center, key) => (
+          <Link key={key} href={`/centers/${center._id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
+            <img src={center.image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
+            {/* <Placeholder.Graph active={true} className='h-[20rem]' /> */}
             <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
-              <div className="font-Saira text-[1.75rem] font-semibold">
-                Sanset Padel
+              <div className="saira text-[1.75rem] font-semibold">
+                {center.name} 
               </div>
               <div>
                 <LocationIcon />
-                &nbsp;Helsingborg
+                Helsingborg
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
   );
 }
-const data = [
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-  {
-    name: "Sanset Padel",
-    location: "Helsingborg",
-  },
-];

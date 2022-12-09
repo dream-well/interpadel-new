@@ -65,7 +65,7 @@ const dropDownMenu = [
     {
         title: 'Favourite courts',
         icon: <PublicOpinionIcon/>,
-        href: '/courts'
+        href: '/favorites'
     },
     {
         title: 'Account preferences',

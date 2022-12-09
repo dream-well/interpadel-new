@@ -70,14 +70,14 @@ const langs = ['en'].map(lang => ({
 }))
 
 const menus = [
-    {
-        title: 'Book',
-        href: '/book'
-    },
-    {
-        title: 'Activies',
-        href: '/activies'
-    },
+    // {
+    //     title: 'Book',
+    //     href: '/book'
+    // },
+    // {
+    //     title: 'Activies',
+    //     href: '/activies'
+    // },
     {
         title: 'Centers',
         href: '/centers'
