@@ -28,4 +28,8 @@ const menus = [
         title: 'Matching',
         href: '/matching'
     },
+    {
+        title: 'Books',
+        href: '/books'
+    },
 ]

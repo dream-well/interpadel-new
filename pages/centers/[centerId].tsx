@@ -81,7 +81,7 @@ function SlotTable({ openAt, hours = 0, courts = [] }) {
               {
               courts.map((_court, key) => (
                 <td key={key} 
-                  className={cn('cursor-pointer border py-2 text-center h-12', (startAt == openAt + i && court._id == _court._id && open) && 'bg-green')}
+                  className={cn('cursor-pointer border py-2 text-center h-12', startAt == openAt + i && court._id == _court._id && ( open ? 'bg-green' : 'bg-grey'))}
                   onMouseEnter={() => { setCourt(_court), setStartAt(openAt + i)}}
                   onClick={() => setOpen(true)}>
                   {/* { court.name } */}
