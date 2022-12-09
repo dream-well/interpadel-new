@@ -23,15 +23,15 @@ export default function Home() {
 
 function Search() {
   return (
-    <div className="absolute left-[8.5rem] right-[8.5rem] rs-theme-light flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white py-[2rem] space-x-[2rem] font-saira px-20">
-      <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full">
+    <div className="absolute left-[8.5rem] right-[8.5rem] rs-theme-light flex justify-between rounded-3xl z-10 shadow-2xl h-[11rem] -mt-[5.5rem] bg-white py-[2rem] space-x-[2rem] font-saira px-20 items-center">
+      <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col">
         <div className="font-semibold text-xl mb-[0.5rem] w-[30rem]">Address</div>
         <Input
           placeholder="Address, club name, city..."
           className="border-none"
         />
       </div>
-      <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col">
+      <div className="rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full">
         <div className="font-semibold text-xl mb-[0.5rem]">Date & Time</div>
         <DatePicker appearance="subtle"/>
       </div>
@@ -241,14 +241,14 @@ function CompaniesLogo({ src }) {
 
 function Testimonial() {
   return (
-    <div className="py-[8.75rem] flex px-[8.5rem]">
-      <div className="z-10 mt-[7.5rem]">
+    <div className="py-[8.75rem] flex px-[8.5rem] justify-between items-center">
+      <div className="z-10">
         <img
           src="images/home/quote.png"
           className="w-[35.625rem] h-[28.125rem]"
         />
       </div>
-      <div className="py-[7.5rem] pl-[13.375rem] pr-[2.75rem] text-white bg-dark -ml-[10.625rem] flex flex-col w-[50rem]">
+      <div className="py-[7.5rem] pl-[13.375rem] pr-[2.75rem] text-white bg-dark -ml-[10.625rem] flex flex-col w-[70rem]">
         <div>Testimonial</div>
         <div className="text-[3rem] font-semibold font-saira">
           Our Customer Says
