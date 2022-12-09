@@ -19,7 +19,7 @@ export default function Center() {
   const hours = closeAt - openAt;
 
   return (
-    <div className='bg-cover bg-center' style={{background: `url(${center?.image})`}}>
+    <div className='bg-cover bg-center' style={{backgroundImage: `url(${center?.image})`}}>
       <div className='py-[5rem] px-[10rem] flex flex-col justify-center w-full flex flex-col bg-white/10 backdrop-blur'>
         <div className='rounded-t-[1.5rem] w-full bg-green h-[4rem] flex items-center justify-center'>
           <span className='text-[2rem] font-bold saira'>{center?.name}</span>
@@ -57,6 +57,15 @@ export default function Center() {
 
 function SlotTable({ openAt, hours = 0, courts = [] }) {
   const [open, setOpen] = useState(false);
+  const [court, setCourt] = useState({});
+  const [startAt, setStartAt] = useState();
+
+  const onClickSlot = (_startAt, _court) => {
+    setStartAt(_startAt);
+    setCourt(_court);
+    setOpen(true);
+  }
+
   return (
     <div>
       <table className='w-full saira'>
@@ -72,27 +81,27 @@ function SlotTable({ openAt, hours = 0, courts = [] }) {
             }
           </tr>
           {
-            (new Array(hours)).fill(0).map((_, i) => (
-              <tr key={i}>
-                <td className='border pl-4'>{moment(`2000-01-01 ${openAt + i}:00`).format('h:mm a')}</td>
-                {
-                  courts.map((court, key) => (
-                    <td key={key} className='border py-2 text-center h-12' onClick={() => setOpen(true)}>
-                      {/* { court.name } */}
-                    </td>
-                  ))
-                }   
-              </tr>
-            ))
+          (new Array(hours)).fill(0).map((_, i) => (
+            <tr key={i}>
+              <td className='border pl-4'>{moment(`2000-01-01 ${openAt + i}:00`).format('h:mm a')}</td>
+              {
+              courts.map((court, key) => (
+                <td key={key} className='border py-2 text-center h-12' onClick={() => onClickSlot(openAt + i, court)}>
+                  {/* { court.name } */}
+                </td>
+              ))
+              }   
+            </tr>
+          ))
           }
         </tbody>
       </table>
-      <DurationDialog open={open} setOpen={setOpen} />
+      <DurationDialog open={open} setOpen={setOpen} court={court} startAt={startAt}/>
     </div>
   )
 }
 
-function DurationDialog({ open, setOpen}) {
+function DurationDialog({ open, setOpen, court, startAt}) {
   const [duration, setDuration] = useState(1);
   const router = useRouter();
   const gotoPayment = () => {
@@ -102,31 +111,31 @@ function DurationDialog({ open, setOpen}) {
     <Modal open={open} onClose={() => setOpen(false)} size='xs' dialogClassName={styles.durationSelector}>
       <Modal.Header as={() => (
         <div className='w-full flex justify-between text-white'>
-            <span>Court1</span>
+            <span>{court.name}</span>
             <span className='flex items-center'>
               <TimeIcon className='text-[1.2rem] mr-1'/>
-              14:00
+              {startAt}:00
             </span>
         </div>
       )}/>
       <Modal.Body className='space-y-5'>
-        <DurationSelector duration={duration} setValue={setDuration} value={1} />
-        <DurationSelector duration={duration} setValue={setDuration} value={1.5} />
-        <DurationSelector duration={duration} setValue={setDuration} value={2} />
-        <Button color='green' className='bg-green w-full text-dark' onClick={gotoPayment}>Continue-${duration * 8 + 0.4}</Button>
+        <DurationSelector price={court.price} duration={duration} setValue={setDuration} value={1} />
+        <DurationSelector price={court.price} duration={duration} setValue={setDuration} value={1.5} />
+        <DurationSelector price={court.price} duration={duration} setValue={setDuration} value={2} />
+        <Button color='green' className='bg-green w-full text-dark' onClick={gotoPayment}>Continue {duration * court.price + 40}-kr.</Button>
       </Modal.Body>
     </Modal>
   )
 }
 
-function DurationSelector({ value, setValue, duration }) {
+function DurationSelector({ value, setValue, duration, price }) {
   return (
     <button 
       className={cn('w-full bg-grey-light h-[2.8rem] rounded-[0.75rem] text-white flex items-center justify-between px-4', duration == value && 'opacity-50')}
       onClick={() => setValue(value)}
     >
       <span>{Math.floor(value)}h {60 * (value - Math.floor(value))}min</span>
-      <span>${value * 8}</span>
+      <span>{value * price}-kr.</span>
     </button> 
   )
 }

@@ -24,7 +24,7 @@ export default function Payment() {
   console.log('client secret', clientSecret);
 
   return (
-    <div className='py-[6rem] flex space-x-8 text-light'>
+    <div className='px-[8.5rem] py-[6rem] flex space-x-8 text-light'>
       <div className='bg-dark p-10 rounded-[1.5rem] w-1/2 flex flex-col h-min'>
         <span className='text-[2rem] text-white mb-[1.5rem]'>Payment data</span>
         {

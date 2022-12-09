@@ -9,6 +9,7 @@ import ExitIcon from '@rsuite/icons/Exit';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { logout } from 'store/slices/authSlice';
+import Avatar from 'components/Avatar';
 
 export default function DropDownMenu({ name, image }) {
     return (
@@ -16,7 +17,7 @@ export default function DropDownMenu({ name, image }) {
             <div className='flex items-center rs-btn bg-transparent'>
                 {name}
                 <div className='relative flex'>
-                    <img src={image} className='ml-3 w-[2.5rem] h-[2.5rem] rounded-full bg-white'/>
+                    <Avatar src={image} className='ml-3 w-[2.5rem] h-[2.5rem]'/>
                     <Badge className='bg-green absolute right-0 bottom-1'/>
                 </div>
                 <ArrowDownLineIcon className='text-xl ml-1' />
