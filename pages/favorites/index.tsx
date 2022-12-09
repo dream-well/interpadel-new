@@ -5,6 +5,7 @@ import LocationIcon from '@rsuite/icons/Location';
 import useSWR from 'swr';
 import { axios, fetcher, notification } from 'utils/helpers';
 import Link from 'next/link';
+import NoItems from 'components/NoItems';
 
 const ROW_PER_PAGE = 3;
 
@@ -50,12 +51,17 @@ export default function Favorites() {
     return (
         <div className='flex flex-col space-y-[3.5rem] my-[4.375rem]'>
             <span className='flex text-[3rem] font-bold saira justify-center'>Your Favorite List</span>
-            <FavoritesSection favorites={favorites} onRemove={handleRemove} />
-            <Paginator
-                activePage={activePage}
-                setActivePage={setActivePage}
-                rows={data?.length}
-            />
+            {data?.length > 0 && (
+                <FavoritesSection favorites={favorites} onRemove={handleRemove} />
+            )}
+            {data?.length > 0 && (
+                <Paginator
+                    activePage={activePage}
+                    setActivePage={setActivePage}
+                    rows={data?.length}
+                />
+            )}
+            {data?.length === 0 && <NoItems href={'/centers'} text='No Favorite centers yet' />}
         </div>
     )
 }
