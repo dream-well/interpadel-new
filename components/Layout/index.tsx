@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import cn from 'classnames';
 import { useEffect } from "react";
-import { axios } from "utils/helpers";
+import axios from 'axios';
 import { login } from "store/slices/authSlice";
 import { useDispatch } from "react-redux";
 

@@ -4,7 +4,8 @@ import { useDispatch } from 'react-redux';
 import { Form, SelectPicker, DatePicker, Button, Input, useToaster } from 'rsuite';
 import { useAppSelector } from 'store/hook';
 import { login } from 'store/slices/authSlice';
-import { axios, notification } from 'utils/helpers';
+import { notification } from 'utils/helpers';
+import axios from 'axios';
 
 export default function ProfileEdit() {
 

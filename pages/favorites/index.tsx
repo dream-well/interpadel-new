@@ -3,7 +3,8 @@ import { Avatar, Button, Form, Pagination, Progress, SelectPicker, useToaster } 
 import AbTestIcon from '@rsuite/icons/AbTest';
 import LocationIcon from '@rsuite/icons/Location';
 import useSWR from 'swr';
-import { axios, fetcher, notification } from 'utils/helpers';
+import axios from 'axios';
+import { fetcher, notification } from 'utils/helpers';
 import Link from 'next/link';
 import NoItems from 'components/NoItems';
 

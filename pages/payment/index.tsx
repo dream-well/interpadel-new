@@ -2,7 +2,7 @@ import PaymentCard from "components/PaymentCard";
 import { useEffect, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { axios } from "utils/helpers";
+import axios from 'axios';
 
 const stripePromise = loadStripe(process.env.STRIPE_KEY);
 

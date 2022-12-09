@@ -1,6 +1,8 @@
 import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import { Notification } from 'rsuite';
+import { logout } from 'store/slices/authSlice';
+import { store } from 'store/store';
 
 export const post = async (data: { key: string; }, url: string) => {
   const response = await axios.post(url, data).catch((err) => err.response);
@@ -41,46 +43,11 @@ export const fetcher = async (url: string) => {
   return res.json()
 }
 
-axios.interceptors.request.use((config) => {
-  // Do something before request is sent
-  if (config.url.startsWith("/api")) {
-    config.url = process.env.API_HOST + config.url.substring(4);
-
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      const headers: any = config.headers;
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
-  return config;
-}, function (error) {
-  // Do something with request error
-  return Promise.reject(error);
-});
-
-axios.interceptors.response.use(
-  res => res.data, 
-  (error: AxiosError) => {
-    if(error.response.status == 401) {
-      const token = localStorage.getItem('access_token');
-      if (token) {
-        localStorage.removeItem("access_token");
-      }
-      window.location.href = '/auth/login'; 
-    }
-    return error;
-  }
-);
-
 export function is_valid_access_token(access_token) {
   const data = jwt.decode(access_token);
   console.log(data);
   return true;
 }
-
-export {
-  axios
-};
 
 export const notification = ({title, description, type}) => (
   <Notification type={type} header={title} closable>

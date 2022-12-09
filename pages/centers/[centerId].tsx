@@ -1,4 +1,4 @@
-import { axios, fetcher } from "utils/helpers";
+import { fetcher } from "utils/helpers";
 import { Button, DatePicker, Modal, Placeholder, Radio, RadioGroup, SelectPicker } from "rsuite";
 import useSWR from "swr";
 import { useRouter } from "next/router";
