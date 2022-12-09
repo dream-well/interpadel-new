@@ -15,7 +15,7 @@ export default function Matching() {
     }
 
     return (
-        <div className='flex flex-col space-y-[3.5rem] my-[4.375rem]'>
+        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
             <SearchSection
                 searchValues={searchValues}
                 setSearchValues={setSearchValues}

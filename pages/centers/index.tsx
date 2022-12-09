@@ -8,7 +8,7 @@ import Link from 'next/link';
 export default function Centers() {
   const { data: centers } = useSWR('/api/centers', fetcher);
   return (
-    <div className="rs-theme-light">
+    <div className="px-[8.5rem] rs-theme-light">
       <SearchBar />
       <CenterList centers={centers}/>
     </div>
@@ -47,21 +47,25 @@ function CenterList({centers = []}) {
       </div>
       <div className="flex flex-wrap w-full">
         {centers.map((center, key) => (
-          <Link key={key} href={`/centers/${center._id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
-            <img src={center.image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
-            {/* <Placeholder.Graph active={true} className='h-[20rem]' /> */}
-            <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
-              <div className="saira text-[1.75rem] font-semibold">
-                {center.name} 
-              </div>
-              <div>
-                <LocationIcon />
-                Helsingborg
-              </div>
-            </div>
-          </Link>
+          <Center key={key} {...center} />
         ))}
       </div>
     </div>
   );
 }
+
+const Center = ({_id, name, image, city}) => (
+  <Link href={`/centers/${_id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
+    <img src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
+    {/* <Placeholder.Graph active={true} className='h-[20rem]' /> */}
+    <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
+      <div className="saira text-[1.75rem] font-semibold">
+        {name} 
+      </div>
+      <div className='flex items-center space-x-1'>
+        <LocationIcon />
+        <span>{city}</span>
+      </div>
+    </div>
+  </Link>
+)
