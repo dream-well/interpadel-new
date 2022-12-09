@@ -4,6 +4,7 @@ import AbTestIcon from '@rsuite/icons/AbTest';
 import LocationIcon from '@rsuite/icons/Location';
 import useSWR from 'swr';
 import { axios, fetcher, notification } from 'utils/helpers';
+import Link from 'next/link';
 
 const ROW_PER_PAGE = 3;
 
@@ -62,9 +63,13 @@ export default function Favorites() {
 
 const FavoriteCard = ({image, name, address, courts, description, _id, onRemove}) => (
     <div className='flex text-white items-center'>
-        <img src={image} alt='Center' className='w-[16.875rem] h-[16.875rem] rounded-[1rem] absolute justify-start object-cover' />
+        <Link href={`/centers/${_id}`} className='w-[16.875rem] h-[16.875rem] absolute'>
+            <img src={image} alt={name} className='rounded-[1rem] object-cover h-full w-full' />
+        </Link>
         <div className='flex flex-col flex-grow bg-dark px-[7rem] py-[3rem] space-y-[1rem] ml-[13.25rem]'>
-            <span className='text-[2rem] font-bold saira'>{name}</span>
+            <Link href={`/centers/${_id}`}  className='text-[2rem] font-bold saira'>
+                {name}
+            </Link>
             <span>{description}</span>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
