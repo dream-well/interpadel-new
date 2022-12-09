@@ -1,5 +1,5 @@
 import LocationIcon from "@rsuite/icons/Location";
-import { Input, Button, DatePicker, InputPicker } from "rsuite";
+import { Input, Button, DatePicker, InputPicker, Placeholder } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import useSWR from "swr";
 import { fetcher } from "utils/helpers";
@@ -48,10 +48,11 @@ function CenterList({centers = []}) {
       <div className="flex flex-wrap w-full">
         {centers.map((center, key) => (
           <Link key={key} href={`/centers/${center._id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
-            <img src={center.image} className='h-[20rem] object-center object-cover'/>
+            <img src={center.image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
+            {/* <Placeholder.Graph active={true} className='h-[20rem]' /> */}
             <div className="bg-dark text-white flex flex-col p-[1rem] rounded-b-2xl">
               <div className="saira text-[1.75rem] font-semibold">
-                {center.name}
+                {center.name} 
               </div>
               <div>
                 <LocationIcon />
