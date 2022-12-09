@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import { Notification } from 'rsuite';
 
@@ -28,7 +28,7 @@ export const fetcher = async (url: string) => {
     if (res.status === 401) {
       if (token) {
         localStorage.removeItem("access_token");
-        window.location.href = '/signin';
+        window.location.href = '/auth/login';
       }
     }
     const error: any = new Error('An error occurred while fetching the data.')
@@ -58,7 +58,19 @@ axios.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-axios.interceptors.response.use((res) => res.data);
+axios.interceptors.response.use(
+  res => res.data, 
+  (error: AxiosError) => {
+    if(error.response.status == 401) {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        localStorage.removeItem("access_token");
+      }
+      window.location.href = '/auth/login'; 
+    }
+    return error;
+  }
+);
 
 export function is_valid_access_token(access_token) {
   const data = jwt.decode(access_token);
