@@ -32,7 +32,6 @@ const BookCalendar = () => {
         (startTime.getDate() === date.getDate())
       );
     })
-    console.log(date, data);
     
     return data;
   }
@@ -50,7 +49,7 @@ const BookCalendar = () => {
         <Link
           className='text-white'
           href={`/centers/${data.center?._id}?date=${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
-          {startTime.getHours() + ':' + startTime.getMinutes()} ~ {endTime.getHours() + ':' + endTime.getMinutes()} at {data.center?.name}
+            <b>{startTime.getHours() + ':' + startTime.getMinutes()}-{endTime.getHours() + ':' + endTime.getMinutes()}</b> at <b>{data.center?.name}</b>
         </Link>
       )
     }
