@@ -143,7 +143,7 @@ const UpcomingBooking = () => {
         return (
             <Link
             className='text-white'
-            href={`/centers/${data.center?._id}?date=${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
+            href={`/centers/${data.center?._id}/${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
                 <b className='text-lg'>[ {startTime.toLocaleString()} - {endTime.toLocaleString()} ]</b> at <b>{data.center?.name}</b> / <b>{data.court?.name}</b>
             </Link>
         )
