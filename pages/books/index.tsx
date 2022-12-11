@@ -49,7 +49,7 @@ const BookCalendar = () => {
       return (
         <Link
           className='text-white'
-          href={`/centers/${data.center?._id}?date=${startTime.getFullYear()}-${startTime.getMonth()}-${startTime.getDay()}`}>
+          href={`/centers/${data.center?._id}?date=${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
           {startTime.getHours() + ':' + startTime.getMinutes()} ~ {endTime.getHours() + ':' + endTime.getMinutes()} at {data.center?.name}
         </Link>
       )
