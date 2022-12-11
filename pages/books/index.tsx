@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { Badge, Calendar, Whisper, Popover } from 'rsuite'
-import CalendarIcon from '@rsuite/icons/Calendar';
+// import CalendarIcon from '@rsuite/icons/Calendar';
 
 export default function Books() {
 
   return (
-    <div className="px-[8.5rem]">
+    <div className="px-[8.5rem] py-[2.5rem] bg-dark text-white">
       <BookCalendar />
     </div>
   );
@@ -13,12 +13,18 @@ export default function Books() {
 
 
 const BookCalendar = () => {
+
+  const handleSelect = (params) => {
+    console.log(params);
+  }
+
   function getTodoList(date) {
       const day = date.getDate();
     
       switch (day) {
         case 10:
           return [
+            { time: '10:30 am', title: 'Meeting' },
             { time: '10:30 am', title: 'Meeting' },
           ];
         case 15:
@@ -70,14 +76,6 @@ const BookCalendar = () => {
   }
 
   return (
-      <div className='flex flex-col p-[2.5rem] space-y-[3.313rem] bg-dark'>
-          <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
-              <CalendarIcon />
-              <span>Your Bookings</span>
-          </span>
-          <span className='flex text-white bg-dark'>
-              <Calendar bordered renderCell={renderCell} className='!w-[55rem]' />
-          </span>
-      </div>
+    <Calendar bordered renderCell={renderCell} onSelect={handleSelect} />
   )
 }
