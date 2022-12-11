@@ -11,6 +11,9 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { AxiosError } from 'axios';
 import { logout } from 'store/slices/authSlice';
+import moment from 'moment-timezone';
+
+moment.tz.setDefault('CET');
 
 setupAxiosInterceptors1();
 
