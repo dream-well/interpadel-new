@@ -92,8 +92,12 @@ body {
   background-color: #C2FF00;
 }
 
-.rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+.rs-theme-dark .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
   color: white;  
+}
+
+.rs-theme-light .rs-picker-has-value .rs-btn .rs-picker-toggle-value, .rs-picker-has-value .rs-picker-toggle .rs-picker-toggle-value {
+  color: var(--rs-text-primary);  
 }
 
 .rs-picker-date-menu {

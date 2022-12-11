@@ -104,7 +104,7 @@ function Section() {
                 </div>
               </div>
               <div className="mt-[1rem]">
-                <Link href={`/centers/${item._id}`}>
+                <Link href={`/centers/${item._id}/today`}>
                   <Button
                     appearance="primary"
                     className="!bg-green !text-black w-full h-[2.5rem]"
@@ -139,7 +139,7 @@ function Section() {
                 </div>
               </div>
               <div className="mt-[1rem]">
-                <Link href={`/centers/${item._id}`}>
+                <Link href={`/centers/${item._id}/today`}>
                   <Button
                     appearance="primary"
                     className="!bg-green !text-black w-full h-[2.5rem]"
@@ -155,7 +155,7 @@ function Section() {
             ></img>
           </div>
         )
-        : <></>
+        : <div key={key}></div>
       )}
     </div>
   );

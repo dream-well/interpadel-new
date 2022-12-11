@@ -16,6 +16,34 @@ export default function Center() {
   const [date, setDate] = useState(moment(new Date).startOf('day').toDate());
   const { data: center } = useSWR(centerId ? `/api/centers/${centerId}` : null, fetcher);
   const { data: reservations, mutate: refreshReservations } = useSWR(centerId ? `/api/reservations/${centerId}?date=${date.toJSON()}` : null, fetcher);
+  
+  useEffect(() => {
+    if(router.query.date) {
+      if(router.query.date == 'today')
+        setDate(moment(new Date).startOf('day').toDate());
+      else  
+        setDate(moment(router.query.date).startOf('day').toDate());
+    }
+  }, [router.query.date]);
+
+  useEffect(() => {
+    if(!router.query.centerId) return;
+    const query = {
+      ...router.query, // list all the queries here
+      date: moment(date).format('yyyy-MM-DD'),
+    };
+    router.replace(
+      {
+        pathname: `/centers/[centerId]/[date]`,
+        query,
+      },
+      undefined,
+      {
+        shallow: true
+      }
+    );
+  }, [date])
+  
   useEffect(() => {
     if(payment_intent_client_secret) {
       axios.put(`/api/bookings`, {
@@ -26,6 +54,10 @@ export default function Center() {
       });
     }
   }, [payment_intent_client_secret, redirect_status]);
+
+  // useEffect(() => {
+  //   setDate(moment(date).startOf('day').toDate());
+  // }, [date])
 
   let closeAt = moment.duration(center?.closeAt).hours();
   let openAt = moment.duration(center?.openAt).hours();

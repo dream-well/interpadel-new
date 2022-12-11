@@ -48,7 +48,7 @@ function SearchBar() {
         data={[]}
       />
       <Input placeholder="Find venue, city..." className="w-[20rem] flex-grow" />
-      <DatePicker className="w-[12rem]"/>
+      <DatePicker className="w-[12rem] rs-theme-light" cleanable={false} />
       <div>
         <Button
           appearance="primary"
@@ -82,7 +82,7 @@ const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) =>
     onToggleFavorite(_id);
   }
   return (
-    <Link href={`/centers/${_id}`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
+    <Link href={`/centers/${_id}/today`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
       <img src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
       <div className="flex bg-dark text-white p-[1rem] rounded-b-2xl justify-between items-center">
         <div className="flex flex-col">
