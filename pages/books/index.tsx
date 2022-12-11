@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { useState } from 'react';
 import { Badge, Calendar, Whisper, Popover } from 'rsuite'
-// import CalendarIcon from '@rsuite/icons/Calendar';
+import useSWR from 'swr';
+import { fetcher } from 'utils/helpers';
 
 export default function Books() {
 
@@ -14,65 +16,74 @@ export default function Books() {
 
 const BookCalendar = () => {
 
-  const handleSelect = (params) => {
-    console.log(params);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const { data: bookings } = useSWR(`/api/profile/bookings?month=${currentDate.getFullYear()}-${currentDate.getMonth() + 1}`, fetcher)
+
+  const handleSelect = (newDate) => {
+    setCurrentDate(newDate);
   }
 
   function getTodoList(date) {
-      const day = date.getDate();
+    const data = bookings?.filter(booking => {
+      const startTime = new Date(booking.startAt);
+      return (
+        (startTime.getFullYear() === date.getFullYear()) && 
+        (startTime.getMonth() === date.getMonth()) &&
+        (startTime.getDate() === date.getDate())
+      );
+    })
+    console.log(date, data);
     
-      switch (day) {
-        case 10:
-          return [
-            { time: '10:30 am', title: 'Meeting' },
-            { time: '10:30 am', title: 'Meeting' },
-          ];
-        case 15:
-          return [
-            { time: '09:30 pm', title: 'Products Introduction' },
-          ];
-        default:
-          return [];
-      }
+    return data;
   }
 
   function renderCell(date) {
-      const list = getTodoList(date);
-      const displayList = list.filter((item, index) => index < 2);
-  
-      if (list.length) {
-          const moreCount = list.length - displayList.length;
-          const moreItem = (
-          <li>
-              <Whisper
-                  placement="top"
-                  trigger="click"
-                  speaker={
-                      <Popover>
-                      {list.map((item, index) => (
-                          <p key={index}>
-                          <b>{item.time}</b> - {item.title}
-                          </p>
-                      ))}
-                      </Popover>
-                  }
-                  >
-                  <a>{moreCount} more</a>
-              </Whisper>
-          </li>
-          );
+    const list = getTodoList(date) || [];
+    const displayList = list.filter((item, index) => index < 2);
 
-          return (
-              <ul className="calendar-todo-list">
-                  {displayList.map((item, index) => (
-                  <li key={index}>
-                      <Badge /> <b>{item.time}</b> - {item.title}
-                  </li>
+    const BookingItem = ({data}) => {
+      const startTime = new Date(data.startAt);
+      return (
+        <Link
+          className='text-white'
+          href={`/centers/${data.center?._id}?date=${startTime.getFullYear()}-${startTime.getMonth()}-${startTime.getDay()}`}>
+          {startTime.getHours() + ':' + startTime.getMinutes()} - {data.center?.name}
+          <br/>
+        </Link>
+      )
+    }
+
+    if (list.length) {
+      const moreCount = list.length - displayList.length;
+      const moreItem = (
+      <li>
+          <Whisper
+              placement="top"
+              trigger="click"
+              speaker={
+                  <Popover>
+                  {list.map((item, index) => (
+                    <BookingItem data={item} key={index} />
                   ))}
-                  {moreCount ? moreItem : null}
-              </ul>
-          );
-      }
+                  </Popover>
+              }
+              >
+              <a>{moreCount} more</a>
+          </Whisper>
+      </li>
+      );
+
+      return (
+        <ul className="calendar-todo-list">
+          {displayList.map((item, index) => (
+          <li key={index}>
+            <Badge /> <BookingItem data={item} />
+          </li>
+          ))}
+          {moreCount ? moreItem : null}
+        </ul>
+      );
+    }
   }
 
   return (

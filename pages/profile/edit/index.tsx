@@ -19,7 +19,7 @@ export default function ProfileEdit() {
 
     const handleBack = (evt) => {
         evt.preventDefault();
-        router.back();
+        router.push('/profile') ;
     }
 
     const handleSubmit = (evt) => {
@@ -56,7 +56,7 @@ export default function ProfileEdit() {
     }
 
     return (
-        <div className='px-[8.5rem] flex flex-col my-[6.25rem] bg-[#1d1829]'>
+        <div className='px-[8.5rem] flex flex-col m-[6.25rem] bg-[#1d1829]'>
             <span className='font-bold px-[4.375rem] py-[2.5rem] text-[#1D1829] text-[2rem] bg-[#c2ff00]'>My Profile Information</span>
             <div className='flex flex-col mx-[4.375rem] my-[2.75rem] space-y-[3.75rem] text-[white]'>
                 <div>
