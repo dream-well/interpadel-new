@@ -43,12 +43,14 @@ const BookCalendar = () => {
 
     const BookingItem = ({data}) => {
       const startTime = new Date(data.startAt);
+      const endTime = new Date(startTime);
+      endTime.setMinutes(startTime.getMinutes() + data.duration);
+
       return (
         <Link
           className='text-white'
           href={`/centers/${data.center?._id}?date=${startTime.getFullYear()}-${startTime.getMonth()}-${startTime.getDay()}`}>
-          {startTime.getHours() + ':' + startTime.getMinutes()} - {data.center?.name}
-          <br/>
+          {startTime.getHours() + ':' + startTime.getMinutes()} ~ {endTime.getHours() + ':' + endTime.getMinutes()} at {data.center?.name}
         </Link>
       )
     }
@@ -63,7 +65,9 @@ const BookCalendar = () => {
               speaker={
                   <Popover>
                   {list.map((item, index) => (
-                    <BookingItem data={item} key={index} />
+                    <div key={index}>
+                      <BookingItem data={item} />
+                    </div>
                   ))}
                   </Popover>
               }
@@ -76,7 +80,7 @@ const BookCalendar = () => {
       return (
         <ul className="calendar-todo-list">
           {displayList.map((item, index) => (
-          <li key={index}>
+          <li key={index} className='whitespace-nowrap'>
             <Badge /> <BookingItem data={item} />
           </li>
           ))}
