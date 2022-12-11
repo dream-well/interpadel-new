@@ -3,16 +3,30 @@ import { Button, DatePicker, Modal, Placeholder, Radio, RadioGroup, SelectPicker
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TimeIcon from '@rsuite/icons/Time';
 import styles from './Center.module.scss';
 import cn from 'classnames';
+import axios from "axios";
 
 export default function Center() {
   
   const router = useRouter();
-  const { centerId } = router.query;
+  const { centerId, payment_intent_client_secret, redirect_status } = router.query;
+  const [date, setDate] = useState(moment(new Date).startOf('day').toDate());
   const { data: center } = useSWR(centerId ? `/api/centers/${centerId}` : null, fetcher);
+  const { data: reservations, mutate: refreshReservations } = useSWR(centerId ? `/api/reservations/${centerId}?date=${date.toJSON()}` : null, fetcher);
+  useEffect(() => {
+    if(payment_intent_client_secret) {
+      axios.put(`/api/bookings`, {
+        clientSecret: payment_intent_client_secret,
+        status: redirect_status
+      }).then(data => {
+        refreshReservations();
+      });
+    }
+  }, [payment_intent_client_secret, redirect_status]);
+
   let closeAt = moment.duration(center?.closeAt).hours();
   let openAt = moment.duration(center?.openAt).hours();
   if(center?.closeAt == '24:00:00') closeAt = 24;
@@ -26,14 +40,14 @@ export default function Center() {
         </div>
         <div className='w-full bg-dark rounded-b-[1.5rem] pb-[3.5rem]'>
           <div className='h-[5rem] p-6 justify-between w-full flex text-white items-center'>
-            <DatePicker cleanable={false} defaultValue={new Date}/>
+            <DatePicker cleanable={false} value={date} onChange={setDate}/>
             <div className='flex items-center'>
               <img src='/images/icons/location.svg' className='h-5' />
               <span className='ml-2'>{center?.city}</span>
             </div>
           </div>
           <div className='px-6 text-light'>
-            <SlotTable openAt={openAt} hours={hours} courts={center?.courts} />
+            <SlotTable openAt={openAt} hours={hours} courts={center?.courts} date={date} reservations={reservations}/>
             <div className='flex justify-end items-center text-sm mt-6 space-x-4'>
               <div className='flex items-center'>
                 <div className='bg-dark border rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
@@ -55,10 +69,15 @@ export default function Center() {
   )
 }
 
-function SlotTable({ openAt, hours = 0, courts = [] }) {
+function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
   const [open, setOpen] = useState(false);
   const [court, setCourt] = useState<any>({});
   const [startAt, setStartAt] = useState();
+
+  const getReservationStatus = (court, offset) => {
+    if(!reservations[court._id]) return 0;
+    return reservations[court._id][offset];
+  }
 
   return (
     <div>
@@ -79,30 +98,42 @@ function SlotTable({ openAt, hours = 0, courts = [] }) {
             <tr key={i}>
               <td className={cn('border pl-4', (openAt + i) == startAt && 'bg-grey')}>{moment(`2000-01-01 ${openAt + i}:00`).format('h:mm a')}</td>
               {
-              courts.map((_court, key) => (
+              courts.map((_court, key) => {
+                const status = getReservationStatus(_court, i);
+                const className = cn('cursor-pointer border py-2 text-center h-12', 
+                  startAt == openAt + i && court._id == _court._id && ( open ? 'bg-green' : 'bg-grey-light'), 
+                  status == 2 && '!bg-green', status == 1 && '!bg-grey');
+                return (
                 <td key={key} 
-                  className={cn('cursor-pointer border py-2 text-center h-12', startAt == openAt + i && court._id == _court._id && ( open ? 'bg-green' : 'bg-grey'))}
+                  className={className}
                   onMouseEnter={() => { setCourt(_court), setStartAt(openAt + i)}}
-                  onClick={() => setOpen(true)}>
+                  onClick={() => { if(getReservationStatus(_court, i) == 0) setOpen(true)}} >
                   {/* { court.name } */}
                 </td>
-              ))
+                );
+              })
               }   
             </tr>
           ))
           }
         </tbody>
       </table>
-      <DurationDialog open={open} setOpen={setOpen} court={court} startAt={startAt}/>
+      <DurationDialog open={open} setOpen={setOpen} court={court} startAt={startAt} date={date}/>
     </div>
   )
 }
 
-function DurationDialog({ open, setOpen, court, startAt}) {
+function DurationDialog({ open, setOpen, court, startAt, date}) {
   const [duration, setDuration] = useState(1);
   const router = useRouter();
   const gotoPayment = () => {
-    router.push('/payment');
+    const searchParams = new URLSearchParams();
+    const startDate = moment(date).startOf('day');
+    startDate.add(startAt, 'h');
+    searchParams.append('court', court._id);
+    searchParams.append('startAt', startDate.toJSON());
+    searchParams.append('duration', duration+'');
+    router.push('/payment?' + searchParams.toString());
   }
   return (
     <Modal open={open} onClose={() => setOpen(false)} size='xs' dialogClassName={styles.durationSelector}>
@@ -116,23 +147,28 @@ function DurationDialog({ open, setOpen, court, startAt}) {
         </div>
       )}/>
       <Modal.Body className='space-y-5'>
-        <DurationSelector price={court.price} duration={duration} setValue={setDuration} value={1} />
-        <DurationSelector price={court.price} duration={duration} setValue={setDuration} value={1.5} />
-        <DurationSelector price={court.price} duration={duration} setValue={setDuration} value={2} />
-        <Button color='green' className='bg-green w-full text-dark' onClick={gotoPayment}>Continue {duration * court.price + 40}-kr.</Button>
+        {
+          durations.map((_duration, key) => 
+            <DurationSelector key={key} price={court.price} duration={_duration} setValue={setDuration} value={duration} />
+          )
+        }
+        <Button color='green' className='bg-green w-full text-dark' onClick={gotoPayment}>Continue {moment.duration(duration, 'm').asHours() * court.price + 40}-kr.</Button>
       </Modal.Body>
     </Modal>
   )
 }
 
 function DurationSelector({ value, setValue, duration, price }) {
+  const m_duration = moment.duration(duration, 'minutes');
   return (
     <button 
       className={cn('w-full bg-grey-light h-[2.8rem] rounded-[0.75rem] text-white flex items-center justify-between px-4', duration == value && 'opacity-50')}
-      onClick={() => setValue(value)}
+      onClick={() => setValue(duration)}
     >
-      <span>{Math.floor(value)}h {60 * (value - Math.floor(value))}min</span>
-      <span>{value * price}-kr.</span>
+      <span>{m_duration.hours()}h {m_duration.minutes()}min</span>
+      <span>{duration * price / 60}-kr.</span>
     </button> 
   )
 }
+
+const durations = [60,90,120];

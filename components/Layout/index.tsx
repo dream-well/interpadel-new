@@ -27,12 +27,12 @@ export default function Layout({ children }) {
     }, [])
     
     return (
-        <div className='open-sans'>
+        <div className='open-sans flex flex-col min-h-screen'>
             {
                 showHeader && 
                 <Header banner={isHome}/>
             }
-            <div className={cn('flex flex-col', showHeader && !isHome && '')}>
+            <div className={cn('flex flex-col flex-grow', showHeader && !isHome && '')}>
                 {children}
             </div>
             {showHeader && <Footer/> }

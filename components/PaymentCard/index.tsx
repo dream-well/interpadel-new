@@ -8,7 +8,7 @@ import { Button } from "rsuite";
 import { useRouter } from "next/router";
 import { BeatLoader } from "react-spinners";
 
-export default function PaymentCard() {
+export default function PaymentCard({ return_url }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -62,7 +62,7 @@ export default function PaymentCard() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: location.origin + "/profile",
+        return_url: location.origin + return_url,
       },
     });
 

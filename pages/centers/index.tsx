@@ -15,10 +15,10 @@ export default function Centers() {
   const dispatch = useDispatch();
   const { data: centers } = useSWR('/api/centers', fetcher);
   const { favoriteCenters } = useAppSelector(state => state.auth);
-
+  
   const addToFavorite = (_id) => axios.post(`/api/profile/favorite-centers/${_id}`)
   const removeFromFavorite = (_id) => axios.delete(`/api/profile/favorite-centers/${_id}`)
-
+  
   const handleToggleFavorite = (_id) => {
     const currentStatus = favoriteCenters.indexOf(_id) !== -1;
     (currentStatus ? removeFromFavorite(_id) : addToFavorite(_id))
@@ -28,7 +28,7 @@ export default function Centers() {
     .catch(err => {
     })
   }
-
+  
   return (
     <div className="px-[8.5rem] rs-theme-light">
       <SearchBar />

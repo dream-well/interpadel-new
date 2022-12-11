@@ -1,10 +1,9 @@
 import { Form, Button, InputGroup } from 'rsuite';
 import Link from 'next/link';
 import UnvisibleIcon from '@rsuite/icons/Unvisible';
-import { axios } from 'utils/helpers';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
 
 export default function Signup() {

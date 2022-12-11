@@ -10,7 +10,15 @@ export const post = async (data: { key: string; }, url: string) => {
   return response.data;
 };
 
-export const fetcher = async (url: string) => {
+export const fetcher = (url: string) => {
+  return _fetcher(url, 'GET');
+}
+
+export const postFetcher = ({ url, body = {} }) => {
+  return _fetcher(url, 'POST', body);
+}
+
+const _fetcher = async(url: string, method: string = 'GET', body: any = {}) => {
   const token = localStorage.getItem('access_token');
   const headers: any = {
 
@@ -22,8 +30,12 @@ export const fetcher = async (url: string) => {
       headers['Authorization'] = `Bearer ${token}`;
     }
   }
+  if(method == 'POST')
+    headers["Content-Type"] = "application/json";
   const res = await fetch(url, {
-    headers: headers
+    method,
+    headers: headers,
+    body: method == 'POST' ? JSON.stringify(body) : undefined
   })
 
   if (!res.ok) {
