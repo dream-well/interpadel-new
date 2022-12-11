@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import Loader from "components/Loader";
 import { postFetcher } from "utils/helpers";
+import moment from "moment";
 
 const stripePromise = loadStripe(process.env.STRIPE_KEY);
 
@@ -25,13 +26,14 @@ export default function Payment() {
     
   }, [router.pathname, router.query])
 
+  const { data: booking } = useSWR(router.pathname ? { url: `/api/bookings`, body: {
+    court, startAt, duration
+  }} : null, postFetcher);
+
   if(!router.pathname) {
     return <Loader />
   }
 
-  const { data: booking } = useSWR({ url: `/api/bookings`, body: {
-    court, startAt, duration
-  }}, postFetcher);
 
   if(!booking)
     return <Loader />
@@ -42,7 +44,7 @@ export default function Payment() {
         <span className='text-[2rem] text-white mb-[1.5rem]'>Payment data</span>
         {
           <Elements options={{clientSecret: booking.clientSecret, appearance: { theme: 'night', labels: 'floating'}}} stripe={stripePromise}>
-            <PaymentCard return_url={'/centers/' + booking.court.center._id} />
+            <PaymentCard return_url={'/centers/' + booking.court.center._id + '/' + moment(booking.startAt).format('yyyy-MM-DD')} />
           </Elements>
         }
       </div>
