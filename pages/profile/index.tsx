@@ -7,6 +7,8 @@ import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
 import MinusIcon from '@rsuite/icons/Minus';
 import { useAppSelector } from 'store/hook';
 import Avatar from 'components/Avatar';
+import useSWR from 'swr';
+import { fetcher } from 'utils/helpers';
 
 export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
@@ -118,15 +120,48 @@ const Collection = ({name, children}) => (
 )
 
 const UpcomingBooking = () => {
+    const { data } = useSWR(`/api/profile/bookings?month=${new Date().getFullYear()}-${new Date().getMonth() + 1}`, fetcher);
+    const bookings = data?.filter((booking) => {
+        const bookingTime = new Date(booking.startAt);
+        const currentTime = new Date();
+        const oneWeekTime = currentTime;
+        oneWeekTime.setDate(oneWeekTime.getDate() + 7);
+        return bookingTime < oneWeekTime;
+    }).sort((d1, d2) => {
+        console.log(d1, d2);
+        const off = (new Date(d1.startAt).getTime()) - (new Date(d2.startAt).getTime());
+        return (off > 0 ? 1 : (off === 0 ? 0 : -1));
+    });
+    console.log(bookings);
+    
+
+    const BookingItem = ({data}) => {
+        const startTime = new Date(data.startAt);
+        const endTime = new Date(startTime);
+        endTime.setMinutes(startTime.getMinutes() + data.duration);
+
+        return (
+            <Link
+            className='text-white'
+            href={`/centers/${data.center?._id}?date=${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
+                <b className='text-lg'>[ {startTime.toLocaleString()} - {endTime.toLocaleString()}</b> ] at <b>{data.center?.name}</b>
+            </Link>
+        )
+    }
+    
     return (
-        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[3.313rem]'>
+        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2rem]'>
             <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
                 <CalendarIcon />
                 <span>Upcoming Booking</span>
             </span>
-            <span className='flex text-white'>
-                You have no upcoming bookings. Search for available times above.
-            </span>
+            <ul className='flex flex-col text-white space-y-1 justify-center'>
+                {bookings?.map((item, index) => (
+                    <li key={index} className='flex whitespace-nowrap items-center space-x-2'>
+                        <Badge /* className='bg-green' */ /> <BookingItem data={item} />
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }
