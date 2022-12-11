@@ -1,5 +1,10 @@
+import axios from 'axios';
+import { now } from 'moment';
 import Link from 'next/link'
+import { useEffect, useState } from 'react';
 import { Badge, Calendar, Whisper, Popover } from 'rsuite'
+import useSWR from 'swr';
+import { fetcher } from 'utils/helpers';
 // import CalendarIcon from '@rsuite/icons/Calendar';
 
 export default function Books() {
@@ -14,9 +19,17 @@ export default function Books() {
 
 const BookCalendar = () => {
 
-  const handleSelect = (params) => {
-    console.log(params);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const { data: bookings, error } = useSWR(`/api/bookings?month=${currentDate.getFullYear()}-${currentDate.getMonth()}`, fetcher)
+
+  const handleSelect = (newDate) => {
+    setCurrentDate(newDate);
   }
+
+  useEffect(() => {
+    console.log(bookings);
+  }, [currentDate])
+  
 
   function getTodoList(date) {
       const day = date.getDate();

@@ -19,7 +19,7 @@ export default function ProfileEdit() {
 
     const handleBack = (evt) => {
         evt.preventDefault();
-        router.back();
+        router.push('/profile') ;
     }
 
     const handleSubmit = (evt) => {
