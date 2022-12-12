@@ -9,6 +9,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useAppSelector } from "store/hook";
 import { useDispatch } from "react-redux";
 import { updateFavorites } from "store/slices/authSlice";
+import Image from 'components/Image';
 
 export default function Centers() {
 
@@ -83,10 +84,10 @@ const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) =>
   }
   return (
     <Link href={`/centers/${_id}/today`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
-      <img src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
+     <Image src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
       <div className="flex bg-dark text-white p-[1rem] rounded-b-2xl justify-between items-center">
         <div className="flex flex-col">
-          <div className="saira text-[1.75rem] font-semibold">
+          <div className="saira text-[1.75rem] font-semibold max-w-[21rem] truncate">
             {name} 
           </div>
           <div className='flex items-center space-x-1'>

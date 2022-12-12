@@ -1,4 +1,5 @@
 import { SelectPicker } from 'rsuite';
+import Image from 'components/Image';
 
 export default function LanguagePicker() {
     return (
@@ -17,7 +18,7 @@ const langs = ['en'].map(lang => ({
     value: lang,
     label: (
         <div className='flex'>
-            <img src={`/images/flags/${lang}.png`} />
+           <Image src={`/images/flags/${lang}.png`} />
             <span className='ml-2 text-white'>{ lang.toUpperCase() }</span>
         </div>
     )

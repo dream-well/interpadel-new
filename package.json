@@ -29,6 +29,7 @@
     "react-spinners": "^0.13.7",
     "rsuite": "^5.23.1",
     "sass": "^1.56.2",
+    "sharp": "^0.31.2",
     "stripe": "^11.2.0",
     "swr": "^1.3.0",
     "typescript": "4.9.3"

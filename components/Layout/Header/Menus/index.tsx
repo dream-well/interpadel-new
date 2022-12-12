@@ -1,9 +1,10 @@
 import Link from "next/link";
+import Image from 'components/Image';
 
 export const Menus = () => (
     <div className='flex items-center'>
         <Link href={'/'}>
-            <img src='/images/logo.svg' alt="logo" className='h-[1.5rem] w-min'/>
+           <Image src='/images/logo.svg' alt="logo" className='h-[1.5rem]'/>
         </Link>
         <ul className='ml-[5.5rem] flex space-x-12'>
             {

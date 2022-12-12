@@ -1,0 +1,16 @@
+.imageContainer {
+
+    overflow: hidden;
+    position: relative;
+
+    > div {
+      position: unset !important;
+    }
+  
+    .image {
+      object-fit: cover;
+      width: 100% !important;
+      position: relative !important;
+      height: 100% !important;
+    }
+}

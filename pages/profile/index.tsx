@@ -9,6 +9,7 @@ import { useAppSelector } from 'store/hook';
 import Avatar from 'components/Avatar';
 import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
+import Image from 'components/Image';
 
 export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
@@ -82,7 +83,7 @@ const Summary = ({name, avatar, rate}) => {
 
 const FavoriteCard = ({image, name, location}) => (
     <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-        <img src={image} className='w-[3rem] h-[3rem] border-1'/>
+       <Image src={image} className='w-[3rem] h-[3rem] border-1'/>
         <div className='flex flex-col'>
             <span>{name}</span>
             <span className='flex space-x-2 items-center'>

@@ -4,8 +4,9 @@ import { useEffect } from "react";
 export default function Index() {
   const router = useRouter();
   useEffect(() => {
-    router.replace('/home');
-  }, [])
+    if(router)
+      router.replace('/home');
+  }, [router])
   return (
     <>
     </>

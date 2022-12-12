@@ -8,6 +8,7 @@ import PlusIcon from "@rsuite/icons/Plus";
 import MinusIcon from "@rsuite/icons/Minus";
 import { useState } from "react";
 import Link from "next/link";
+import Image from 'components/Image';
 
 export default function Home() {
   return (
@@ -81,13 +82,13 @@ function Section() {
         key < 3 ?
         key % 2 == 0 ? (
           <div className="text-white flex my-[2.5rem] px-[8.5rem]" key={key}>
-            <img src={item.image} className="w-[48.125rem] h-[31.25rem]"></img>
-            <div className="bg-dark rounded-3xl pt-[2rem] px-[4rem] pb-[3rem] h-[18rem] -ml-[6.25rem] mt-[6rem] w-[35.625rem]">
+           <Image src={item.image} className="w-[48.125rem] h-[31.25rem]" />
+            <div className="bg-dark rounded-3xl pt-[2rem] px-[4rem] pb-[3rem] h-[18rem] -ml-[6.25rem] mt-[6rem] w-[35.625rem] z-10">
               <div className="flex justify-between">
                 <div className="font-saira text-[2rem] font-semibold">
                   {item.name}
                 </div>
-                <img src="/images/home/Direction.png"></img>
+               <Image src="/images/home/Direction.png" />
               </div>
               <div className="font-sans text-xl font-normal mt-[1rem]">
                 <LocationIcon />
@@ -122,7 +123,7 @@ function Section() {
                 <div className="font-saira text-[2rem] font-semibold">
                   {item.name}
                 </div>
-                <img src="/images/home/Direction.png"></img>
+               <Image src="/images/home/Direction.png" />
               </div>
               <div className="font-sans text-xl font-normal mt-[1rem]">
                 <LocationIcon />
@@ -149,10 +150,10 @@ function Section() {
                 </Link>
               </div>
             </div>
-            <img
+            <Image
               src={item.image}
               className="-ml-[6.25rem] w-[48.125rem] h-[31.25rem]"
-            ></img>
+             />
           </div>
         )
         : <div key={key}></div>
@@ -230,9 +231,9 @@ function Trustedbythousands() {
           Trusted by thousands
         </div>
         <div className="flex items-center space-x-[1.5rem]">
-          <CompaniesLogo src="images/home/companies/01.png" />
-          <CompaniesLogo src="images/home/companies/02.png" />
-          <CompaniesLogo src="images/home/companies/03.png" />
+          <CompaniesLogo src="/images/home/companies/01.png" />
+          <CompaniesLogo src="/images/home/companies/02.png" />
+          <CompaniesLogo src="/images/home/companies/03.png" />
         </div>
       </div>
       <div className="flex space-x-[4.625rem] mt-6">
@@ -241,9 +242,9 @@ function Trustedbythousands() {
           organizations worldwide.
         </div>
         <div className="flex items-center space-x-[1.5rem]">
-          <CompaniesLogo src="images/home/companies/04.png" />
-          <CompaniesLogo src="images/home/companies/05.png" />
-          <CompaniesLogo src="images/home/companies/06.png" />
+          <CompaniesLogo src="/images/home/companies/04.png" />
+          <CompaniesLogo src="/images/home/companies/05.png" />
+          <CompaniesLogo src="/images/home/companies/06.png" />
         </div>
       </div>
     </div>
@@ -252,7 +253,7 @@ function Trustedbythousands() {
 function CompaniesLogo({ src }) {
   return (
     <div className="border-black border rounded-[0.3rem] px-[1rem] py-[0.5rem]">
-      <img src={src} />
+     <Image src={src} />
     </div>
   );
 }
@@ -262,7 +263,7 @@ function Testimonial() {
     <div className="py-[8.75rem] flex px-[8.5rem] justify-between items-center">
       <div className="z-10">
         <img
-          src="images/home/quote.png"
+          src="/images/home/quote.png"
           className="w-[35.625rem] h-[28.125rem]"
         />
       </div>
@@ -272,7 +273,7 @@ function Testimonial() {
           Our Customer Says
         </div>
         <div>
-          <img src="images/home/qutesMark.png" />
+         <Image src="/images/home/qutesMark.png" className='w-[3rem] h-[3rem]' />
         </div>
         <div className="mt-[1.375rem]">
           Great job on my Cakephp scraper script! Easy to communicate with and
@@ -280,7 +281,7 @@ function Testimonial() {
           that were greatly appreciated! Will be hiring again for sure. ;-)
         </div>
         <div className="flex mt-[1.876rem]">
-          <img src="images/home/quoteWoman.png" />
+         <Image src="/images/home/quoteWoman.png" />
           <div className="flex flex-col ml-6">
             <div className="text-xl font-semibold">Elenor Rose</div>
             <div>Manager</div>
@@ -303,12 +304,12 @@ function Download() {
           advertising mailings, malwares.
         </div>
         <div className="mt-[3.75rem] flex space-x-[2.215rem]">
-          <img src="images/home/googleBadge.png" />
-          <img src="images/home/appBadge.png" />
+         <Image src="/images/home/googleBadge.png" />
+         <Image src="/images/home/appBadge.png" />
         </div>
       </div>
       <div>
-        <img src="images/home/iphone.png" className="w-[30rem] h-[29rem]" />
+       <Image src="/images/home/iphone.png" className="w-[30rem] h-[29rem]" />
       </div>
     </div>
   );
@@ -354,7 +355,7 @@ function FAQ() {
       <div className="flex mt-[3.75rem]">
         <div className="py-[3rem] mr-[1.875rem]">
           <img
-            src="images/home/faq.png"
+            src="/images/home/faq.png"
             className="w-[29.375rem] h-[28.125rem]"
           />
         </div>
@@ -393,7 +394,7 @@ function GetStarted() {
   return (
     <div className="bg-dark text-white flex mt-[16rem] mx-[8.5rem] pt-[3rem] rounded-3xl mb-[8.75rem]">
       <img
-        src="images/home/getstarted.png"
+        src="/images/home/getstarted.png"
         className="-mt-[7.3rem] ml-8 w-[26rem] h-[35.625rem]"
       />
       <div className="flex flex-col ml-8">

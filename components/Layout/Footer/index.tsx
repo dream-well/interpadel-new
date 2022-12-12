@@ -1,11 +1,12 @@
 import Link from 'next/link';
+import Image from 'components/Image';
 
 export default function Footer() {
     return (
         <div className='text-white bg-dark'>
             <div className='flex py-[5.5rem] px-[8.5rem]'>
                 <div className='flex flex-col'>
-                    <img src='/images/logo.png' className='h-[1.5rem] w-min'/>
+                   <Image src='/images/logo.png' className='h-[1.5rem] w-min'/>
                     <span className='text-light mt-[2.5rem]'>
                         For us, it&apos;s about offering Padel for everyone! 
                         We want to cultivate an environment and create enthusiasm for the sport throughout the country. 
@@ -20,7 +21,7 @@ export default function Footer() {
                             <div className='text-light mt-[2.5rem] flex flex-col'>
                                 {
                                     category.links.map((link, key) => (
-                                        <Link href={link.href} key={key}>
+                                        <Link href={link.href} key={key} target={link.href.startsWith('/') ? '_self' : '_blank'}>
                                             {link.title}
                                         </Link>
                                     ))
@@ -38,10 +39,10 @@ export default function Footer() {
                     <Link href='/privacy' className='text-green'>Privacy and Cookies</Link>
                 </span>
                 <div className='flex space-x-4 absolute top-1/2 -translate-y-1/2 right-[8.5rem] items-center'>
-                    <img src='/images/icons/facebook.png' className='w-[1.5rem] h-min' />
-                    <img src='/images/icons/twitter.png' className='w-[1.5rem] h-min' />
-                    <img src='/images/icons/linkedin.png' className='w-[1.5rem] h-min' />
-                    <img src='/images/icons/youtube.png' className='w-[1.5rem] h-min' />
+                   <Image src='/images/icons/facebook.png' className='w-[1.5rem] h-min' />
+                   <Image src='/images/icons/twitter.png' className='w-[1.5rem] h-min' />
+                   <Image src='/images/icons/linkedin.png' className='w-[1.5rem] h-min' />
+                   <Image src='/images/icons/youtube.png' className='w-[1.5rem] h-min' />
                 </div>
             </div>
         </div>
@@ -52,7 +53,7 @@ const categories = [
     {
         title: 'Company',
         links: [
-            { title: 'About', href: '/about' },
+            { title: 'About', href: 'https://interpadel.no/om-interpadel/' },
             { title: 'Features', href: '/features' },
             { title: 'Works', href: '/works' },
             { title: 'Career', href: '/career' },

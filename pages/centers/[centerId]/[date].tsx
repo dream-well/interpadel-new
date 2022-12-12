@@ -8,6 +8,8 @@ import TimeIcon from '@rsuite/icons/Time';
 import styles from './Center.module.scss';
 import cn from 'classnames';
 import axios from "axios";
+import Image from 'components/Image';
+import Loader from "components/Loader";
 
 export default function Center() {
   
@@ -55,6 +57,8 @@ export default function Center() {
     }
   }, [payment_intent_client_secret, redirect_status]);
 
+  if(!center)
+    return <Loader />
   // useEffect(() => {
   //   setDate(moment(date).startOf('day').toDate());
   // }, [date])
@@ -74,7 +78,7 @@ export default function Center() {
           <div className='h-[5rem] p-6 justify-between w-full flex text-white items-center'>
             <DatePicker cleanable={false} value={date} onChange={setDate}/>
             <div className='flex items-center'>
-              <img src='/images/icons/location.svg' className='h-5' />
+             <Image src='/images/icons/location.svg' className='h-5' />
               <span className='ml-2'>{center?.city}</span>
             </div>
           </div>

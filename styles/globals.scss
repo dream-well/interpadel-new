@@ -1,10 +1,15 @@
+// @import url('rsuite/dist/rsuite.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Saira:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Saira&display=swap');
+
+.flex {
+  display: flex;
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Saira&display=swap');
 
 html {
   font-size: 16px;
@@ -430,4 +435,58 @@ body {
 
 a:active, a:focus, a:hover {
   text-decoration: unset;
+}
+
+.rs-icon {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: middle;
+}
+.rs-icon[tabindex] {
+  cursor: pointer;
+}
+.rs-icon-spin {
+  -webkit-animation: icon-spin 2s infinite linear;
+          animation: icon-spin 2s infinite linear;
+}
+.rs-icon-pulse {
+  -webkit-animation: icon-spin 1s infinite steps(8);
+          animation: icon-spin 1s infinite steps(8);
+}
+.rs-icon-flip-horizontal {
+  -webkit-transform: scaleX(-1);
+      -ms-transform: scaleX(-1);
+          transform: scaleX(-1);
+}
+.rs-icon-flip-vertical {
+  -webkit-transform: scaleY(-1);
+      -ms-transform: scaleY(-1);
+          transform: scaleY(-1);
+}
+@-webkit-keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+@keyframes icon-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
 }

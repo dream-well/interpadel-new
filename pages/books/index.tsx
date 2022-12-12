@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Badge, Calendar, Whisper, Popover } from 'rsuite'
 import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
+import Image from 'components/Image';
 
 export default function Books() {
 

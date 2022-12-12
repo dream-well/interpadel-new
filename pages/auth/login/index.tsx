@@ -8,6 +8,7 @@ import { login } from 'store/slices/authSlice';
 import { useRouter } from 'next/router';
 import { AxiosError } from 'axios';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
+import Image from 'components/Image';
 
 export default function Login() {
     const [formValue, setFormValue] = useState({
@@ -36,7 +37,7 @@ export default function Login() {
     <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] bg-cover min-h-screen py-[2rem]' onClick={() => setError('')}>
         <div className='w-[48rem] flex flex-col items-center text-white bg-dark p-[4rem] rounded-[1.5rem] border border-grey'>
             <Link href='/home'>
-                <img src='/images/logo.svg' className='h-[2rem] w-min'/>
+               <Image src='/images/logo.svg' className='h-[2rem] w-min'/>
             </Link>
             <span className='text-[3rem] mt-[2rem]'>
                 Welcome to Interpadel
@@ -83,11 +84,11 @@ export default function Login() {
             </div>
             <div className='mt-[2.5rem] space-x-[1.25rem] flex'>
                 <Button appearance='ghost' className='!text-grey7 !border-grey7 h-[3.6rem] flex items-center'>
-                    <img src='/images/icons/google.svg' className='mr-3' />
+                   <Image src='/images/icons/google.svg' className='mr-3' />
                     Continue with Google
                 </Button>
                 <Button appearance='ghost' className='!text-grey7 !border-grey7 h-[3.6rem] flex items-center'>
-                    <img src='/images/icons/apple.svg' className='mr-3' />
+                   <Image src='/images/icons/apple.svg' className='mr-3' />
                     Continue with Apple
                 </Button>
             </div>
