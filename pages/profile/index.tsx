@@ -52,6 +52,50 @@ export default function Profile() {
 }
 
 const Summary = ({name, avatar, rate}) => {
+    const { data } = useSWR(`/api/profile/bookings?month=${new Date().getFullYear()}-${new Date().getMonth() + 1}`, fetcher);
+    const bookings = data?.filter((booking) => {
+        const bookingTime = new Date(booking.startAt);
+        const currentTime = new Date();
+        return bookingTime > currentTime;
+    }).sort((d1, d2) => {
+        const off = (new Date(d1.startAt).getTime()) - (new Date(d2.startAt).getTime());
+        return (off > 0 ? 1 : (off === 0 ? 0 : -1));
+    });
+
+    const BookingItem = ({data}) => {
+        const startTime = new Date(data.startAt);
+        const endTime = new Date(startTime);
+        endTime.setMinutes(startTime.getMinutes() + data.duration);
+
+        const checkTime = (i) => (i < 10 ? "0"+i : i) 
+        const timeString = (time) => (
+            checkTime(time.getHours()) + ':' + 
+            checkTime(time.getMinutes()) + ':' +
+            checkTime(time.getSeconds())
+        )
+        const formatDate = (d) => {
+            var month = '' + (d.getMonth() + 1);
+            var day = '' + d.getDate();
+            var year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+    
+        return (
+            <Link
+            className='text-white'
+            href={`/centers/${data.center?._id}/${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
+                <span className='text-lg font-bold'>{formatDate(startTime)} {timeString(startTime)}-{timeString(endTime)}</span><br />
+                <i className='text-sm'>{data.center?.name} / {data.court?.name}</i>
+            </Link>
+        )
+    }
+
     return (
         <div className='flex p-[3rem] space-x-[3rem] bg-[#1d1829] justify-between'>
             <div className='flex flex-col w-1/3 space-y-[2rem]'>
@@ -64,8 +108,11 @@ const Summary = ({name, avatar, rate}) => {
                 <div className='flex flex-col rounded-3xl border-grey border-2 p-[2.5rem] space-y-[1rem]'>
                     <span className='font-bold text-white text-[1.5rem]'>Your next booking</span>
                     <span className='text-white flex items-center space-x-2'>
-                        <CalendarIcon className='text-[1.5rem]' />
-                        <span>You have no upcoming bookings</span>
+                        {/* <CalendarIcon className='text-[1.5rem]' /> */}
+                        {bookings.length === 0
+                            ? (<span>You have no upcoming bookings</span>)
+                            : (<BookingItem data={bookings[0]} />)
+                        }
                     </span>
                 </div>
                 <Button appearance="ghost" className='w-[15rem] h-[3rem] rounded-xl bg-[#c2ff00] !border-green text-black'>
@@ -127,20 +174,17 @@ const UpcomingBooking = () => {
         const currentTime = new Date();
         const oneWeekTime = currentTime;
         oneWeekTime.setDate(oneWeekTime.getDate() + 7);
-        return bookingTime < oneWeekTime;
+        return (bookingTime < oneWeekTime) && (bookingTime > currentTime);
     }).sort((d1, d2) => {
-        console.log(d1, d2);
         const off = (new Date(d1.startAt).getTime()) - (new Date(d2.startAt).getTime());
         return (off > 0 ? 1 : (off === 0 ? 0 : -1));
     });
-    console.log(bookings);
-    
 
     const BookingItem = ({data}) => {
         const startTime = new Date(data.startAt);
         const endTime = new Date(startTime);
         endTime.setMinutes(startTime.getMinutes() + data.duration);
-
+    
         return (
             <Link
             className='text-white'
@@ -162,6 +206,11 @@ const UpcomingBooking = () => {
                         <Badge /* className='bg-green' */ /> <BookingItem data={item} />
                     </li>
                 ))}
+                {(bookings.length) === 0 && (
+                    <span className='flex text-white'>
+                        You have no upcoming bookings.
+                    </span>
+                )}
             </ul>
         </div>
     )
