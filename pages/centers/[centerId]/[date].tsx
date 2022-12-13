@@ -160,7 +160,7 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
 }
 
 function DurationDialog({ open, setOpen, court, startAt, date}) {
-  const [duration, setDuration] = useState(1);
+  const [duration, setDuration] = useState(60);
   const router = useRouter();
   const gotoPayment = () => {
     const searchParams = new URLSearchParams();

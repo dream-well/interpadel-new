@@ -9,12 +9,27 @@ import Image from 'components/Image';
 
 export default function Signup() {
     const [formValue, setFormValue] = useState<any>({});
-    const [error, setError] = useState('');
+    const [error, setError] = useState<any>({});
     const router = useRouter();
-    const signup = () => {
+    const signup = (e: Event) => {
+
+        e.stopPropagation();
+
+        const fields = ['firstname', 'lastname', 'email', 'password', 'repeat'];
+        for(let field of fields) {
+            if(!formValue[field]) {
+                setError( {type: field, msg: 'Required'});
+                return;
+            }
+        }
+
+        if(!formValue.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)) {
+            setError({ type: 'email', msg: 'Invalid email'});
+            return;
+        }
 
         if(formValue.password != formValue.repeat) {
-            setError('Password mismatch');
+            setError({ type: 'repeat', msg: 'Password mismatch'});
             return;
         }
         const { repeat, ...formData} = formValue;
@@ -27,7 +42,7 @@ export default function Signup() {
         .catch((e: AxiosError) => {
             if(e.response?.status == 400) {
                 if(e.response?.data['code'] == 11000) {
-                    setError('Already registered');
+                    setError({ type: 'error', msg: 'Already registered'});
                 }
 
             }
@@ -45,17 +60,17 @@ export default function Signup() {
             <div className='flex flex-col w-full'>
                 <Form className='mt-[2rem] w-full space-y-[2.5rem]' fluid formValue={formValue} onChange={setFormValue}>
                     <Form.Group controlId="firstname">
-                        <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="firstname" type="text" placeholder="First Name"/>
+                        <Form.Control errorMessage={error.type == 'firstname' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="firstname" type="text" placeholder="First Name"/>
                     </Form.Group>
                     <Form.Group controlId="lastname">
-                        <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="lastname" type="text" placeholder="Last Name"/>
+                        <Form.Control errorMessage={error.type == 'lastname' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="lastname" type="text" placeholder="Last Name"/>
                     </Form.Group>
                     <Form.Group controlId="email">
-                        <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
+                        <Form.Control errorMessage={error.type == 'email' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
                     </Form.Group>
                     <Form.Group controlId="password">
                         <InputGroup inside>
-                            <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type="password" autoComplete="off" placeholder="Password"/>
+                            <Form.Control errorMessage={error.type == 'password' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type="password" autoComplete="off" placeholder="Password"/>
                             <InputGroup.Addon className='h-full mr-[1rem]'>
                                 <UnvisibleIcon width='1.5rem' height='1.5rem'/>
                             </InputGroup.Addon>
@@ -63,16 +78,16 @@ export default function Signup() {
                     </Form.Group>
                     <Form.Group controlId="repeat">
                         <InputGroup inside>
-                            <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="repeat" type="password" autoComplete="off" placeholder="Confirm Password"/>
+                            <Form.Control errorMessage={error.type == 'repeat' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="repeat" type="password" autoComplete="off" placeholder="Confirm Password"/>
                             <InputGroup.Addon className='h-full mr-[1rem]'>
                                 <UnvisibleIcon width='1.5rem' height='1.5rem'/>
                             </InputGroup.Addon>
                         </InputGroup>
                         {
-                        error &&
+                        error.type == 'error' &&
                         <Form.HelpText className='text-sm text-red flex items-center'>
                             <HelpOutlineIcon/>
-                            {error}
+                            {error.msg}
                         </Form.HelpText>
                         }
                     </Form.Group>
