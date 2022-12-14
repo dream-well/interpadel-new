@@ -8,21 +8,31 @@ import { fetcher, notification } from 'utils/helpers';
 import Link from 'next/link';
 import NoItems from 'components/NoItems';
 import Image from 'components/Image';
+import { updateFavorites } from 'store/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 const ROW_PER_PAGE = 3;
 
 export default function Favorites() {
 
+    const dispatch = useDispatch();
+
     const [activePage, setActivePage] = useState(1)
     const [favorites, setFavorites] = useState([])
 
-    const {data, error, mutate} = useSWR('/api/profile/favorite-centers', fetcher);
+    const {data: favoritesData, error, mutate} = useSWR('/api/profile/favorite-centers', fetcher);
     
-    const toaster = useToaster();    
+    const toaster = useToaster();
 
     useEffect(() => {        
-        setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
-    }, [activePage, data])
+        setFavorites(favoritesData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+        if (favoritesData?.length <= (activePage-1) * ROW_PER_PAGE)
+            setActivePage(1);
+    }, [favoritesData])
+
+    useEffect(() => {        
+        setFavorites(favoritesData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+    }, [activePage])
 
     const handleRemove = (id) => {
         axios.delete(
@@ -37,6 +47,20 @@ export default function Favorites() {
                 { placement: 'topEnd', }
             )
             mutate();
+
+            console.log(favoritesData);
+            console.log(id);
+            
+            console.log(favoritesData?
+                .map(d => d._id)
+                /*.filter(_id => _id != id)*/);
+            
+
+            dispatch(updateFavorites(
+                favoritesData?
+                    .map(d => d._id)
+                    .filter(_id => _id != id)
+            ));
         }).catch(() => {
             toaster.push(
                 notification({
@@ -52,17 +76,17 @@ export default function Favorites() {
     return (
         <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
             <span className='flex text-[3rem] font-bold saira justify-center'>Your Favorite List</span>
-            {data?.length > 0 && (
+            {favoritesData?.length > 0 && (
                 <FavoritesSection favorites={favorites} onRemove={handleRemove} />
             )}
-            {data?.length > 0 && (
+            {favoritesData?.length > 0 && (
                 <Paginator
                     activePage={activePage}
                     setActivePage={setActivePage}
-                    rows={data?.length}
+                    rows={favoritesData?.length}
                 />
             )}
-            {data?.length === 0 && <NoItems href={'/centers'} text='No Favorite centers yet' />}
+            {favoritesData?.length === 0 && <NoItems href={'/centers'} text='No Favorite centers yet' />}
         </div>
     )
 }
