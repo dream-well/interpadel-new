@@ -1,5 +1,5 @@
 import LocationIcon from "@rsuite/icons/Location";
-import { Input, Button, DatePicker, SelectPicker, DateRangePicker } from "rsuite";
+import { Input, Button, DatePicker, SelectPicker, DateRangePicker, Tooltip, Whisper } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import useSWR from "swr";
 import axios from 'axios';
@@ -11,11 +11,11 @@ import { useDispatch } from "react-redux";
 import { updateFavorites } from "store/slices/authSlice";
 import Image from 'components/Image';
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import useApi from "hooks/useApi";
 import GoogleMapReact from 'google-map-react';
-
+import cn from 'classnames';
 
 // import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
@@ -43,29 +43,23 @@ export default function Centers() {
 
   useEffect(() => {
     if(!router.query) return;
-    // alert(JSON.stringify(router.query));
+    setSearchParams({ ...router.query });
+    setQuery({ ...router.query });
   }, [router.query]);
 
   const findCenters = () => {
-    setQuery({ ...searchParams });
-    router.replace(
-      {
-        pathname: `/centers`,
-        query: {
-          ...searchParams,
-          ... (searchParams.date ? { date: moment(searchParams.date).format('yyyy-MM-DD') } : {}),
-        },
-      },
-      undefined,
-      {
-        shallow: false
-      }
-    );
+    router.push({
+      pathname: '/centers',
+      query: {
+      ...searchParams,
+      ... (searchParams.date ? { date: moment(searchParams.date).format('yyyy-MM-DD') } : {}),
+    }}, undefined, { shallow: true });
+    
   }
   
   return (
     <div className='rs-theme-light mt-[-6rem] bg-grey-dark'>
-      <Maps />
+      <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/>
       <div className='px-[8.5rem] '>
         <SearchBar searchParams={searchParams} onChange={setSearchParams} onSearch={findCenters} />
         <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
@@ -74,29 +68,54 @@ export default function Centers() {
   );
 }
 
-function Maps() {
+const MapPin = ({ lat, lng, text, onClick }) => {
+  const [hover, setHover] = useState(false);
+  return (
+    <div className='cursor-pointer relative' onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      <Image src='/images/centers/padel.png' className='w-[2rem]'/>
+      <Tooltip visible={hover} className={cn('absolute left-[2rem] bottom-0', hover && '!opacity-70 bg-green !text-[#214b56]')}>{text}</Tooltip>
+    </div>
+)};
+
+function Maps({centers=[], onCenterClick}) {
   const defaultProps = {
     center: {
       lat: 59.950272862410756,
       lng: 10.880461887376
     },
-    zoom: 11
+    zoom: 6
   };
+
+  const ref = useRef<GoogleMapReact>();
+
+  useEffect(() => {
+    if(!ref.current) return;
+    const fullscreenBtn = document.querySelector(".gm-control-active.gm-fullscreen-control");
+    if(fullscreenBtn) {
+      fullscreenBtn.setAttribute('hidden', 'hidden');
+    }
+  }, [ref]);
 
   return (
     // Important! Always set the container height explicitly
     <div style={{ height: '32rem', width: '100%' }}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: "" }}
+        ref={ref}
+        bootstrapURLKeys={{key:''}}
         defaultCenter={defaultProps.center}
         defaultZoom={defaultProps.zoom}
+        options={{gestureHandling: 'greedy', fullscreenControlOptions: {position:9}}}
       >
-        <div
-          lat={59.950272862410756}
-          lng={10.880461887376}
-        >
-          hello
-        </div>
+        {
+          centers.map(center => 
+            <MapPin
+              lat={center.latitude}
+              lng={center.longitude}
+              text={center.name}
+              onClick={() => onCenterClick(center)}
+            />
+          )
+        }
       </GoogleMapReact>
     </div>
   );
@@ -111,10 +130,10 @@ function SearchBar({searchParams, onChange, onSearch}) {
         onPressEnter={onSearch}
       />
       <DatePicker 
-        className="w-[12rem] rs-theme-light" 
+        className="w-[10rem] rs-theme-light" 
         cleanable={true} 
         value={searchParams.date} 
-        format="yyyy-MM-dd HH"
+        format="yyyy-MM-dd"
         onChange={v => onChange({ ...searchParams, date: v})} 
       />
       <div>

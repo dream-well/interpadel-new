@@ -39,10 +39,13 @@ export default function Footer() {
                     <Link href='/privacy' className='text-green'>Privacy and Cookies</Link>
                 </span>
                 <div className='flex space-x-4 absolute top-1/2 -translate-y-1/2 right-[8.5rem] items-center'>
-                   <Image src='/images/icons/facebook.png' className='w-[1.5rem] h-min' />
-                   <Image src='/images/icons/twitter.png' className='w-[1.5rem] h-min' />
-                   <Image src='/images/icons/linkedin.png' className='w-[1.5rem] h-min' />
-                   <Image src='/images/icons/youtube.png' className='w-[1.5rem] h-min' />
+                    {
+                        socialLinks.map((social, key) => (
+                            <Link key={key} href={social.href} target='_blank'>
+                                <Image src={social.image} className='w-[1.5rem] h-min' />
+                            </Link>
+                        ))
+                    }
                 </div>
             </div>
         </div>
@@ -86,4 +89,27 @@ const categories = [
     //         { title: 'How to - Blog', href: '/career' },
     //     ]
     // },
+]
+
+const socialLinks = [
+    {
+        type: 'facebook',
+        image: '/images/icons/facebook.png',
+        href: 'https://www.facebook.com/interpadelnorge'
+    },
+    {
+        type: 'instagram',
+        image: '/images/icons/twitter.png',
+        href: 'https://www.instagram.com/interpadel_norge/'
+    },
+    {
+        type: 'twitter',
+        image: '/images/icons/linkedin.png',
+        href: 'https://twitter.com/padel_inter'
+    },
+    {
+        type: 'youtube',
+        image: '/images/icons/youtube.png',
+        href: 'https://www.youtube.com/channel/UC7mJ9uY8jLUEnsBapYfczBw'
+    },
 ]

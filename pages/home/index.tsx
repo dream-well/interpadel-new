@@ -47,11 +47,15 @@ function Search() {
           className='border-none'
           value={address}
           onChange={setAddress}
+          onPressEnter={onSearch}
         />
       </div>
       <div className='rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full'>
         <div className='font-semibold text-xl mb-[0.5rem]'>Date & Time</div>
-        <DatePicker appearance='subtle' />
+        <DatePicker
+          appearance='subtle'
+          format="yyyy-MM-dd"
+        />
       </div>
       <div className='justify-center items-center flex'>
         <Button

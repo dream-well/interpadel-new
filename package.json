@@ -12,6 +12,7 @@
     "@reduxjs/toolkit": "^1.9.1",
     "@stripe/react-stripe-js": "^1.16.0",
     "@stripe/stripe-js": "^1.46.0",
+    "@types/google-map-react": "^2.1.7",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "18.11.11",
     "@types/react": "18.0.26",
