@@ -4,6 +4,7 @@ import { Badge, Calendar, Whisper, Popover } from 'rsuite'
 import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
 import Image from 'components/Image';
+import moment from 'moment';
 
 export default function Books() {
 
@@ -39,7 +40,7 @@ const BookCalendar = () => {
 
   function renderCell(date) {
     const list = getTodoList(date) || [];
-    const displayList = list.filter((item, index) => index < 2);
+    const displayList = list.filter((item, index) => index < 1);
 
     const BookingItem = ({data}) => {
       const startTime = new Date(data.startAt);
@@ -48,9 +49,11 @@ const BookCalendar = () => {
 
       return (
         <Link
-          className='text-white'
+          className='text-white text-sm'
           href={`/centers/${data.center?._id}/${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
-            <b>{startTime.getHours() + ':' + startTime.getMinutes()}-{endTime.getHours() + ':' + endTime.getMinutes()}</b> at <b>{data.center?.name}</b>
+            <b>{moment(startTime).format('hh:MM A')}-{moment(endTime).format('hh:MM A')}</b>
+            <br/>
+            <b>{data.center?.name}</b>
         </Link>
       )
     }
