@@ -1,6 +1,7 @@
 import { Form, Button, InputGroup } from 'rsuite';
 import Link from 'next/link';
 import UnvisibleIcon from '@rsuite/icons/Unvisible';
+import VisibleIcon from '@rsuite/icons/Visible';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios, { AxiosError } from 'axios';
@@ -10,6 +11,7 @@ import Image from 'components/Image';
 export default function Signup() {
     const [formValue, setFormValue] = useState<any>({});
     const [error, setError] = useState<any>({});
+    const [revealPassword, setRevealPassword] = useState(false);
     const router = useRouter();
     const signup = (e: any) => {
 
@@ -70,17 +72,25 @@ export default function Signup() {
                     </Form.Group>
                     <Form.Group controlId="password">
                         <InputGroup inside>
-                            <Form.Control errorMessage={error.type == 'password' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type="password" autoComplete="off" placeholder="Password"/>
-                            <InputGroup.Addon className='h-full mr-[1rem]'>
-                                <UnvisibleIcon width='1.5rem' height='1.5rem'/>
+                            <Form.Control errorMessage={error.type == 'password' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
+                                                        <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
+                                {
+                                    revealPassword ?
+                                    <VisibleIcon width='1.5rem' height='1.5rem'/> :
+                                    <UnvisibleIcon width='1.5rem' height='1.5rem'/>
+                                }
                             </InputGroup.Addon>
                         </InputGroup>
                     </Form.Group>
                     <Form.Group controlId="repeat">
                         <InputGroup inside>
-                            <Form.Control errorMessage={error.type == 'repeat' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="repeat" type="password" autoComplete="off" placeholder="Confirm Password"/>
-                            <InputGroup.Addon className='h-full mr-[1rem]'>
-                                <UnvisibleIcon width='1.5rem' height='1.5rem'/>
+                            <Form.Control errorMessage={error.type == 'repeat' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="repeat" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Confirm Password"/>
+                                                        <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
+                                {
+                                    revealPassword ?
+                                    <VisibleIcon width='1.5rem' height='1.5rem'/> :
+                                    <UnvisibleIcon width='1.5rem' height='1.5rem'/>
+                                }
                             </InputGroup.Addon>
                         </InputGroup>
                         {

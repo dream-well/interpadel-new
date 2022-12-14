@@ -1,6 +1,7 @@
 import { Form, Button, InputGroup } from 'rsuite';
 import Link from 'next/link';
 import UnvisibleIcon from '@rsuite/icons/Unvisible';
+import VisibleIcon from '@rsuite/icons/Visible';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useState } from 'react';
@@ -15,6 +16,7 @@ export default function Login() {
         email: '',
         password: ''
     });
+    const [revealPassword, setRevealPassword] = useState(false);
     const [error, setError] = useState('');
     const dispatch = useDispatch();
     const router = useRouter();
@@ -49,9 +51,13 @@ export default function Login() {
                     </Form.Group>
                     <Form.Group controlId="password">
                         <InputGroup inside>
-                            <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type="password" autoComplete="off" placeholder="Password"/>
-                            <InputGroup.Addon className='h-full mr-[1rem]'>
-                                <UnvisibleIcon width='1.5rem' height='1.5rem'/>
+                            <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
+                            <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
+                                {
+                                    revealPassword ?
+                                    <VisibleIcon width='1.5rem' height='1.5rem'/> :
+                                    <UnvisibleIcon width='1.5rem' height='1.5rem'/>
+                                }
                             </InputGroup.Addon>
                         </InputGroup>
                         <Form.HelpText className='text-sm text-red flex items-center'>
