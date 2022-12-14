@@ -26,7 +26,7 @@ export default function Matching() {
     }
 
     return (
-        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
+        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] py-[4.375rem] bg-grey-dark'>
             <SearchSection
                 searchValues={searchValues}
                 setSearchValues={setSearchValues}
@@ -142,7 +142,7 @@ const municipalties = [
 ]
 
 const MatchingCard = ({_id, avatar, name, location, rate, matching, level, onAddToTeam}) => (
-    <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center'>
+    <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center rounded-[1rem] border border-grey'>
         <Avatar src={avatar} alt={`Player ${name}`}  className='w-[6rem] h-[6rem]' />
         <div className='flex flex-col flex-grow space-y-2'>
             <div className='flex space-x-2'>

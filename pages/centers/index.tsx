@@ -1,5 +1,5 @@
 import LocationIcon from "@rsuite/icons/Location";
-import { Input, Button, DatePicker, SelectPicker } from "rsuite";
+import { Input, Button, DatePicker, SelectPicker, DateRangePicker } from "rsuite";
 import SearchIcon from "@rsuite/icons/Search";
 import useSWR from "swr";
 import axios from 'axios';
@@ -13,13 +13,19 @@ import Image from 'components/Image';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import useApi from "hooks/useApi";
+import GoogleMapReact from 'google-map-react';
+
+
+// import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export default function Centers() {
 
   const dispatch = useDispatch();
-  const { data: centers } = useSWR('/api/centers', fetcher);
-  const { favoriteCenters } = useAppSelector(state => state.auth);
   const [query, setQuery] = useState<any>({});
+  const { data: centers } = useApi('/api/centers', query);
+  const { favoriteCenters } = useAppSelector(state => state.auth);
+  const [searchParams, setSearchParams] = useState<any>({});
   const router = useRouter();
   
   const addToFavorite = (_id) => axios.post(`/api/profile/favorite-centers/${_id}`)
@@ -40,47 +46,82 @@ export default function Centers() {
     // alert(JSON.stringify(router.query));
   }, [router.query]);
 
-  useEffect(() => {
-    if(!router.query) return;
+  const findCenters = () => {
+    setQuery({ ...searchParams });
     router.replace(
       {
         pathname: `/centers`,
         query: {
-          ...query,
-          ... (query.date ? { date: moment(query.date).format('yyyy-MM-DD') } : {}),
+          ...searchParams,
+          ... (searchParams.date ? { date: moment(searchParams.date).format('yyyy-MM-DD') } : {}),
         },
       },
       undefined,
       {
-        shallow: true
+        shallow: false
       }
     );
-  }, [query])
+  }
   
   return (
-    <div className="px-[8.5rem] rs-theme-light">
-      <SearchBar query={query} onChange={setQuery} />
-      <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
+    <div className='rs-theme-light mt-[-6rem] bg-grey-dark'>
+      <Maps />
+      <div className='px-[8.5rem] '>
+        <SearchBar searchParams={searchParams} onChange={setSearchParams} onSearch={findCenters} />
+        <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
+      </div>
     </div>
   );
 }
 
-function SearchBar({query, onChange}) {
+function Maps() {
+  const defaultProps = {
+    center: {
+      lat: 59.950272862410756,
+      lng: 10.880461887376
+    },
+    zoom: 11
+  };
+
   return (
-    <div className="flex mt-[6.25rem] justify-between items-center space-x-4">
-      <SelectPicker
-        placeholder="In / out condition"
-        className="w-[20rem]"
-        searchable={false}
-        cleanable={false}
-        data={[]}
+    // Important! Always set the container height explicitly
+    <div style={{ height: '32rem', width: '100%' }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: "" }}
+        defaultCenter={defaultProps.center}
+        defaultZoom={defaultProps.zoom}
+      >
+        <div
+          lat={59.950272862410756}
+          lng={10.880461887376}
+        >
+          hello
+        </div>
+      </GoogleMapReact>
+    </div>
+  );
+}
+
+function SearchBar({searchParams, onChange, onSearch}) {
+  return (
+    <div className="z-10 flex mt-[-4rem] items-center space-x-4">
+      <Input placeholder="Find venue, city..." className="w-[20rem] z-10" 
+        value={searchParams.address} 
+        onChange={v => onChange({...searchParams, address: v})}
+        onPressEnter={onSearch}
       />
-      <Input placeholder="Find venue, city..." className="w-[20rem] flex-grow" value={query.address} onChange={v => onChange({...query, address: v})}/>
-      <DatePicker className="w-[12rem] rs-theme-light" cleanable={false} value={query.date} onChange={v => onChange({ ...query, date: v})} />
+      <DatePicker 
+        className="w-[12rem] rs-theme-light" 
+        cleanable={true} 
+        value={searchParams.date} 
+        format="yyyy-MM-dd HH"
+        onChange={v => onChange({ ...searchParams, date: v})} 
+      />
       <div>
         <Button
           appearance="primary"
           className="!bg-green !text-black h-[2.5rem] w-[9rem]"
+          onClick={onSearch}
         >
           Search <SearchIcon className="ml-2"/>
         </Button>
@@ -91,10 +132,10 @@ function SearchBar({query, onChange}) {
 
 function CenterList({centers = [], onToggleFavorite, favoriteCenters = []}) {
   return (
-    <div>
-      <div className="font-Saira text-[1.5rem] font-semibold my-[2rem]">
+    <div className='mt-[4rem]'>
+      {/* <div className="font-Saira text-[1.5rem] font-semibold mt-[3rem] mb-[2rem]">
         {centers.length} found clubs, {centers.length} with availability
-      </div>
+      </div> */}
       <div className="flex flex-wrap w-full">
         {centers.map((center, key) => (
           <Center key={key} {...center} onToggleFavorite={onToggleFavorite} isFavorite={favoriteCenters.indexOf(center._id) !== -1 } />
@@ -113,8 +154,8 @@ const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) =>
     <Link href={`/centers/${_id}/today`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
      <Image src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
       <div className="flex bg-dark text-white p-[1rem] rounded-b-2xl justify-between items-center">
-        <div className="flex flex-col">
-          <div className="saira text-[1.75rem] font-semibold max-w-[21rem] truncate">
+        <div className="flex flex-col flex-grow min-w-[1rem]">
+          <div className="saira text-[1.75rem] font-semibold min-w flex-shrink truncate">
             {name} 
           </div>
           <div className='flex items-center space-x-1'>
@@ -122,7 +163,7 @@ const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) =>
             <span>{city}</span>
           </div>
         </div>
-        <div className='text-[2rem]'>
+        <div className='text-[2rem] ml-2'>
           {isFavorite && <AiFillHeart onClick={toggleFavorite} />}
           {!isFavorite && <AiOutlineHeart onClick={toggleFavorite} />}
         </div>

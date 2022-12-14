@@ -4,8 +4,8 @@ import Image from 'components/Image';
 export default function Footer() {
     return (
         <div className='text-white bg-dark'>
-            <div className='flex py-[5.5rem] px-[8.5rem]'>
-                <div className='flex flex-col'>
+            <div className='flex py-[5.5rem] px-[8.5rem] justify-between'>
+                <div className='flex flex-col w-[32rem]'>
                    <Image src='/images/logo.png' className='h-[1.5rem] w-min'/>
                     <span className='text-light mt-[2.5rem]'>
                         For us, it&apos;s about offering Padel for everyone! 
@@ -13,7 +13,7 @@ export default function Footer() {
                         Our goal is to become a leading padel chain in Norway.
                     </span>
                 </div>
-                <div className='flex space-x-[4.5rem] ml-[4rem]'>
+                <div className='flex space-x-[6rem] ml-[4rem]'>
                 {
                     categories.map((category, key) => (
                         <div className='flex flex-col w-max' key={key}>
@@ -68,22 +68,22 @@ const categories = [
             { title: 'Privacy Policy    ', href: '/career' },
         ]
     },
-    {
-        title: 'Resources',
-        links: [
-            { title: 'Free eBooks', href: '/about' },
-            { title: 'Development Tutorial', href: '/features' },
-            { title: 'Youtube Playlist', href: '/works' },
-            { title: 'How to - Blog', href: '/career' },
-        ]
-    },
-    {
-        title: 'Links',
-        links: [
-            { title: 'Free eBooks', href: '/about' },
-            { title: 'Development Tutorial', href: '/features' },
-            { title: 'Youtube Playlist', href: '/works' },
-            { title: 'How to - Blog', href: '/career' },
-        ]
-    },
+    // {
+    //     title: 'Resources',
+    //     links: [
+    //         { title: 'Free eBooks', href: '/about' },
+    //         { title: 'Development Tutorial', href: '/features' },
+    //         { title: 'Youtube Playlist', href: '/works' },
+    //         { title: 'How to - Blog', href: '/career' },
+    //     ]
+    // },
+    // {
+    //     title: 'Links',
+    //     links: [
+    //         { title: 'Free eBooks', href: '/about' },
+    //         { title: 'Development Tutorial', href: '/features' },
+    //         { title: 'Youtube Playlist', href: '/works' },
+    //         { title: 'How to - Blog', href: '/career' },
+    //     ]
+    // },
 ]

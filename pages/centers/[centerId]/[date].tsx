@@ -10,14 +10,17 @@ import cn from 'classnames';
 import axios from "axios";
 import Image from 'components/Image';
 import Loader from "components/Loader";
+import useApi from "hooks/useApi";
+
+// moment.tz.setDefault('CET');
 
 export default function Center() {
   
   const router = useRouter();
   const { centerId, payment_intent_client_secret, redirect_status } = router.query;
   const [date, setDate] = useState(moment(new Date).startOf('day').toDate());
-  const { data: center } = useSWR(centerId ? `/api/centers/${centerId}` : null, fetcher);
-  const { data: reservations, mutate: refreshReservations } = useSWR(centerId ? `/api/reservations/${centerId}?date=${date.toJSON()}` : null, fetcher);
+  const { data: center } = useApi(centerId ? `/api/centers/${centerId}` : null);
+  const { data: reservations, mutate: refreshReservations } = useApi(centerId ? `/api/reservations/${centerId}` : null, {date: date.toJSON()});
   
   useEffect(() => {
     if(router.query.date) {
@@ -114,10 +117,10 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
     if(!reservations[court._id]) return 0;
     return reservations[court._id][offset];
   }
-
+  // alert(openAt);
   return (
     <div>
-      <table className='w-full saira table-fixed'>
+      <table className='w-full saira table-fixed break-words'>
         <tbody>
           <tr>
             <td className='border pl-4 py-2 w-[7.5rem]'>Time/Courts</td>
@@ -132,7 +135,7 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
           {
           (new Array(hours)).fill(0).map((_, i) => (
             <tr key={i}>
-              <td className={cn('border pl-4', (openAt + i) == startAt && 'bg-grey')}>{moment(`2000-01-01 ${openAt + i}:00`).format('h:mm a')}</td>
+              <td className={cn('border pl-4', (openAt + i) == startAt && 'bg-grey')}>{openAt + i > 12 ? openAt + i - 12 : openAt + i}:00 {openAt + i >= 12 ? 'PM' : 'AM'}</td>
               {
               courts.map((_court, key) => {
                 const status = getReservationStatus(_court, i);

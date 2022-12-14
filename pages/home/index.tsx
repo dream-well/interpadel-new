@@ -22,7 +22,7 @@ export default function Home() {
       <Testimonial />
       <Download />
       <FAQ />
-      <GetStarted />
+      {/* <GetStarted /> */}
     </div>
   );
 }
