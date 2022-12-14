@@ -18,11 +18,17 @@ export default function Favorites() {
 
     const {data, error, mutate} = useSWR('/api/profile/favorite-centers', fetcher);
     
-    const toaster = useToaster();    
+    const toaster = useToaster();
 
     useEffect(() => {        
         setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
-    }, [activePage, data])
+        if (data?.length <= (activePage-1) * ROW_PER_PAGE)
+            setActivePage(1);
+    }, [data])
+
+    useEffect(() => {        
+        setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+    }, [activePage])
 
     const handleRemove = (id) => {
         axios.delete(
