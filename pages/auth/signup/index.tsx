@@ -11,7 +11,7 @@ export default function Signup() {
     const [formValue, setFormValue] = useState<any>({});
     const [error, setError] = useState<any>({});
     const router = useRouter();
-    const signup = (e: Event) => {
+    const signup = (e: any) => {
 
         e.stopPropagation();
 
