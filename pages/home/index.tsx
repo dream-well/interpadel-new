@@ -30,9 +30,10 @@ export default function Home() {
 function Search() {
 
   const router = useRouter();
+  const [address, setAddress] = useState('');
 
   const onSearch = () => {
-    router.push('/centers');
+    router.push(`/centers?address=${address}`);
   }
 
   return (
@@ -44,6 +45,8 @@ function Search() {
         <Input
           placeholder='Address, club name, city...'
           className='border-none'
+          value={address}
+          onChange={setAddress}
         />
       </div>
       <div className='rounded-2xl border px-[1.5rem] py-[1rem] flex-col w-full'>

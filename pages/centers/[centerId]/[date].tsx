@@ -207,4 +207,4 @@ function DurationSelector({ value, setValue, duration, price }) {
   )
 }
 
-const durations = [60,90,120];
+const durations = [60,120,180];

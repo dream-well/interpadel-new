@@ -7,7 +7,7 @@ const nextConfig = {
     STRIPE_KEY: "pk_test_51MBqwcCQO6T38kilxah5Ohj2C4kTH0wNAdQOsfdIbZG460IcQ7SQroUKKN3atjgRQ743ZhZG4C245Qq8ztny7Z8y00zmzMqxck",
   },
   images: {
-    domains: ['cdn.pixabay.com']
+    domains: ['cdn.pixabay.com', '192.168.0.156']
   }
 }
 

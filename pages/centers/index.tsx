@@ -10,12 +10,17 @@ import { useAppSelector } from "store/hook";
 import { useDispatch } from "react-redux";
 import { updateFavorites } from "store/slices/authSlice";
 import Image from 'components/Image';
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import moment from "moment";
 
 export default function Centers() {
 
   const dispatch = useDispatch();
   const { data: centers } = useSWR('/api/centers', fetcher);
   const { favoriteCenters } = useAppSelector(state => state.auth);
+  const [query, setQuery] = useState<any>({});
+  const router = useRouter();
   
   const addToFavorite = (_id) => axios.post(`/api/profile/favorite-centers/${_id}`)
   const removeFromFavorite = (_id) => axios.delete(`/api/profile/favorite-centers/${_id}`)
@@ -29,16 +34,38 @@ export default function Centers() {
     .catch(err => {
     })
   }
+
+  useEffect(() => {
+    if(!router.query) return;
+    // alert(JSON.stringify(router.query));
+  }, [router.query]);
+
+  useEffect(() => {
+    if(!router.query) return;
+    router.replace(
+      {
+        pathname: `/centers`,
+        query: {
+          ...query,
+          ... (query.date ? { date: moment(query.date).format('yyyy-MM-DD') } : {}),
+        },
+      },
+      undefined,
+      {
+        shallow: true
+      }
+    );
+  }, [query])
   
   return (
     <div className="px-[8.5rem] rs-theme-light">
-      <SearchBar />
+      <SearchBar query={query} onChange={setQuery} />
       <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
     </div>
   );
 }
 
-function SearchBar() {
+function SearchBar({query, onChange}) {
   return (
     <div className="flex mt-[6.25rem] justify-between items-center space-x-4">
       <SelectPicker
@@ -48,8 +75,8 @@ function SearchBar() {
         cleanable={false}
         data={[]}
       />
-      <Input placeholder="Find venue, city..." className="w-[20rem] flex-grow" />
-      <DatePicker className="w-[12rem] rs-theme-light" cleanable={false} />
+      <Input placeholder="Find venue, city..." className="w-[20rem] flex-grow" value={query.address} onChange={v => onChange({...query, address: v})}/>
+      <DatePicker className="w-[12rem] rs-theme-light" cleanable={false} value={query.date} onChange={v => onChange({ ...query, date: v})} />
       <div>
         <Button
           appearance="primary"

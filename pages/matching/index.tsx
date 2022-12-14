@@ -264,7 +264,7 @@ function AddToTeamModal({ open, onClose }) {
 
     return (
         <Modal
-            keyboard={false} open={open} onClose={onClose} backdrop={'static'}
+            keyboard={false} open={open} onClose={onClose}
             className='p-[2.5rem]'
         >
             <Modal.Header>

@@ -10,6 +10,10 @@ import Avatar from 'components/Avatar';
 import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
 import Image from 'components/Image';
+import { useRef, useState } from 'react';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { updateProfile } from 'store/slices/authSlice';
 
 export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
@@ -53,6 +57,26 @@ export default function Profile() {
 
 const Summary = ({name, avatar, rate}) => {
     const { data } = useSWR(`/api/profile/bookings?month=${new Date().getFullYear()}-${new Date().getMonth() + 1}`, fetcher);
+
+    const uploaderRef = useRef<HTMLInputElement>();
+    const dispatch = useDispatch();
+
+    const uploadPhoto = () => {
+        if(!uploaderRef.current.files[0]) return;
+        var formData = new FormData();
+        formData.append("file", uploaderRef.current.files[0]);
+        axios.post('/api/profile/avatar', formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+            }
+        }).then(() => {
+            axios.get('/api/profile')
+            .then(res => {
+                dispatch(updateProfile(res));
+            })
+        })
+    }
+
     const bookings = data?.filter((booking) => {
         const bookingTime = new Date(booking.startAt);
         const currentTime = new Date();
@@ -101,17 +125,18 @@ const Summary = ({name, avatar, rate}) => {
             <div className='flex flex-col w-1/3 space-y-[2rem]'>
                 <div className='flex justify-between items-center'>
                     <Badge content={rate.toFixed(1)} color={'green'}>
-                        <Avatar src={avatar} className='w-[7.5rem] h-[7.5rem]' />
+                        <Avatar src={avatar} className='w-[7.5rem] h-[7.5rem] cursor-pointer' onClick={() => uploaderRef?.current.click()}/>
                     </Badge>
+                    <input type="file" hidden onChange={uploadPhoto} ref={uploaderRef}/>
                     <span className='font-bold text-[2.5rem] ml-2 text-white'>{name}</span>
                 </div>
                 <div className='flex flex-col rounded-3xl border-grey border-2 p-[2.5rem] space-y-[1rem]'>
                     <span className='font-bold text-white text-[1.5rem]'>Your next booking</span>
                     <span className='text-white flex items-center space-x-2'>
                         {/* <CalendarIcon className='text-[1.5rem]' /> */}
-                        {bookings.length === 0
-                            ? (<span>You have no upcoming bookings</span>)
-                            : (<BookingItem data={bookings[0]} />)
+                        {bookings?.length > 0
+                            ? (<BookingItem data={bookings[0]} />)
+                            : (<span>You have no upcoming bookings</span>)
                         }
                     </span>
                 </div>
@@ -206,7 +231,7 @@ const UpcomingBooking = () => {
                         <Badge /* className='bg-green' */ /> <BookingItem data={item} />
                     </li>
                 ))}
-                {(bookings.length) === 0 && (
+                {(bookings?.length) === 0 && (
                     <span className='flex text-white'>
                         You have no upcoming bookings.
                     </span>

@@ -58,6 +58,15 @@ import {
       updateFavorites: (state, action: PayloadAction<any>) => {
         state.favoriteCenters = action.payload;
       },
+
+      updateProfile: (state, action: PayloadAction<any>) => {
+        state._id = action.payload['_id'];
+        state.email = action.payload['email'];
+        state.firstname = action.payload['firstname'];
+        state.lastname = action.payload['lastname'];
+        state.image = action.payload['image'];
+        state.favoriteCenters = action.payload['favoriteCenters'];
+      }
     },
   });
   // Here we are just exporting the actions from this slice, so that we can call them anywhere in our app.
@@ -65,6 +74,7 @@ import {
     login,
     logout,
     updateFavorites,
+    updateProfile
   } = loginSlice.actions;
   
   // exporting the reducer here, as we need to add this to the store
