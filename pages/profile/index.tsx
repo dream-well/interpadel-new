@@ -10,10 +10,11 @@ import Avatar from 'components/Avatar';
 import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
 import Image from 'components/Image';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { updateProfile } from 'store/slices/authSlice';
+import useApi from 'hooks/useApi';
 
 export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
@@ -77,7 +78,7 @@ const Summary = ({name, avatar, rate}) => {
         })
     }
 
-    const bookings = data?.filter((booking) => {
+    const bookings = data?.records?.filter((booking) => {
         const bookingTime = new Date(booking.startAt);
         const currentTime = new Date();
         return bookingTime > currentTime;
@@ -194,7 +195,7 @@ const Collection = ({name, children}) => (
 
 const UpcomingBooking = () => {
     const { data } = useSWR(`/api/profile/bookings?month=${new Date().getFullYear()}-${new Date().getMonth() + 1}`, fetcher);
-    const bookings = data?.filter((booking) => {
+    const bookings = data?.records?.filter((booking) => {
         const bookingTime = new Date(booking.startAt);
         const currentTime = new Date();
         const oneWeekTime = currentTime;
@@ -255,28 +256,56 @@ const UpcomingActivity = () => {
     )
 }
 
-const TeamMember = ({avatar, name, location, rate, team}) => (
+const TeamMember = ({image, firstname, lastname, address, level, team}) => (
     <div className='flex bg-[#2c303a] space-x-[1rem] p-[2rem] text-white items-center rounded-xl'>
-        <Avatar src={avatar} className='w-[5rem] h-[5rem]'/>
+        <Avatar src={image} className='w-[5rem] h-[5rem]'/>
         <div className='flex flex-col space-y-2'>
-            <div className='flex space-x-5 justify-between'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
-                <span className='text-[#F4F3F4] items-center'>{name}</span>
+            <div className='flex space-x-5'>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level}</span>
+                <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
             </div>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
-                <span>{location}</span>
+                <span>{address}</span>
             </span>
         </div>
-        <span className='flex flex-grow justify-center'>{team}</span>
-        <Button appearance='ghost' className='flex rounded-xl border border-green text-green px-[1.5rem] py-[0.75rem] items-center space-x-2'>
+        <span className='flex flex-grow justify-end'>{team}</span>
+        {/* <Button appearance='ghost' className='flex rounded-xl border border-green text-green px-[1.5rem] py-[0.75rem] items-center space-x-2'>
             <span>Remove</span>
             <MinusIcon />
-        </Button>
+        </Button> */}
     </div>
 )
 
 const TeamMembers = () => {
+    const { data } = useApi('/api/teams/myteams');
+    
+    const [members, setMembers] = useState([])
+    
+    useEffect(() => {
+        console.log(data);
+        
+      var newMembers = []
+      
+      for (const d of (data || [])) {
+        for (const m of d.members) {
+            newMembers = [
+                ...newMembers,
+                {
+                    image: m.image,
+                    firstname: m.firstname,
+                    lastname: m.lastname,
+                    address: m.address + ', ' + m.city + ', ' + m.country,
+                    level: m.level,
+                    team: d.name
+                }
+            ]
+        }
+      }
+
+      setMembers(newMembers)
+    }, [data])
+
     return (
         <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2.5rem]'>
             <div className='flex justify-between'>
@@ -290,9 +319,14 @@ const TeamMembers = () => {
                 </Button>
             </div>
             <div className='flex flex-col space-y-[1rem]'>
-                {members.map((member, index) =>(
+                {members?.map((member, index) =>(
                     <TeamMember {...member} key={index} />
                 ))}
+                {(members?.length) === 0 && (
+                    <span className='flex text-white'>
+                        You have no team members.
+                    </span>
+                )}
             </div>
         </div>
     )
@@ -337,36 +371,5 @@ const matchingPlayers = [
         name: 'Tobias Ribba',
         location: 'Helsingburg',
         matching: 70,
-    },
-]
-
-const members = [
-    {
-        avatar: '/images/profile/team/1.png',
-        rate: 5,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
-    },
-    {
-        avatar: '/images/profile/team/2.png',
-        rate: 4,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
-    },
-    {
-        avatar: '/images/profile/team/3.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
-    },
-    {
-        avatar: '/images/profile/team/4.png',
-        rate: 3,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
     },
 ]
