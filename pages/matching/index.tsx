@@ -1,17 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import cn from "classnames";
-import { Button, Form, Input, Modal, Pagination, Progress, SelectPicker } from 'rsuite'
+import { Button, Form, Input, Modal, Pagination, Progress, SelectPicker, useToaster } from 'rsuite'
 import SearchIcon from '@rsuite/icons/Search';
 import LocationIcon from '@rsuite/icons/Location';
 import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
 import Avatar from 'components/Avatar';
+import useSWR from 'swr';
+import { fetcher } from 'utils/helpers';
+import NoItems from 'components/NoItems';
 
+const ROW_PER_PAGE = 3;
 
 export default function Matching() {
     const [searchValues, setSearchValues] = useState({})
     const [activePage, setActivePage] = useState(1)
     const [open, setOpen] = useState(false)
     const [currentUser, setCurrentUser] = useState(0)
+    const [matchings, setMatchings] = useState([])
+
+    const {data, error, mutate} = useSWR('/api/profile/matchings', fetcher);
+    const matchingsData = []
+
+    const toaster = useToaster();
+
+    // useEffect(() => {
+    //     setMatchings(matchingsData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+    //     if (matchingsData?.length <= (activePage-1) * ROW_PER_PAGE)
+    //         setActivePage(1);
+    // }, [matchingsData])
+
+    // useEffect(() => {        
+    //     setMatchings(matchingsData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+    // }, [activePage])
     
     const handleOpen = ({_id}) => {
         setCurrentUser(_id);
@@ -32,86 +52,25 @@ export default function Matching() {
                 setSearchValues={setSearchValues}
                 onSearch={handleSearch}
             />
-            <Matchings
-                matchings={matchings}
-                onAddToTeam={handleOpen}
-            />
-            <Paginator
-                activePage={activePage}
-                setActivePage={setActivePage}
-                rows={100}
-            />
+            {matchingsData?.length > 0 && (
+                <Matchings
+                    matchings={matchings}
+                    onAddToTeam={handleOpen}
+                />
+            )}
+            {matchingsData?.length > 0 && (
+                <Paginator
+                    activePage={activePage}
+                    setActivePage={setActivePage}
+                    rows={100}
+                />
+            )}
+            {matchingsData?.length === 0 && <NoItems href={'/profile/edit'} text='Complete your profile to see your matchings' />}
             <AddToTeamModal open={open} onClose={handleClose} />
         </div>
     )
 }
 
-const matchings = [
-    {
-        avatar: '/images/matching/1.png',
-        rate: 5,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 49,
-        level: 'Intermediate Level 5',
-    },
-    {
-        avatar: '/images/matching/2.png',
-        rate: 4,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 56,
-        level: 'Intermediate Level 5',
-    },
-    {
-        avatar: '/images/matching/3.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
-        level: 'Intermediate Level 5',
-    },
-    {
-        avatar: '/images/matching/4.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
-        level: 'Intermediate Level 5',
-    },
-    {
-        avatar: '/images/matching/5.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
-        level: 'Intermediate Level 5',
-    },
-    {
-        avatar: '/images/matching/6.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
-        level: 'Intermediate Level 5',
-    },
-    {
-        avatar: '/images/matching/7.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
-        level: 'Intermediate Level 5',
-    },
-    {
-        avatar: '/images/matching/8.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
-        level: 'Intermediate Level 5',
-    },
-]
 const countries = [
     {
         label: "Norway",
@@ -141,20 +100,20 @@ const municipalties = [
     },
 ]
 
-const MatchingCard = ({_id, avatar, name, location, rate, matching, level, onAddToTeam}) => (
+const MatchingCard = ({_id, image, firstname, lastname, address, matching = 45, level, onAddToTeam}) => (
     <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center rounded-[1rem] border border-grey'>
-        <Avatar src={avatar} alt={`Player ${name}`}  className='w-[6rem] h-[6rem]' />
+        <Avatar src={image} alt={`Player ${firstname}`}  className='w-[6rem] h-[6rem]' />
         <div className='flex flex-col flex-grow space-y-2'>
             <div className='flex space-x-2'>
                 {/* <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span> */}
-                <span className='text-[#F4F3F4] items-center text-xl saira font-bold'>{name}</span>
+                <span className='text-[#F4F3F4] items-center text-xl saira font-bold'>{firstname + ' ' + lastname}</span>
             </div>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
-                <span>{location}</span>
+                <span>{address}</span>
             </span>
             <Progress.Line percent={matching} showInfo={false} className='px-0' />
-            <span className='0.875rem'>{name.split(' ')[0]} Matches your profile {matching}%</span>
+            <span className='0.875rem'>{firstname.split(' ')[0]} Matches your profile {matching}%</span>
         </div>
         <span className='flex flex-grow justify-center'>Plays Padel at {level}</span>
         <Button className='flex rounded-xl bg-green text-black w-[12rem] h-[3rem] px-[1.5rem] py-[0.75rem] items-center justify-center space-x-2 text-[1.5rem]'>

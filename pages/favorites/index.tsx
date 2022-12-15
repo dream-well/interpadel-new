@@ -48,14 +48,6 @@ export default function Favorites() {
             )
             mutate();
 
-            console.log(favoritesData);
-            console.log(id);
-            
-            console.log(favoritesData?
-                .map(d => d._id)
-                /*.filter(_id => _id != id)*/);
-            
-
             dispatch(updateFavorites(
                 favoritesData?
                     .map(d => d._id)

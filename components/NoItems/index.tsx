@@ -5,7 +5,7 @@ export default function NoItems({ href, text }) {
   return (
     <div className='flex flex-col items-center space-y-4'>
        <Image src='/images/no-items.svg' alt='Not Items Found' />
-        <Link href={href}  className='font-bold'>{text}</Link>
+        <Link href={href}  className='font-bold text-white'>{text}</Link>
     </div>
   )
 }
