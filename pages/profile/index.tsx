@@ -30,9 +30,7 @@ export default function Profile() {
                 {/* left space */}
                 <div className='flex flex-col space-y-[2.5rem] w-[18.75rem]'>
                     <Collection name='Favorite Venues'>
-                        {favoriteVenues.map((favoriteVenue, key) =>(
-                            <FavoriteCard {...favoriteVenue} key={key}/>
-                        ))}
+                        <Favorites />
                     </Collection>
                     {/* <Collection name='Memberships'>
                         <span className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
@@ -152,14 +150,16 @@ const Summary = ({name, avatar, rate}) => {
     )
 }
 
-const FavoriteCard = ({image, name, location}) => (
-    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-       <Image src={image} className='w-[3rem] h-[3rem] border-1'/>
+const FavoriteCard = ({image, name, address}) => (
+    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
+        <div className='w-[3rem] h-[3rem] border-1 items-center'>
+            <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
+        </div>
         <div className='flex flex-col'>
             <span>{name}</span>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
-                <span>{location}</span>
+                <span>{address}</span>
             </span>
         </div>
     </div>
@@ -172,6 +172,20 @@ const Matchings = () => {
         <div>
             {matchingPlayers?.slice(0, 3).map((matching, key) =>(
                 <MatchingCard {...matching} key={key}/>
+            ))}
+        </div>
+    )
+}
+
+const Favorites = () => {
+    const { data: favoriteVenues } = useApi('/api/profile/favorite-centers');
+    console.log(favoriteVenues);
+    
+
+    return (
+        <div>
+            {favoriteVenues?.slice(0, 3).map((venues, key) =>(
+                <FavoriteCard {...venues} key={key}/>
             ))}
         </div>
     )
@@ -343,21 +357,3 @@ const TeamMembers = () => {
         </div>
     )
 }
-
-const favoriteVenues = [
-    {
-        image: '/images/profile/favorites/1.png',
-        name: '247 PADEL Vala centrum',
-        location: 'Helsingburg',
-    },
-    {
-        image: '/images/profile/favorites/2.png',
-        name: '247 PADEL Vala centrum',
-        location: 'Helsingburg',
-    },
-    {
-        image: '/images/profile/favorites/3.png',
-        name: '247 PADEL Vala centrum',
-        location: 'Helsingburg',
-    },
-]
