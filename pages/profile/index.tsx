@@ -34,15 +34,13 @@ export default function Profile() {
                             <FavoriteCard {...favoriteVenue} key={key}/>
                         ))}
                     </Collection>
-                    <Collection name='Memberships'>
+                    {/* <Collection name='Memberships'>
                         <span className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
                             You are not a member at any venue.
                         </span>
-                    </Collection>
+                    </Collection> */}
                     <Collection name='Matching Players'>
-                        {matchingPlayers.map((matching, key) =>(
-                            <MatchingCard {...matching} key={key}/>
-                        ))}
+                        <Matchings />
                     </Collection>
                 </div>
                 {/* right space */}
@@ -167,21 +165,35 @@ const FavoriteCard = ({image, name, location}) => (
     </div>
 )
 
-const MatchingCard = ({avatar, name, location, rate, matching}) => (
-    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-        <Avatar src={avatar} className='w-[2.5rem] h-[2.5rem]'/>
+const Matchings = () => {
+    const { data: matchingPlayers } = useApi('/api/profile/matchings');
+
+    return (
+        <div>
+            {matchingPlayers?.slice(0, 3).map((matching, key) =>(
+                <MatchingCard {...matching} key={key}/>
+            ))}
+        </div>
+    )
+}
+
+const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}) => (
+    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
+        <div className='flex w-[2.5rem] h-[2.5rem]'>
+            <Avatar src={image} className='w-[2.5rem] h-[2.5rem]' />
+        </div>
         <div className='flex flex-col flex-grow space-y-2'>
-            <div className='flex space-x-5 justify-between'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
-                <span className='text-[#F4F3F4] items-center'>{name}</span>
-                <EmailIcon className='justify-end' />
+            <div className='flex space-x-5'>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level.toFixed(1)}</span>
+                <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
+                {/* <EmailIcon className='justify-end' /> */}
             </div>
             <span className='flex space-x-2 items-center'>
-                <LocationIcon/>
-                <span>{location}</span>
+                <LocationIcon className='!w-[1rem]'/>
+                <span className='whitespace-wrap'>{address}</span>
             </span>
-            <Progress.Line percent={matching} showInfo={false} className='px-0' />
-            <span className='0.875rem'>Match score: {matching}%</span>
+            <Progress.Line percent={level * 10} showInfo={false} className='px-0' />
+            {/* <span className='0.875rem'>Match score: {matching}%</span> */}
         </div>
     </div>
 )
@@ -261,7 +273,7 @@ const TeamMember = ({image, firstname, lastname, address, level, team}) => (
         <Avatar src={image} className='w-[5rem] h-[5rem]'/>
         <div className='flex flex-col space-y-2'>
             <div className='flex space-x-5'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level}</span>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>Level : {level}</span>
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
             </div>
             <span className='flex space-x-2 items-center'>
@@ -347,29 +359,5 @@ const favoriteVenues = [
         image: '/images/profile/favorites/3.png',
         name: '247 PADEL Vala centrum',
         location: 'Helsingburg',
-    },
-]
-
-const matchingPlayers = [
-    {
-        avatar: '/images/profile/matchings/1.png',
-        rate: 5,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 49,
-    },
-    {
-        avatar: '/images/profile/matchings/2.png',
-        rate: 4,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 56,
-    },
-    {
-        avatar: '/images/profile/matchings/3.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
     },
 ]
