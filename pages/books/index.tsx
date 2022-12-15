@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
 import Image from 'components/Image';
 import moment from 'moment';
+import useApi from 'hooks/useApi';
 
 export default function Books() {
 
@@ -19,14 +20,14 @@ export default function Books() {
 const BookCalendar = () => {
 
   const [currentDate, setCurrentDate] = useState(new Date());
-  const { data: bookings } = useSWR(`/api/profile/bookings?month=${currentDate.getFullYear()}-${currentDate.getMonth() + 1}`, fetcher)
+  const { data: bookings } = useApi(`/api/profile/bookings`, { month: moment(currentDate).format('yy-MM')})
 
   const handleSelect = (newDate) => {
     setCurrentDate(newDate);
   }
 
   function getTodoList(date) {
-    const data = bookings?.filter(booking => {
+    const data = bookings?.records.filter(booking => {
       const startTime = new Date(booking.startAt);
       return (
         (startTime.getFullYear() === date.getFullYear()) && 
@@ -94,6 +95,6 @@ const BookCalendar = () => {
   }
 
   return (
-    <Calendar bordered renderCell={renderCell} onSelect={handleSelect} />
+    <Calendar bordered renderCell={renderCell} onChange={handleSelect} value={currentDate} />
   )
 }
