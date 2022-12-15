@@ -10,10 +10,11 @@ import Avatar from 'components/Avatar';
 import useSWR from 'swr';
 import { fetcher } from 'utils/helpers';
 import Image from 'components/Image';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { updateProfile } from 'store/slices/authSlice';
+import useApi from 'hooks/useApi';
 
 export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
@@ -29,19 +30,15 @@ export default function Profile() {
                 {/* left space */}
                 <div className='flex flex-col space-y-[2.5rem] w-[18.75rem]'>
                     <Collection name='Favorite Venues'>
-                        {favoriteVenues.map((favoriteVenue, key) =>(
-                            <FavoriteCard {...favoriteVenue} key={key}/>
-                        ))}
+                        <Favorites />
                     </Collection>
-                    <Collection name='Memberships'>
+                    {/* <Collection name='Memberships'>
                         <span className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
                             You are not a member at any venue.
                         </span>
-                    </Collection>
+                    </Collection> */}
                     <Collection name='Matching Players'>
-                        {matchingPlayers.map((matching, key) =>(
-                            <MatchingCard {...matching} key={key}/>
-                        ))}
+                        <Matchings />
                     </Collection>
                 </div>
                 {/* right space */}
@@ -77,7 +74,7 @@ const Summary = ({name, avatar, rate}) => {
         })
     }
 
-    const bookings = data?.filter((booking) => {
+    const bookings = data?.records?.filter((booking) => {
         const bookingTime = new Date(booking.startAt);
         const currentTime = new Date();
         return bookingTime > currentTime;
@@ -153,34 +150,64 @@ const Summary = ({name, avatar, rate}) => {
     )
 }
 
-const FavoriteCard = ({image, name, location}) => (
-    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-       <Image src={image} className='w-[3rem] h-[3rem] border-1'/>
+const FavoriteCard = ({image, name, address}) => (
+    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
+        <div className='w-[3rem] h-[3rem] border-1 items-center'>
+            <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
+        </div>
         <div className='flex flex-col'>
             <span>{name}</span>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
-                <span>{location}</span>
+                <span>{address}</span>
             </span>
         </div>
     </div>
 )
 
-const MatchingCard = ({avatar, name, location, rate, matching}) => (
-    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-        <Avatar src={avatar} className='w-[2.5rem] h-[2.5rem]'/>
+const Matchings = () => {
+    const { data: matchingPlayers } = useApi('/api/profile/matchings');
+
+    return (
+        <div>
+            {matchingPlayers?.slice(0, 3).map((matching, key) =>(
+                <MatchingCard {...matching} key={key}/>
+            ))}
+        </div>
+    )
+}
+
+const Favorites = () => {
+    const { data: favoriteVenues } = useApi('/api/profile/favorite-centers');
+    console.log(favoriteVenues);
+    
+
+    return (
+        <div>
+            {favoriteVenues?.slice(0, 3).map((venues, key) =>(
+                <FavoriteCard {...venues} key={key}/>
+            ))}
+        </div>
+    )
+}
+
+const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}) => (
+    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
+        <div className='flex w-[2.5rem] h-[2.5rem]'>
+            <Avatar src={image} className='w-[2.5rem] h-[2.5rem]' />
+        </div>
         <div className='flex flex-col flex-grow space-y-2'>
-            <div className='flex space-x-5 justify-between'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
-                <span className='text-[#F4F3F4] items-center'>{name}</span>
-                <EmailIcon className='justify-end' />
+            <div className='flex space-x-5'>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level.toFixed(1)}</span>
+                <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
+                {/* <EmailIcon className='justify-end' /> */}
             </div>
             <span className='flex space-x-2 items-center'>
-                <LocationIcon/>
-                <span>{location}</span>
+                <LocationIcon className='!w-[1rem]'/>
+                <span className='whitespace-wrap'>{address}</span>
             </span>
-            <Progress.Line percent={matching} showInfo={false} className='px-0' />
-            <span className='0.875rem'>Match score: {matching}%</span>
+            <Progress.Line percent={level * 10} showInfo={false} className='px-0' />
+            {/* <span className='0.875rem'>Match score: {matching}%</span> */}
         </div>
     </div>
 )
@@ -194,7 +221,7 @@ const Collection = ({name, children}) => (
 
 const UpcomingBooking = () => {
     const { data } = useSWR(`/api/profile/bookings?month=${new Date().getFullYear()}-${new Date().getMonth() + 1}`, fetcher);
-    const bookings = data?.filter((booking) => {
+    const bookings = data?.records?.filter((booking) => {
         const bookingTime = new Date(booking.startAt);
         const currentTime = new Date();
         const oneWeekTime = currentTime;
@@ -255,28 +282,56 @@ const UpcomingActivity = () => {
     )
 }
 
-const TeamMember = ({avatar, name, location, rate, team}) => (
+const TeamMember = ({image, firstname, lastname, address, level, team}) => (
     <div className='flex bg-[#2c303a] space-x-[1rem] p-[2rem] text-white items-center rounded-xl'>
-        <Avatar src={avatar} className='w-[5rem] h-[5rem]'/>
+        <Avatar src={image} className='w-[5rem] h-[5rem]'/>
         <div className='flex flex-col space-y-2'>
-            <div className='flex space-x-5 justify-between'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span>
-                <span className='text-[#F4F3F4] items-center'>{name}</span>
+            <div className='flex space-x-5'>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>Level : {level}</span>
+                <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
             </div>
             <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
-                <span>{location}</span>
+                <span>{address}</span>
             </span>
         </div>
-        <span className='flex flex-grow justify-center'>{team}</span>
-        <Button appearance='ghost' className='flex rounded-xl border border-green text-green px-[1.5rem] py-[0.75rem] items-center space-x-2'>
+        <span className='flex flex-grow justify-end'>{team}</span>
+        {/* <Button appearance='ghost' className='flex rounded-xl border border-green text-green px-[1.5rem] py-[0.75rem] items-center space-x-2'>
             <span>Remove</span>
             <MinusIcon />
-        </Button>
+        </Button> */}
     </div>
 )
 
 const TeamMembers = () => {
+    const { data } = useApi('/api/teams/myteams');
+    
+    const [members, setMembers] = useState([])
+    
+    useEffect(() => {
+        console.log(data);
+        
+      var newMembers = []
+      
+      for (const d of (data || [])) {
+        for (const m of d.members) {
+            newMembers = [
+                ...newMembers,
+                {
+                    image: m.image,
+                    firstname: m.firstname,
+                    lastname: m.lastname,
+                    address: m.address + ', ' + m.city + ', ' + m.country,
+                    level: m.level,
+                    team: d.name
+                }
+            ]
+        }
+      }
+
+      setMembers(newMembers)
+    }, [data])
+
     return (
         <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2.5rem]'>
             <div className='flex justify-between'>
@@ -285,88 +340,20 @@ const TeamMembers = () => {
                     <span>Your Team Members</span>
                 </span>
                 <Button className='flex rounded-xl bg-green text-black px-[1.5rem] py-[0.75rem] items-center space-x-2'>
-                    <Link href='/profile/edit'>Make a new team </Link>
+                    <Link href='/matching'>Manage members</Link>
                     <CreditCardPlusIcon />
                 </Button>
             </div>
             <div className='flex flex-col space-y-[1rem]'>
-                {members.map((member, index) =>(
+                {members?.map((member, index) =>(
                     <TeamMember {...member} key={index} />
                 ))}
+                {(members?.length) === 0 && (
+                    <span className='flex text-white'>
+                        You have no team members.
+                    </span>
+                )}
             </div>
         </div>
     )
 }
-
-const favoriteVenues = [
-    {
-        image: '/images/profile/favorites/1.png',
-        name: '247 PADEL Vala centrum',
-        location: 'Helsingburg',
-    },
-    {
-        image: '/images/profile/favorites/2.png',
-        name: '247 PADEL Vala centrum',
-        location: 'Helsingburg',
-    },
-    {
-        image: '/images/profile/favorites/3.png',
-        name: '247 PADEL Vala centrum',
-        location: 'Helsingburg',
-    },
-]
-
-const matchingPlayers = [
-    {
-        avatar: '/images/profile/matchings/1.png',
-        rate: 5,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 49,
-    },
-    {
-        avatar: '/images/profile/matchings/2.png',
-        rate: 4,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 56,
-    },
-    {
-        avatar: '/images/profile/matchings/3.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        matching: 70,
-    },
-]
-
-const members = [
-    {
-        avatar: '/images/profile/team/1.png',
-        rate: 5,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
-    },
-    {
-        avatar: '/images/profile/team/2.png',
-        rate: 4,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
-    },
-    {
-        avatar: '/images/profile/team/3.png',
-        rate: 6,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
-    },
-    {
-        avatar: '/images/profile/team/4.png',
-        rate: 3,
-        name: 'Tobias Ribba',
-        location: 'Helsingburg',
-        team: 'Team name 1',
-    },
-]
