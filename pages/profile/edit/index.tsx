@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Form, SelectPicker, DatePicker, Button, Input, useToaster } from 'rsuite';
+import { Form, SelectPicker, DatePicker, Button, Input, useToaster, Slider } from 'rsuite';
 import { useAppSelector } from 'store/hook';
 import { login } from 'store/slices/authSlice';
 import { notification } from 'utils/helpers';
@@ -86,27 +86,55 @@ export default function ProfileEdit() {
     )
 }
 
-const Mandatory = ({ formValue, setFormValue }) => (
-    <Form fluid className='mt-[2.5rem] flex flex-wrap' onChange={setFormValue} formValue={formValue}>
-        <Form.Group controlId="firstname" className='!w-1/2 pr-[1.875rem]'>
-            <Form.ControlLabel>First Name</Form.ControlLabel>
-            <Form.Control name="firstname" placeholder='John' 
-                className='flex items-center h-[3.75rem] placeholder-grey7' 
-            />
-        </Form.Group>
-        <Form.Group controlId="lastname" className='!w-1/2 pr-[1.875rem]'>
-            <Form.ControlLabel>Last Name</Form.ControlLabel>
-            <Form.Control name="lastname" placeholder='Doe' 
-                className='flex items-center h-[3.75rem] placeholder-grey7' 
-            />
-        </Form.Group>
-    </Form>
-)
+const Mandatory = ({ formValue, setFormValue }) => {
+    const [level, setLevel] = useState(formValue.level)
+    const levelText = [
+        '',
+        'Never held a racket.',
+        'Beginner. Learning the basics of padel.',
+        'Beginner advanced. Knows the basics of the game but is uncomfortable with ground strokes and having trouble with bounces of the wall.',
+        'Recreational player. Played for a while and know the basics well and can pick up the pace of the game but no consistency.',
+        'Average. Has played a couple of years and, although no super talent, gets the ball over the net for the most part and with reasonable power. Serve/drop and more can still be inconsistent.',
+        'Average advanced. Like level 5 but with better smash and special shots. Also more consistent and more in control.',
+        'Experienced. Can defend and turn the game against the opponent. Can maintain pressure on the opponent with heavy volleys and build up and hit winners. In addition to matches you have probably started with specific padel exercises.',
+        'Skilled. You master all the technical and tactical parts of the game. Can read the game and use different tactical elements depending on resistance. You are probably among the best players in your club and exercises padel regularly probably with coach.',
+        'Expert. Belongs to the absolute best and masters the game at the highest level and could play national competitions with good results.',
+        'Like Fernando Belasteguín, Paquito Navarro or someone similar in their heyday but better.',
+    ]
+    return (
+        <Form fluid className='mt-[2.5rem] flex flex-wrap' onChange={setFormValue} formValue={formValue}>
+            <Form.Group controlId="firstname" className='!w-1/2 pr-[1.875rem]'>
+                <Form.ControlLabel>First Name</Form.ControlLabel>
+                <Form.Control name="firstname" placeholder='John' 
+                    className='flex items-center h-[3.75rem] placeholder-grey7' 
+                />
+            </Form.Group>
+            <Form.Group controlId="lastname" className='!w-1/2 pr-[1.875rem]'>
+                <Form.ControlLabel>Last Name</Form.ControlLabel>
+                <Form.Control name="lastname" placeholder='Doe' 
+                    className='flex items-center h-[3.75rem] placeholder-grey7' 
+                />
+            </Form.Group>
+            <Form.Group controlId="level" className='w-full pr-[1.875rem]'>
+                <Form.ControlLabel>Player Level</Form.ControlLabel>
+                <Form.Control name="level"
+                    min={1} max={10} step={1} graduated defaultValue={1} progress
+                    accepter={Slider}
+                    onChange={setLevel}
+                    renderMark={mark => {
+                        return mark;
+                    }}
+                />
+            </Form.Group>
+            <span>{levelText[level]}</span>
+        </Form>
+    )
+}
 const Optional = ({ formValue, setFormValue }) => (
-    <Form fluid className='mt-[2.5rem] flex flex-wrap'>
-        <Form.Group controlId="mobile" className='!w-1/2 pr-[1.875rem]'>
+    <Form fluid className='mt-[2.5rem] flex flex-wrap' formValue={formValue} onChange={setFormValue}>
+        <Form.Group controlId="phone" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Mobile Phone</Form.ControlLabel>
-            <Form.Control name="mobile" type='mobile' placeholder='+12345678912' 
+            <Form.Control name="phone" type='mobile' placeholder='+12345678912' 
                 className='flex items-center h-[3.75rem] placeholder-grey7' 
             />
         </Form.Group>
@@ -168,7 +196,7 @@ const Optional = ({ formValue, setFormValue }) => (
         </div>
         <Form.Group controlId="description" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Description</Form.ControlLabel>
-            <Input as="textarea" rows={6} placeholder="Bio" name="language"
+            <Input as="textarea" rows={6} placeholder="Bio" name="description"
                 className='flex items-center h-[3.75rem] placeholder-grey7' 
             />
         </Form.Group>
