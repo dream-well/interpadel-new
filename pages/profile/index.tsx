@@ -314,7 +314,7 @@ const TeamMembers = () => {
                     <span>Your Team Members</span>
                 </span>
                 <Button className='flex rounded-xl bg-green text-black px-[1.5rem] py-[0.75rem] items-center space-x-2'>
-                    <Link href='/profile/edit'>Make a new team </Link>
+                    <Link href='/matching'>Manage members</Link>
                     <CreditCardPlusIcon />
                 </Button>
             </div>
