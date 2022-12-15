@@ -109,6 +109,10 @@ body {
   color: var(--rs-text-primary);  
 }
 
+.rs-picker-menu {
+  z-index: 10;
+}
+
 .rs-picker-date-menu {
   --rs-gray-50: #f7f7fa;
   --rs-gray-100: #f2f2f5;

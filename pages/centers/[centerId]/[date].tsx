@@ -151,7 +151,7 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
                   className={className}
                   onMouseEnter={() => { setCourt(_court), setStartAt(openAt + i)}}
                   onClick={() => { if(getReservationStatus(_court, i) == 0) setOpen(true)}} >
-                  <div className={cn('absolute bottom-[4rem] w-max left-1/2 -translate-x-1/2 bg-white flex flex-col text-md text-black rounded-[0.5rem] px-2', (!hover || status == 0) && 'hidden')}>
+                  <div className={cn('absolute select-none bottom-[4rem] w-max left-1/2 -translate-x-1/2 bg-white flex flex-col text-md text-black rounded-[0.5rem] px-2', (!hover || status == 0) && 'hidden')}>
                     <span className='text-black font-bold'>Booked</span>
                     <span className='text-black'>{court.name}</span>
                     <span className='text-black'>{openAt + i}:00 - {openAt + i + 1}:00</span>
