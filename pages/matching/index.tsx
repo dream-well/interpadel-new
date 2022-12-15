@@ -48,11 +48,11 @@ export default function Matching() {
 
     return (
         <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] py-[4.375rem] bg-grey-dark'>
-            <SearchSection
+            {/* <SearchSection
                 searchValues={searchValues}
                 setSearchValues={setSearchValues}
                 onSearch={handleSearch}
-            />
+            /> */}
             {matchingsData?.length > 0 && (
                 <Matchings
                     matchings={matchings}
