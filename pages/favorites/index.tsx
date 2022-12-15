@@ -8,21 +8,25 @@ import { fetcher, notification } from 'utils/helpers';
 import Link from 'next/link';
 import NoItems from 'components/NoItems';
 import Image from 'components/Image';
+import { updateFavorites } from 'store/slices/authSlice';
+import { useDispatch } from 'react-redux';
 
 const ROW_PER_PAGE = 3;
 
 export default function Favorites() {
 
+    const dispatch = useDispatch();
+
     const [activePage, setActivePage] = useState(1)
     const [favorites, setFavorites] = useState([])
 
-    const {data, error, mutate} = useSWR('/api/profile/favorite-centers', fetcher);
+    const {data: favoritesData, error, mutate} = useSWR('/api/profile/favorite-centers', fetcher);
     
     const toaster = useToaster();    
 
     useEffect(() => {        
-        setFavorites(data?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
-    }, [activePage, data])
+        setFavorites(favoritesData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+    }, [activePage, favoritesData])
 
     const handleRemove = (id) => {
         axios.delete(
@@ -37,6 +41,11 @@ export default function Favorites() {
                 { placement: 'topEnd', }
             )
             mutate();
+            dispatch(updateFavorites(
+                favoritesData?
+                    .map(d => d._id)
+                    .filter(_id => _id != id)
+            ));
         }).catch(() => {
             toaster.push(
                 notification({
@@ -52,28 +61,28 @@ export default function Favorites() {
     return (
         <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
             <span className='flex text-[3rem] font-bold saira justify-center'>Your Favorite List</span>
-            {data?.length > 0 && (
+            {favoritesData?.length > 0 && (
                 <FavoritesSection favorites={favorites} onRemove={handleRemove} />
             )}
-            {data?.length > 0 && (
+            {favoritesData?.length > 0 && (
                 <Paginator
                     activePage={activePage}
                     setActivePage={setActivePage}
-                    rows={data?.length}
+                    rows={favoritesData?.length}
                 />
             )}
-            {data?.length === 0 && <NoItems href={'/centers'} text='No Favorite centers yet' />}
+            {favoritesData?.length === 0 && <NoItems className='text-black' href={'/centers'} text='No Favorite centers yet' />}
         </div>
     )
 }
 
 const FavoriteCard = ({image, name, address, courts, description, _id, onRemove}) => (
     <div className='flex text-white items-center'>
-        <Link href={`/centers/${_id}`} className='w-[16.875rem] h-[16.875rem] absolute'>
+        <Link href={`/centers/${_id}/today`} className='w-[16.875rem] h-[16.875rem] absolute'>
            <Image src={image} alt={name} className='rounded-[1rem] object-cover h-full w-full' />
         </Link>
         <div className='flex flex-col flex-grow bg-dark px-[7rem] py-[3rem] space-y-[1rem] ml-[13.25rem]'>
-            <Link href={`/centers/${_id}`}  className='text-[2rem] font-bold saira'>
+            <Link href={`/centers/${_id}/today`}  className='text-[2rem] font-bold saira'>
                 {name}
             </Link>
             <span>{description}</span>
