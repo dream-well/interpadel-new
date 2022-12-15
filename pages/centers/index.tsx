@@ -73,7 +73,11 @@ const MapPin = ({ lat, lng, text, onClick }) => {
   return (
     <div className='cursor-pointer relative' onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       <Image src='/images/centers/padel.png' className='w-[2rem]'/>
-      <Tooltip visible={hover} className={cn('absolute left-[2rem] bottom-0', hover && '!opacity-70 bg-green !text-[#214b56]')}>{text}</Tooltip>
+      <Tooltip visible={hover} className={cn('absolute left-[2rem] bottom-0', hover && '!opacity-70 bg-green !text-[#1a424a] font-bold')}>
+        <span className='text-black text-md'>{text}</span>
+        <br/>
+        <Link href={`https://www.google.com/maps/search/${text.replace(' ', '+')}`} target='_blank' className='font-bold text-sm'>GoogleMap</Link>
+      </Tooltip>
     </div>
 )};
 
@@ -107,8 +111,9 @@ function Maps({centers=[], onCenterClick}) {
         options={{gestureHandling: 'greedy', fullscreenControlOptions: {position:9}}}
       >
         {
-          centers.map(center => 
+          centers.map((center, key) => 
             <MapPin
+              key={key}
               lat={center.latitude}
               lng={center.longitude}
               text={center.name}

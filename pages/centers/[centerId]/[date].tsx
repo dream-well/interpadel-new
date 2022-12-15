@@ -1,5 +1,5 @@
 import { fetcher } from "utils/helpers";
-import { Button, DatePicker, Modal, Placeholder, Radio, RadioGroup, SelectPicker } from "rsuite";
+import { Button, DatePicker, Modal, Placeholder, Radio, RadioGroup, SelectPicker, Tooltip } from "rsuite";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import moment from "moment";
@@ -18,20 +18,12 @@ export default function Center() {
   
   const router = useRouter();
   const { centerId, payment_intent_client_secret, redirect_status } = router.query;
-  const [date, setDate] = useState(moment(new Date).startOf('day').toDate());
+  const [date, setDate] = useState(null);
   const { data: center } = useApi(centerId ? `/api/centers/${centerId}` : null);
-  const { data: reservations, mutate: refreshReservations } = useApi(centerId ? `/api/reservations/${centerId}` : null, {date: date.toJSON()});
+  const { data: reservations, mutate: refreshReservations } = useApi(centerId && date ? `/api/reservations/${centerId}` : null, date && {date: date.toJSON()});
   
   useEffect(() => {
-    if(router.query.date) {
-      if(router.query.date == 'today')
-        setDate(moment(new Date).startOf('day').toDate());
-      else  
-        setDate(moment(router.query.date).startOf('day').toDate());
-    }
-  }, [router.query.date]);
-
-  useEffect(() => {
+    if(!date) return;
     if(!router.query.centerId) return;
     const query = {
       ...router.query, // list all the queries here
@@ -49,6 +41,15 @@ export default function Center() {
     );
   }, [date])
   
+  useEffect(() => {
+    if(router.query.date) {
+      if(router.query.date == 'today')
+        setDate(moment(new Date).startOf('day').toDate());
+      else  
+        setDate(moment(router.query.date).startOf('day').toDate());
+    }
+  }, [router.query.date]);
+
   useEffect(() => {
     if(payment_intent_client_secret) {
       axios.put(`/api/bookings`, {
@@ -139,15 +140,17 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
               {
               courts.map((_court, key) => {
                 const status = getReservationStatus(_court, i);
-                const className = cn('cursor-pointer border py-2 text-center h-12', 
-                  startAt == openAt + i && court._id == _court._id && ( open ? 'bg-green' : 'bg-grey-light'), 
-                  status == 2 && '!bg-green', status == 1 && '!bg-grey');
+                const hover = startAt == openAt + i && court._id == _court._id;
+                const className = cn('relative cursor-pointer border py-2 text-center h-12', 
+                  hover && ( open ? 'bg-green' : 'bg-grey-light'), 
+                  status == 2 && '!bg-green', status == 1 && '!bg-grey',
+                  status > 0 && hover && '!bg-opacity-50'
+                  );
                 return (
                 <td key={key} 
                   className={className}
                   onMouseEnter={() => { setCourt(_court), setStartAt(openAt + i)}}
                   onClick={() => { if(getReservationStatus(_court, i) == 0) setOpen(true)}} >
-                  {/* { court.name } */}
                 </td>
                 );
               })

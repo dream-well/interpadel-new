@@ -17,7 +17,7 @@ function useApi(url, params = {}) {
   usp.sort();
   const qs = usp.toString();
 
-  const { data, error, mutate } = useSWR(url && `${url}?${qs}`, fetcher);
+  const { data, error, mutate } = useSWR(url && `${url}${qs?'?'+qs:''}`, fetcher);
 
   const isLoading = !error && !data;
 

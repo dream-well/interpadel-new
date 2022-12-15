@@ -56,19 +56,19 @@ const categories = [
     {
         title: 'Company',
         links: [
-            { title: 'About', href: 'https://interpadel.no/om-interpadel/' },
-            { title: 'Features', href: '/features' },
-            { title: 'Works', href: '/works' },
-            { title: 'Career', href: '/career' },
+            { title: 'About', href: 'https://interpadel.no/om-interpadel' },
+            { title: 'Contact', href: 'https://interpadel.no/kontakt-oss/' },
+            { title: 'Online Store', href: 'https://interpadelshop.no/' },
+            { title: 'Blogs', href: 'https://interpadel.no/interpadel-blogg/' },
         ]
     },
     {
         title: 'Help',
         links: [
-            { title: 'Delivery Details', href: '/about' },
-            { title: 'Customer Support', href: '/features' },
-            { title: 'Terms & Conditions', href: '/works' },
-            { title: 'Privacy Policy    ', href: '/career' },
+            { title: 'Game Rules', href: 'https://interpadel.no/hva-er-padel/padel-spilleregler/' },
+            { title: 'Level System', href: 'https://interpadel.no/hva-er-padel/interpadel-nivasystem/' },
+            { title: 'Establishment', href: 'https://interpadel.no/om-interpadel/#etablering' },
+            { title: 'Privacy Policy    ', href: 'https://interpadel.no/personvern-og-cookies/' },
         ]
     },
     // {
