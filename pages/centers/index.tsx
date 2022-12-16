@@ -27,6 +27,8 @@ export default function Centers() {
   const { favoriteCenters } = useAppSelector(state => state.auth);
   const [searchParams, setSearchParams] = useState<any>({});
   const router = useRouter();
+
+  console.log(favoriteCenters);
   
   const addToFavorite = (_id) => axios.post(`/api/profile/favorite-centers/${_id}`)
   const removeFromFavorite = (_id) => axios.delete(`/api/profile/favorite-centers/${_id}`)
@@ -35,7 +37,7 @@ export default function Centers() {
     const currentStatus = favoriteCenters.indexOf(_id) !== -1;
     (currentStatus ? removeFromFavorite(_id) : addToFavorite(_id))
     .then(data => {
-      dispatch(updateFavorites(data))
+      dispatch(updateFavorites(data.map(d => d._id)))
     })
     .catch(err => {
     })
