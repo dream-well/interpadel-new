@@ -16,8 +16,8 @@ export default function ProfileEdit() {
 
     const { firstname, lastname, image, access_token, level, address, city, country, nationality, phone, postcode, gender, birthday, description, language, municipality } = useAppSelector(state => state.auth);
     const [mandatoryValue, setMandatoryValue] = useState({firstname, lastname, level});
-    const [optionalValue, setOptionalValue] = useState({ city, country, nationality, phone, postcode, address, gender, birthday: new Date(birthday), description, language, municipality});
-    
+    const [optionalValue, setOptionalValue] = useState({ city, country, nationality, phone, postcode, address, gender, birthday: new Date(birthday || 0), description, language, municipality});
+       
     const handleBack = (evt) => {
         evt.preventDefault();
         router.push('/profile') ;
