@@ -14,13 +14,13 @@ import axios from 'axios';
 const ROW_PER_PAGE = 3;
 
 export default function Matching() {
-    const [searchValues, setSearchValues] = useState({})
+    const [query, setQuery] = useState('')
     const [activePage, setActivePage] = useState(1)
     const [open, setOpen] = useState(false)
     const [currentUser, setCurrentUser] = useState(0)
     const [matchings, setMatchings] = useState([])
 
-    const {data: matchingsData} = useApi('/api/profile/matchings', { query: searchValues?.query || '' });
+    const {data: matchingsData} = useApi('/api/profile/matchings', { query });
     
     const toaster = useToaster();
 
@@ -41,12 +41,15 @@ export default function Matching() {
     const handleClose = () => {
         setOpen(false);
     }
+    const handleSearch = (q) => {
+        setQuery(q);
+    }
 
     return (
         <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] py-[4.375rem] bg-grey-dark'>
             <SearchSection
-                searchValues={searchValues}
-                setSearchValues={setSearchValues}
+                value={query}
+                onSearch={handleSearch}
             />
             {matchingsData?.length > 0 && (
                 <Matchings
@@ -89,26 +92,30 @@ const MatchingCard = ({_id, image, firstname, lastname, address, matching = 45, 
         </Button>
     </div>
 )
-const SearchSection = ({searchValues, setSearchValues}) => {
+const SearchSection = ({value, onSearch}) => {
+    const [query, setQuery] = useState(value);
+
     return (
         <Form
             layout='inline'
             className='flex justify-center items-center'
-            onChange={setSearchValues} formValue={searchValues}
         >
             <Form.Group controlId="query">
                 <Form.Control
                     name="query" placeholder='Search query...' 
                     className='flex items-center placeholder-grey7'
+                    value={query}
+                    onChange={setQuery}
+                    onPressEnter={() => onSearch(query)}
                 />
             </Form.Group>
-            {/* <Button
+            <Button
                 className='flex bg-green py-[1.115rem] px-[2.25rem] text-[black] items-center space-x-1 h-[2.4rem]'
-                onClick={onSearch}
+                onClick={() => onSearch(query)}
             >
                 <span>Search</span>
                 <SearchIcon />
-            </Button> */}
+            </Button>
         </Form>
     )
 }
