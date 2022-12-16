@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, SelectPicker, DatePicker, Button, Input, useToaster, Slider } from 'rsuite';
 import { useAppSelector } from 'store/hook';
-import { login } from 'store/slices/authSlice';
 import { notification } from 'utils/helpers';
 import axios from 'axios';
+import { updateProfile } from 'store/slices/authSlice';
+import moment from 'moment';
 
 export default function ProfileEdit() {
 
@@ -13,10 +14,10 @@ export default function ProfileEdit() {
     const toaster = useToaster();
     const router = useRouter();
 
-    const { firstname, lastname, image, access_token } = useAppSelector(state => state.auth);
-    const [mandatoryValue, setMandatoryValue] = useState({firstname, lastname});
-    const [optionalValue, setOptionalValue] = useState({});
-
+    const { firstname, lastname, image, access_token, level, address, city, country, nationality, phone, postcode, gender, birthday, description, language, municipality } = useAppSelector(state => state.auth);
+    const [mandatoryValue, setMandatoryValue] = useState({firstname, lastname, level});
+    const [optionalValue, setOptionalValue] = useState({ city, country, nationality, phone, postcode, address, gender, birthday: new Date(birthday), description, language, municipality});
+    
     const handleBack = (evt) => {
         evt.preventDefault();
         router.push('/profile') ;
@@ -32,8 +33,8 @@ export default function ProfileEdit() {
 
         axios.put(
             `/api/profile`, data,
-        ).then(data => {
-            dispatch(login({ access_token: access_token, profile: data }));
+        ).then(d => {
+            
             toaster.push(
                 notification({
                     title: "Profile",
@@ -42,7 +43,13 @@ export default function ProfileEdit() {
                 }),
                 { placement: 'topEnd', }
             )
-            router.back();
+            
+            axios.get('/api/profile')
+            .then(res => {
+                dispatch(updateProfile(res));
+            })
+
+            router.push('/profile') ;
         }).catch(err => {
             toaster.push(
                 notification({
@@ -85,6 +92,8 @@ export default function ProfileEdit() {
         </div>
     )
 }
+
+const Textarea = forwardRef((props, ref) => <Input {...props} as="textarea" ref={ref} />);
 
 const Mandatory = ({ formValue, setFormValue }) => {
     const [level, setLevel] = useState(formValue.level)
@@ -140,20 +149,23 @@ const Optional = ({ formValue, setFormValue }) => (
         </Form.Group>
         <Form.Group controlId="gender" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Gender</Form.ControlLabel>
-            <SelectPicker size='lg' name="gender" placeholder='Select Gender' data={genderData} searchable={false}
+            <Form.Control name="gender" placeholder='Select Gender' data={genderData} searchable={false}
                 className='flex items-center !h-[3.75rem] placeholder-grey7'
+                accepter={SelectPicker}
             />
         </Form.Group>
         <Form.Group controlId="birthday" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Date of Birth</Form.ControlLabel>
-            <DatePicker name="birthday" placeholder='Select date of birth'
+            <Form.Control name="birthday" placeholder='Select date of birth'
                 className='flex items-center !h-[3.75rem] placeholder-grey7' 
+                accepter={DatePicker}
             />
         </Form.Group>
         <Form.Group controlId="language" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Language</Form.ControlLabel>
-            <SelectPicker name="language" placeholder='Select Language' data={langData} searchable={false}
-                    className='flex items-center h-[3.75rem] placeholder-grey7'
+            <Form.Control name="language" placeholder='Select Language' data={langData} searchable={false}
+                className='flex items-center h-[3.75rem] placeholder-grey7'
+                accepter={SelectPicker}
             />
         </Form.Group>
         <Form.Group controlId="address" className='!w-1/2 pr-[1.875rem]'>
@@ -196,9 +208,11 @@ const Optional = ({ formValue, setFormValue }) => (
         </div>
         <Form.Group controlId="description" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Description</Form.ControlLabel>
-            <Input as="textarea" rows={6} placeholder="Bio" name="description"
+            <Form.Control rows={6} placeholder="Bio" name="description"
                 className='flex items-center h-[3.75rem] placeholder-grey7' 
+                accepter={Textarea}
             />
+            {/* <Form.Control rows={5} name="textarea" accepter={Textarea} /> */}
         </Form.Group>
     </Form>
 )

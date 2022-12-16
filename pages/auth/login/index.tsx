@@ -20,17 +20,20 @@ export default function Login() {
     const [error, setError] = useState('');
     const dispatch = useDispatch();
     const router = useRouter();
+
     const signin = () => {
         axios.post('/api/auth/login', {
             email: formValue.email, 
             password: formValue.password
         })
         .then(res => {
+            console.log(res);
+            
             dispatch(login(res));
             router.replace('/home');
         })
         .catch((e: AxiosError) => {
-            if(e.response?.status == 401) {
+            if(e?.response?.status == 401) {
                 setError("Password you entered doesn't match");
             }
         })

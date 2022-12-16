@@ -57,7 +57,6 @@ const _fetcher = async(url: string, method: string = 'GET', body: any = {}) => {
 
 export function is_valid_access_token(access_token) {
   const data = jwt.decode(access_token);
-  console.log(data);
   return true;
 }
 
