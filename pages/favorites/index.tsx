@@ -24,9 +24,15 @@ export default function Favorites() {
     
     const toaster = useToaster();    
 
-    useEffect(() => {        
+    useEffect(() => {
         setFavorites(favoritesData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
-    }, [activePage, favoritesData])
+        if (favoritesData?.length <= (activePage-1) * ROW_PER_PAGE)
+            setActivePage(1);
+    }, [favoritesData])
+
+    useEffect(() => {
+        setFavorites(favoritesData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+    }, [activePage])
 
     const handleRemove = (id) => {
         axios.delete(
