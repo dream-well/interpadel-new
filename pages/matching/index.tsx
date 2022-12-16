@@ -20,7 +20,7 @@ export default function Matching() {
     const [currentUser, setCurrentUser] = useState(0)
     const [matchings, setMatchings] = useState([])
 
-    const {data: matchingsData} = useApi('/api/profile/matchings', { query: searchValues?.query });
+    const {data: matchingsData} = useApi('/api/profile/matchings', { query: searchValues?.query || '' });
     
     const toaster = useToaster();
 
