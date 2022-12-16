@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { forwardRef, useState } from 'react';
+import { forwardRef, RefObject, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, SelectPicker, DatePicker, Button, Input, useToaster, Slider } from 'rsuite';
 import { useAppSelector } from 'store/hook';
@@ -93,7 +93,9 @@ export default function ProfileEdit() {
     )
 }
 
-const Textarea = forwardRef((props, ref) => <Input {...props} as="textarea" ref={ref} />);
+const Textarea = forwardRef(function Textarea(props, ref:RefObject<HTMLTextAreaElement>){
+    return  <Input {...props} as="textarea" ref={ref} />;
+});
 
 const Mandatory = ({ formValue, setFormValue }) => {
     const [level, setLevel] = useState(formValue.level)
@@ -208,7 +210,7 @@ const Optional = ({ formValue, setFormValue }) => (
         </div>
         <Form.Group controlId="description" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Description</Form.ControlLabel>
-            <Form.Control rows={6} placeholder="Bio" name="description"
+            <Form.Control placeholder="Bio" name="description"
                 className='flex items-center h-[3.75rem] placeholder-grey7' 
                 accepter={Textarea}
             />

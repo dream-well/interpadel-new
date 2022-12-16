@@ -12,12 +12,13 @@ import axios from 'axios';
 import { AxiosError } from 'axios';
 import { logout } from 'store/slices/authSlice';
 import moment from 'moment-timezone';
+import { SessionProvider } from "next-auth/react"
 
 moment.tz.setDefault('CET');
 
 setupAxiosInterceptors1();
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const router = useRouter();
   
   useEffect(() => {
@@ -28,17 +29,20 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <title>Interpadel App</title>
+        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta>
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=''></link>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Saira&display=swap" rel="stylesheet"></link>
       </Head>
-      <CustomProvider theme="dark">
-        <Provider store={store}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </Provider>
-      </CustomProvider>
+      <SessionProvider session={session}>
+        <CustomProvider theme="dark">
+          <Provider store={store}>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </Provider>
+        </CustomProvider>
+      </SessionProvider>
     </>
     )
 
@@ -49,7 +53,7 @@ function setupAxiosInterceptors1() {
     // Do something before request is sent
     if (config.url.startsWith("/api")) {
       config.url = process.env.API_HOST + config.url.substring(4);
-
+      console.log(config.url);
       const token = localStorage.getItem('access_token');
       if (token) {
         const headers: any = config.headers;

@@ -34,7 +34,7 @@ export default function Centers() {
   const handleToggleFavorite = (_id) => {
     const currentStatus = favoriteCenters.indexOf(_id) !== -1;
     (currentStatus ? removeFromFavorite(_id) : addToFavorite(_id))
-    .then(data => {
+    .then((data: any) => {
       dispatch(updateFavorites(data.map(d => d._id)))
     })
     .catch(err => {

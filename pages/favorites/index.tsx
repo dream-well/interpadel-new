@@ -48,8 +48,7 @@ export default function Favorites() {
             )
             mutate();
             dispatch(updateFavorites(
-                favoritesData?
-                    .map(d => d._id)
+                favoritesData?.map(d => d._id)
                     .filter(_id => _id != id)
             ));
         }).catch(() => {
