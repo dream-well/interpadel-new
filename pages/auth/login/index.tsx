@@ -27,9 +27,7 @@ export default function Login({ providers }) {
             email: formValue.email, 
             password: formValue.password
         })
-        .then(res => {
-            console.log(res);
-            
+        .then(res => {            
             dispatch(login(res));
             router.replace('/home');
         })
