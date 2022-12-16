@@ -92,27 +92,19 @@ export default function Login({ providers }) {
                 <span className='px-4'>Or</span>
                 <hr className='flex-grow' />
             </div>
-            <div className='mt-[2.5rem] space-x-[1.25rem] flex'>
-                <Button appearance='ghost' className='!text-grey7 !border-grey7 h-[3.6rem] flex items-center'>
+            <div className='mt-[2.5rem] space-x-[1.25rem] flex text-white'>
+                <Button 
+                    appearance='ghost' 
+                    className='!border-grey7 h-[3.6rem] flex items-center !text-white'
+                    onClick={() => signIn('google')}
+                >
                    <Image src='/images/icons/google.svg' className='mr-3' />
                     Continue with Google
                 </Button>
-                <Button appearance='ghost' className='!text-grey7 !border-grey7 h-[3.6rem] flex items-center'>
+                <Button appearance='ghost' className='!border-grey7 h-[3.6rem] flex items-center !text-white'>
                    <Image src='/images/icons/apple.svg' className='mr-3' />
                     Continue with Apple
                 </Button>
-            </div>
-            <div>
-                
-                {
-                providers &&
-                Object.values(providers).map((provider: any) => (
-                    <div key={provider.name}>
-                    <button onClick={() => signIn(provider.id)}>
-                        Sign in with {provider.name}
-                    </button>
-                    </div>
-                ))}
             </div>
         </div>
     </div>

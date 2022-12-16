@@ -30,6 +30,7 @@ export default function ProfileEdit() {
             ...mandatoryValue,
             ...optionalValue,
         }
+        console.log(data);
 
         axios.put(
             `/api/profile`, data,
