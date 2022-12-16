@@ -92,7 +92,7 @@ const Summary = ({name, avatar, rate}) => {
             <Link
             className='text-white'
             href={`/centers/${data.center?._id}/${startTime.format("YYYY-MM-DD")}`}>
-                <span className='text-lg font-bold'>{moment(startTime).format("YYYY/MM/DD")} {moment(startTime).format("hh:mm")}-{moment(endTime).format("hh:mm")}</span><br />
+                <span className='text-lg font-bold'>{moment(startTime).format("YYYY/MM/DD")} {moment(startTime).format("hh:mm A")}-{moment(endTime).format("hh:mm A")}</span><br />
                 <i className='text-sm'>{data.center?.name} / {data.court?.name}</i>
             </Link>
         )
@@ -123,7 +123,7 @@ const Summary = ({name, avatar, rate}) => {
                 </Button>
             </div>
             <div className='flex flex-col items-end'>
-                <Button appearance="ghost" className='h-[3rem] w-[7.5rem] rounded-xl !border-green !text-green'>
+                <Button appearance="ghost" className='flex h-[3rem] w-[7.5rem] rounded-xl !border-green !text-green items-center justify-center'>
                     <Link href='/profile/edit'>Edit Profile</Link>
                 </Button>
             </div>
@@ -215,16 +215,12 @@ const UpcomingBooking = () => {
     const BookingItem = ({data}) => {
         const startTime = moment(data.startAt);
         const endTime = moment(startTime).add(data.duration, 'minutes');
-        console.log(data);
-        console.log('s', startTime.format());
-        console.log('e', endTime.format());
         
-    
         return (
             <Link
             className='text-white'
             href={`/centers/${data.center?._id}/${startTime.format("YYYY-MM-DD")}`}>
-                <b className='text-lg'>[ {startTime.format("YYYY/MM/DD hh:mm")} - {endTime.format("YYYY/MM/DD hh:mm")} ]</b> at <b>{data.center?.name}</b> / <b>{data.court?.name}</b>
+                <b className='text-lg'>[ {startTime.format("YYYY/MM/DD hh:mm A")} - {endTime.format("YYYY/MM/DD hh:mm A")} ]</b> at <b>{data.center?.name}</b> / <b>{data.court?.name}</b>
             </Link>
         )
     }
