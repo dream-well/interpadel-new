@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { forwardRef, useState } from 'react';
+import { forwardRef, RefObject, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, SelectPicker, DatePicker, Button, Input, useToaster, Slider } from 'rsuite';
 import { useAppSelector } from 'store/hook';
@@ -93,7 +93,9 @@ export default function ProfileEdit() {
     )
 }
 
-const Textarea = forwardRef((props, ref) => <Input {...props} as="textarea" ref={ref} />);
+const Textarea = forwardRef(function Textarea(props, ref:RefObject<HTMLTextAreaElement>){
+    return  <Input {...props} as="textarea" ref={ref} />;
+});
 
 const Mandatory = ({ formValue, setFormValue }) => {
     const [level, setLevel] = useState(formValue.level)
