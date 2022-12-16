@@ -20,7 +20,7 @@ export default function Matching() {
     const [currentUser, setCurrentUser] = useState(0)
     const [matchings, setMatchings] = useState([])
 
-    const {data: matchingsData, error, mutate} = useSWR('/api/profile/matchings', fetcher);
+    const {data: matchingsData} = useApi('/api/profile/matchings', { query: searchValues?.query });
     
     const toaster = useToaster();
 
@@ -41,18 +41,13 @@ export default function Matching() {
     const handleClose = () => {
         setOpen(false);
     }
-    const handleSearch = (evt) => {
-        evt.preventDefault();
-        console.log(searchValues);
-    }
 
     return (
         <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] py-[4.375rem] bg-grey-dark'>
-            {/* <SearchSection
+            <SearchSection
                 searchValues={searchValues}
                 setSearchValues={setSearchValues}
-                onSearch={handleSearch}
-            /> */}
+            />
             {matchingsData?.length > 0 && (
                 <Matchings
                     matchings={matchings}
@@ -72,35 +67,6 @@ export default function Matching() {
     )
 }
 
-const countries = [
-    {
-        label: "Norway",
-        value: "nr",
-    },
-    {
-        label: "United States",
-        value: "us",
-    },
-    {
-        label: "Canada",
-        value: "ca",
-    },
-]
-const municipalties = [
-    {
-        label: "Norway",
-        value: "nr",
-    },
-    {
-        label: "United States",
-        value: "us",
-    },
-    {
-        label: "Canada",
-        value: "ca",
-    },
-]
-
 const MatchingCard = ({_id, image, firstname, lastname, address, matching = 45, level, onOpenModal}) => (
     <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center rounded-[1rem] border border-grey'>
         <Avatar src={image} alt={`Player ${firstname}`}  className='w-[6rem] h-[6rem]' />
@@ -116,37 +82,33 @@ const MatchingCard = ({_id, image, firstname, lastname, address, matching = 45, 
             <Progress.Line percent={matching} showInfo={false} className='px-0' />
             <span className='0.875rem'>{firstname} Matches your profile {matching}%</span>
         </div>
-        <span className='flex flex-grow justify-center'>Plays Padel at {level}</span>
+        <span className='flex flex-grow justify-end'>Plays Padel at Level {level}</span>
         <Button className='flex rounded-xl bg-green text-black w-[12rem] h-[3rem] px-[1.5rem] py-[0.75rem] items-center justify-center space-x-2 text-[1.5rem]'>
             <span onClick={() => onOpenModal(_id)}>Make a team</span>
             <CreditCardPlusIcon />
         </Button>
     </div>
 )
-const SearchSection = ({searchValues, setSearchValues, onSearch}) => {
+const SearchSection = ({searchValues, setSearchValues}) => {
     return (
         <Form
             layout='inline'
             className='flex justify-center items-center'
             onChange={setSearchValues} formValue={searchValues}
         >
-            <Form.Group controlId="country">
-                <SelectPicker name="country" placeholder='All Countries' data={countries}
-                    className='w-[12.75rem]'
+            <Form.Group controlId="query">
+                <Form.Control
+                    name="query" placeholder='Search query...' 
+                    className='flex items-center placeholder-grey7'
                 />
             </Form.Group>
-            <Form.Group controlId="municipalty">
-                <SelectPicker name="municipalty" placeholder='All Municipalties' data={municipalties}
-                    className='w-[18.75rem]'
-                />
-            </Form.Group>
-            <Button
+            {/* <Button
                 className='flex bg-green py-[1.115rem] px-[2.25rem] text-[black] items-center space-x-1 h-[2.4rem]'
                 onClick={onSearch}
             >
                 <span>Search</span>
                 <SearchIcon />
-            </Button>
+            </Button> */}
         </Form>
     )
 }
