@@ -29,7 +29,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
     <>
       <Head>
         <title>Interpadel App</title>
-        {/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta> */}
+        <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta>
         <link rel="preconnect" href="https://fonts.googleapis.com"></link>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin=''></link>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Saira&display=swap" rel="stylesheet"></link>
