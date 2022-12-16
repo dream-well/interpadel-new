@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import axios from 'axios';
 import { login } from "store/slices/authSlice";
 import { useDispatch } from "react-redux";
+import { useSession } from "next-auth/react"
 
 export default function Layout({ children }) {
     const router = useRouter();
@@ -13,6 +14,7 @@ export default function Layout({ children }) {
     const showHeader = !router.pathname.startsWith('/auth');
     const isHome = router.pathname == '/home';
     const isCenter = router.pathname == '/centers';
+    const { data: session, status } = useSession();
     
     useEffect(() => {
         const access_token = localStorage.getItem('access_token');
@@ -27,6 +29,10 @@ export default function Layout({ children }) {
         }
     }, [])
     
+    useEffect(() => {
+
+    }, [])
+
     return (
         <div className='open-sans flex flex-col min-h-screen'>
             {
