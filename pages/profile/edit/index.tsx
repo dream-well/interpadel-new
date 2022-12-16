@@ -210,7 +210,7 @@ const Optional = ({ formValue, setFormValue }) => (
         </div>
         <Form.Group controlId="description" className='!w-1/2 pr-[1.875rem]'>
             <Form.ControlLabel>Description</Form.ControlLabel>
-            <Form.Control rows={6} placeholder="Bio" name="description"
+            <Form.Control placeholder="Bio" name="description"
                 className='flex items-center h-[3.75rem] placeholder-grey7' 
                 accepter={Textarea}
             />
