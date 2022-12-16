@@ -21,15 +21,15 @@ export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
     
     return (
-        <div className='px-[8.5rem] flex flex-col my-[6rem] space-y-[3rem]'>
+        <div className='px-[8.5rem] flex flex-col py-[6rem] space-y-[3rem] bg-grey-dark'>
             <Summary
                 name={firstname + ' ' + lastname}
                 avatar={image}
                 rate={5.0}
             />
-            <div className='flex justify-between space-x-[3.813rem]'>
+            <div className='flex justify-between space-x-[3.813rem] '>
                 {/* left space */}
-                <div className='flex flex-col space-y-[2.5rem] w-[18.75rem]'>
+                <div className='flex flex-col space-y-[2.5rem] w-[18.75rem] rounded-[1rem]'>
                     <Collection name='Favorite Centers'>
                         <Favorites />
                     </Collection>
@@ -99,7 +99,7 @@ const Summary = ({name, avatar, rate}) => {
     }
 
     return (
-        <div className='flex p-[3rem] space-x-[3rem] bg-[#1d1829] justify-between'>
+        <div className='flex p-[3rem] space-x-[3rem] bg-[#1d1829] justify-between rounded-[1rem] border border-grey'>
             <div className='flex flex-col w-1/3 space-y-[2rem]'>
                 <div className='flex justify-between items-center'>
                     <Badge content={rate.toFixed(1)} color={'green'}>
@@ -132,7 +132,7 @@ const Summary = ({name, avatar, rate}) => {
 }
 
 const FavoriteCard = ({image, name, address}) => (
-    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
+    <div className='flex space-x-5 p-[1rem] text-white items-center'>
         <div className='w-[3rem] h-[3rem] border-1 items-center'>
             <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
         </div>
@@ -171,7 +171,7 @@ const Favorites = () => {
 }
 
 const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}) => (
-    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
+    <div className='flex space-x-5 p-[1rem] text-white items-center'>
         <div className='flex w-[2.5rem] h-[2.5rem]'>
             <Avatar src={image} className='w-[2.5rem] h-[2.5rem]' />
         </div>
@@ -192,8 +192,8 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
 )
 
 const Collection = ({name, children}) => (
-    <div className='flex flex-col space-y-1'>
-        <span className='p-5 font-bold text-[1.25rem] bg-[#c2ff00]'>{name}</span>
+    <div className='flex flex-col space-y-1 border border-grey bg-dark rounded-[1rem]'>
+        <span className='p-5 font-bold text-[1.25rem] bg-[#c2ff00] rounded-t-[1rem]'>{name}</span>
         {children}
     </div>
 )
@@ -226,7 +226,7 @@ const UpcomingBooking = () => {
     }
     
     return (
-        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2rem]'>
+        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2rem] border border-grey rounded-[1rem]'>
             <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
                 <CalendarIcon />
                 <span>Upcoming Booking</span>
@@ -249,7 +249,7 @@ const UpcomingBooking = () => {
 
 const UpcomingActivity = () => {
     return (
-        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[3.313rem]'>
+        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[3.313rem]  border border-grey rounded-[1rem]'>
             <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
                 <CalendarIcon />
                 <span>Upcoming Activities</span>
@@ -310,7 +310,7 @@ const TeamMembers = () => {
     }, [data])
 
     return (
-        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2.5rem]'>
+        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2.5rem] border border-grey rounded-[1rem]'>
             <div className='flex justify-between'>
                 <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
                     <CalendarIcon />

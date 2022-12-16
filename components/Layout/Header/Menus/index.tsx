@@ -4,7 +4,7 @@ import Image from 'components/Image';
 export const Menus = () => (
     <div className='flex items-center'>
         <Link href={'/'}>
-           <Image src='/images/logo.svg' alt="logo" className='h-[1.5rem]'/>
+           <Image src='/images/logo.svg' alt="logo" className='h-[1.5rem] select-none'/>
         </Link>
         <ul className='ml-[5.5rem] flex space-x-12'>
             {

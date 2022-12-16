@@ -4,10 +4,10 @@ import Image from 'components/Image';
 export default function Footer() {
     return (
         <div className='text-white bg-dark'>
-            <div className='flex py-[5.5rem] px-[8.5rem] justify-between'>
+            <div className='flex py-[3rem] px-[8.5rem] justify-between'>
                 <div className='flex flex-col w-[32rem]'>
                    <Image src='/images/logo.png' className='h-[1.5rem] w-min'/>
-                    <span className='text-light mt-[2.5rem]'>
+                    <span className='text-light mt-[1.5rem]'>
                         For us, it&apos;s about offering Padel for everyone! 
                         We want to cultivate an environment and create enthusiasm for the sport throughout the country. 
                         Our goal is to become a leading padel chain in Norway.
@@ -18,7 +18,7 @@ export default function Footer() {
                     categories.map((category, key) => (
                         <div className='flex flex-col w-max' key={key}>
                             <span className='text-xl font-bold'>{category.title}</span>
-                            <div className='text-light mt-[2.5rem] flex flex-col'>
+                            <div className='text-light mt-[1.5rem] flex flex-col'>
                                 {
                                     category.links.map((link, key) => (
                                         <Link href={link.href} key={key} target={link.href.startsWith('/') ? '_self' : '_blank'}>
@@ -33,7 +33,7 @@ export default function Footer() {
                 </div>
             </div>
             <hr className='border-green'/>
-            <div className='h-[5.625rem] flex items-center justify-center relative'>
+            <div className='h-[5rem] flex items-center justify-center relative'>
                 <span>
                     Copyright © InterPadel–&nbsp;
                     <Link href='/privacy' className='text-green'>Privacy and Cookies</Link>
@@ -59,14 +59,12 @@ const categories = [
             { title: 'About', href: 'https://interpadel.no/om-interpadel' },
             { title: 'Contact', href: 'https://interpadel.no/kontakt-oss/' },
             { title: 'Online Store', href: 'https://interpadelshop.no/' },
-            { title: 'Blogs', href: 'https://interpadel.no/interpadel-blogg/' },
         ]
     },
     {
         title: 'Help',
         links: [
             { title: 'Game Rules', href: 'https://interpadel.no/hva-er-padel/padel-spilleregler/' },
-            { title: 'Level System', href: 'https://interpadel.no/hva-er-padel/interpadel-nivasystem/' },
             { title: 'Establishment', href: 'https://interpadel.no/om-interpadel/#etablering' },
             { title: 'Privacy Policy    ', href: 'https://interpadel.no/personvern-og-cookies/' },
         ]
