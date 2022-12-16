@@ -15,6 +15,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { updateProfile } from 'store/slices/authSlice';
 import useApi from 'hooks/useApi';
+import moment from 'moment';
 
 export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
@@ -29,7 +30,7 @@ export default function Profile() {
             <div className='flex justify-between space-x-[3.813rem]'>
                 {/* left space */}
                 <div className='flex flex-col space-y-[2.5rem] w-[18.75rem]'>
-                    <Collection name='Favorite Venues'>
+                    <Collection name='Favorite Centers'>
                         <Favorites />
                     </Collection>
                     {/* <Collection name='Memberships'>
@@ -53,7 +54,7 @@ export default function Profile() {
 }
 
 const Summary = ({name, avatar, rate}) => {
-    const { data } = useSWR(`/api/profile/bookings?month=${new Date().getFullYear()}-${new Date().getMonth() + 1}`, fetcher);
+    const { data } = useSWR(`/api/profile/bookings?month=${moment(new Date()).format("YYYY-MM")}`, fetcher);
 
     const uploaderRef = useRef<HTMLInputElement>();
     const dispatch = useDispatch();
@@ -75,43 +76,23 @@ const Summary = ({name, avatar, rate}) => {
     }
 
     const bookings = data?.records?.filter((booking) => {
-        const bookingTime = new Date(booking.startAt);
-        const currentTime = new Date();
-        return bookingTime > currentTime;
+        const bookingTime = moment(booking.startAt);
+        const currentTime = moment();
+        return bookingTime.diff(currentTime) > 0;
     }).sort((d1, d2) => {
-        const off = (new Date(d1.startAt).getTime()) - (new Date(d2.startAt).getTime());
-        return (off > 0 ? 1 : (off === 0 ? 0 : -1));
+        const diff = (new Date(d1.startAt).getTime()) - (new Date(d2.startAt).getTime());
+        return (diff > 0 ? 1 : (diff === 0 ? 0 : -1));
     });
 
     const BookingItem = ({data}) => {
-        const startTime = new Date(data.startAt);
-        const endTime = new Date(startTime);
-        endTime.setMinutes(startTime.getMinutes() + data.duration);
+        const startTime = moment(data.startAt);
+        const endTime = moment(startTime).add(data.duration, "minutes");
 
-        const checkTime = (i) => (i < 10 ? "0"+i : i) 
-        const timeString = (time) => (
-            checkTime(time.getHours()) + ':' + 
-            checkTime(time.getMinutes()) + ':' +
-            checkTime(time.getSeconds())
-        )
-        const formatDate = (d) => {
-            var month = '' + (d.getMonth() + 1);
-            var day = '' + d.getDate();
-            var year = d.getFullYear();
-
-            if (month.length < 2) 
-                month = '0' + month;
-            if (day.length < 2) 
-                day = '0' + day;
-
-            return [year, month, day].join('-');
-        }
-    
         return (
             <Link
             className='text-white'
-            href={`/centers/${data.center?._id}/${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
-                <span className='text-lg font-bold'>{formatDate(startTime)} {timeString(startTime)}-{timeString(endTime)}</span><br />
+            href={`/centers/${data.center?._id}/${startTime.format("YYYY-MM-DD")}`}>
+                <span className='text-lg font-bold'>{moment(startTime).format("YYYY/MM/DD")} {moment(startTime).format("hh:mm")}-{moment(endTime).format("hh:mm")}</span><br />
                 <i className='text-sm'>{data.center?.name} / {data.court?.name}</i>
             </Link>
         )
@@ -179,8 +160,6 @@ const Matchings = () => {
 
 const Favorites = () => {
     const { data: favoriteVenues } = useApi('/api/profile/favorite-centers');
-    console.log(favoriteVenues);
-    
 
     return (
         <div>
@@ -220,28 +199,32 @@ const Collection = ({name, children}) => (
 )
 
 const UpcomingBooking = () => {
-    const { data } = useSWR(`/api/profile/bookings?month=${new Date().getFullYear()}-${new Date().getMonth() + 1}`, fetcher);
+    const { data } = useSWR(`/api/profile/bookings?month=${moment(new Date()).format("YYYY-MM")}`, fetcher);
     const bookings = data?.records?.filter((booking) => {
-        const bookingTime = new Date(booking.startAt);
-        const currentTime = new Date();
-        const oneWeekTime = currentTime;
-        oneWeekTime.setDate(oneWeekTime.getDate() + 7);
-        return (bookingTime < oneWeekTime) && (bookingTime > currentTime);
+        const bookingTime = moment(booking.startAt);
+        const currentTime = moment();
+        const oneWeekTime = moment();
+        oneWeekTime.add(7, 'days');
+        
+        return bookingTime.diff(currentTime) > 0 && oneWeekTime.diff(bookingTime) > 0;
     }).sort((d1, d2) => {
-        const off = (new Date(d1.startAt).getTime()) - (new Date(d2.startAt).getTime());
-        return (off > 0 ? 1 : (off === 0 ? 0 : -1));
+        const diff = moment(d1.startAt).diff(moment(d2.startAt));
+        return (diff > 0 ? 1 : (diff === 0 ? 0 : -1));
     });
 
     const BookingItem = ({data}) => {
-        const startTime = new Date(data.startAt);
-        const endTime = new Date(startTime);
-        endTime.setMinutes(startTime.getMinutes() + data.duration);
+        const startTime = moment(data.startAt);
+        const endTime = moment(startTime).add(data.duration, 'minutes');
+        console.log(data);
+        console.log('s', startTime.format());
+        console.log('e', endTime.format());
+        
     
         return (
             <Link
             className='text-white'
-            href={`/centers/${data.center?._id}/${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
-                <b className='text-lg'>[ {startTime.toLocaleString()} - {endTime.toLocaleString()} ]</b> at <b>{data.center?.name}</b> / <b>{data.court?.name}</b>
+            href={`/centers/${data.center?._id}/${startTime.format("YYYY-MM-DD")}`}>
+                <b className='text-lg'>[ {startTime.format("YYYY/MM/DD hh:mm")} - {endTime.format("YYYY/MM/DD hh:mm")} ]</b> at <b>{data.center?.name}</b> / <b>{data.court?.name}</b>
             </Link>
         )
     }
@@ -309,11 +292,9 @@ const TeamMembers = () => {
     const [members, setMembers] = useState([])
     
     useEffect(() => {
-        console.log(data);
+        var newMembers = []
         
-      var newMembers = []
-      
-      for (const d of (data || [])) {
+        for (const d of (data || [])) {
         for (const m of d.members) {
             newMembers = [
                 ...newMembers,
@@ -327,9 +308,9 @@ const TeamMembers = () => {
                 }
             ]
         }
-      }
+        }
 
-      setMembers(newMembers)
+        setMembers(newMembers)
     }, [data])
 
     return (

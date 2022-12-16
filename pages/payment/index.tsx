@@ -78,7 +78,7 @@ function InformationCard({startAt, court, price, duration}) {
       <hr/>
       <div className='flex items-center justify-between h-[4rem]'>
         <span>Start</span>
-        <span>{(new Date(startAt)).toLocaleString()} <span className='text-red'>*</span></span>
+        <span>{moment(startAt).format("YYYY/MM/DD hh:mm:ss A")} <span className='text-red'>*</span></span>
       </div>
       <hr/>
       <div className='flex items-center justify-between h-[4rem]'>

@@ -27,13 +27,10 @@ const BookCalendar = () => {
   }
 
   function getTodoList(date) {
+    const m = moment(date).startOf('day');  // compare date only (ignore time)
     const data = bookings?.records.filter(booking => {
-      const startTime = new Date(booking.startAt);
-      return (
-        (startTime.getFullYear() === date.getFullYear()) && 
-        (startTime.getMonth() === date.getMonth()) &&
-        (startTime.getDate() === date.getDate())
-      );
+      const startTime = moment(booking.startAt).startOf('day'); // compare date only (ignore time)
+      return startTime.isSame(m);
     })
     
     return data;
@@ -44,15 +41,15 @@ const BookCalendar = () => {
     const displayList = list.filter((item, index) => index < 1);
 
     const BookingItem = ({data}) => {
-      const startTime = new Date(data.startAt);
-      const endTime = new Date(startTime);
-      endTime.setMinutes(startTime.getMinutes() + data.duration);
+      const startTime =moment(data.startAt);
+      const endTime = moment(startTime);
+      endTime.add(data.duration, "minutes");
 
       return (
         <Link
           className='text-white text-sm'
-          href={`/centers/${data.center?._id}/${startTime.getFullYear()}-${startTime.getMonth()+1}-${startTime.getDate()}`}>
-            <b>{moment(startTime).format('hh:MM A')}-{moment(endTime).format('hh:MM A')}</b>
+          href={`/centers/${data.center?._id}/${startTime.format("YYYY-MM-DD")}`}>
+            <b>{moment(startTime).format('hh:mm A')}-{moment(endTime).format('hh:mm A')}</b>
             <br/>
             <b>{data.center?.name}</b>
         </Link>
