@@ -39,8 +39,8 @@ export default function Payment() {
     return <Loader />
 
   return (
-    <div className='px-[8.5rem] py-[6rem] flex space-x-8 text-light'>
-      <div className='bg-dark p-10 rounded-[1.5rem] w-1/2 flex flex-col h-min'>
+    <div className='px-[8.5rem] py-[6rem] flex space-x-8 text-light bg-grey-dark'>
+      <div className='bg-dark p-10 rounded-[1.5rem] w-1/2 flex flex-col border border-grey rounded-[1rem] h-min'>
         <span className='text-[2rem] text-white mb-[1.5rem]'>Payment data</span>
         {
           <Elements options={{clientSecret: booking.clientSecret, appearance: { theme: 'night', labels: 'floating'}}} stripe={stripePromise}>
@@ -48,7 +48,7 @@ export default function Payment() {
           </Elements>
         }
       </div>
-      <div className='bg-dark p-10 rounded-[1.5rem] w-1/2 flex flex-col'>
+      <div className='bg-dark p-10 rounded-[1.5rem] w-1/2 flex flex-col border border-grey rounded-[1rem]'>
         <InformationCard {...booking}/>
       </div>
     </div>
