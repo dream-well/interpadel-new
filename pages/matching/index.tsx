@@ -86,8 +86,11 @@ const MatchingCard = ({_id, image, firstname, lastname, address, matching = 45, 
             <span className='0.875rem'>{firstname} Matches your profile {matching}%</span>
         </div>
         <span className='flex flex-grow justify-end'>Plays Padel at Level {level}</span>
-        <Button className='flex rounded-xl bg-green text-black w-[12rem] h-[3rem] px-[1.5rem] py-[0.75rem] items-center justify-center space-x-2 text-[1.5rem]'>
-            <span onClick={() => onOpenModal(_id)}>Make a team</span>
+        <Button 
+            className='flex rounded-xl bg-green text-black w-[12rem] h-[3rem] px-[1.5rem] py-[0.75rem] items-center justify-center space-x-2 text-[1.5rem]'
+            onClick={() => onOpenModal(_id)}
+        >
+            <span>Make a team</span>
             <CreditCardPlusIcon />
         </Button>
     </div>
