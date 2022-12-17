@@ -33,4 +33,8 @@ const menus = [
         title: 'Books',
         href: '/books'
     },
+    {
+        title: 'Messages',
+        href: '/messages'
+    },
 ]
