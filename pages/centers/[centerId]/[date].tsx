@@ -11,6 +11,9 @@ import axios from "axios";
 import Image from 'components/Image';
 import Loader from "components/Loader";
 import useApi from "hooks/useApi";
+import Link from "next/link";
+import PageNextIcon from '@rsuite/icons/PageNext';
+import PagePreviousIcon from '@rsuite/icons/PagePrevious';
 
 // moment.tz.setDefault('CET');
 
@@ -21,7 +24,9 @@ export default function Center() {
   const [date, setDate] = useState(null);
   const { data: center } = useApi(centerId ? `/api/centers/${centerId}` : null);
   const { data: reservations, mutate: refreshReservations } = useApi(centerId && date ? `/api/reservations/${centerId}` : null, date && {date: date.toJSON()});
-  
+
+  const [calendarOpen, setCalendarOpen] = useState(false);
+
   useEffect(() => {
     if(!date) return;
     if(!router.query.centerId) return;
@@ -72,19 +77,33 @@ export default function Center() {
   if(center?.closeAt == '24:00:00') closeAt = 24;
   const hours = closeAt - openAt;
 
+  const setNewDate = (date) => {
+    const newDate = moment(date);
+    if(newDate < moment().startOf('day'))
+      return;
+    setDate(newDate.toDate());
+  }
+
   return (
     <div className='bg-cover bg-center' style={{backgroundImage: `url(${center?.image})`}}>
-      <div className='py-[5rem] px-[10rem] flex flex-col justify-center w-full flex flex-col bg-white/10 backdrop-blur'>
+      <div className='py-[4rem] px-[6rem] flex flex-col justify-center w-full flex flex-col bg-white/10 backdrop-blur'>
         <div className='rounded-t-[1.5rem] w-full bg-green h-[4rem] flex items-center justify-center'>
-          <span className='text-[2rem] font-bold saira'>{center?.name}</span>
+          <span className='text-[2rem] font-bold saira text-dark'>{center?.name}</span>
         </div>
         <div className='w-full bg-dark rounded-b-[1.5rem] pb-[3.5rem]'>
-          <div className='h-[5rem] p-6 justify-between w-full flex text-white items-center'>
-            <DatePicker cleanable={false} value={date} onChange={setDate}/>
-            <div className='flex items-center'>
-             <Image src='/images/icons/location.svg' className='h-5' />
-              <span className='ml-2'>{center?.city}</span>
+          <div className='h-[5rem] p-6 justify-center relative w-full flex text-white items-center'>
+            <div className='absolute left-1/2 -translate-x-1/2 text-[1.5rem] cursor-pointer space-x-4 select-none'>
+              <PagePreviousIcon onClick={() => setNewDate(moment(date).subtract(1, 'day').toDate())} />
+              <span onClick={() => setCalendarOpen(true)}>{moment(date).format('dddd D MMMM')}</span>
+              <PageNextIcon onClick={() => setDate(moment(date).add(1, 'day').toDate())} />
             </div>
+            <DatePicker placement='bottom' cleanable={false} value={date} onChange={(date) => { setNewDate(date); setCalendarOpen(false) }} format='yyyy-MM-dd' className='invisible cursor-pointer' open={calendarOpen} onOk={() => setCalendarOpen(false)}/>
+            <Link href={`https://www.google.com/maps/search/${center.name.replace(' ', '+')}`} 
+              target='_blank' 
+              className='flex items-center absolute right-8'>
+              <Image src='/images/icons/location.svg' className='h-5' />
+              <span className='ml-2'>{center?.city}</span>
+            </Link>
           </div>
           <div className='px-6 text-light'>
             <SlotTable openAt={openAt} hours={hours} courts={center?.courts} date={date} reservations={reservations}/>
@@ -117,42 +136,51 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
   const getReservationStatus = (court, offset) => {
     if(!reservations[court._id]) return 0;
     return reservations[court._id][offset];
+  }  
+  let current_hour = 0;
+  if(moment(date).days() == moment().days()){
+    current_hour = moment().hour();
+    // alert(current_hour);
   }
+  const hour_array = (new Array(hours)).fill(0).map((_, i) => i + openAt);
   // alert(openAt);
   return (
     <div>
       <table className='w-full saira table-fixed break-words'>
         <tbody>
           <tr>
-            <td className='border pl-4 py-2 w-[7.5rem]'>Time/Courts</td>
+            <td className='text-center py-2 w-[7.5rem]'></td>
             {
-              courts.map((_court, key) => (
-                <td key={key} className={cn('border py-2 text-center', court._id == _court._id && 'bg-grey')}>
-                  { _court.name }
-                </td>
+                
+              hour_array.map((hour) => (
+                <td key={hour} className={cn(' text-center py-2', (hour) == startAt && 'bg-grey')}>{hour > 12 ? hour - 12 : hour} {hour >= 12 ? 'PM' : 'AM'}</td>
               ))
             }
           </tr>
           {
-          (new Array(hours)).fill(0).map((_, i) => (
-            <tr key={i}>
-              <td className={cn('border pl-4', (openAt + i) == startAt && 'bg-grey')}>{openAt + i > 12 ? openAt + i - 12 : openAt + i}:00 {openAt + i >= 12 ? 'PM' : 'AM'}</td>
+          courts.map((_court, key) => (
+            <tr key={key}>
+                <td key={key} className={cn('text-center px-2 h-[3.75rem]', court._id == _court._id && 'bg-grey')}>
+                    { _court.name }
+                </td>
               {
-              courts.map((_court, key) => {
+              hour_array.map((hour, i) => {
                 const status = getReservationStatus(_court, i);
-                const hover = (startAt == openAt + i && court._id == _court._id);
+                const hover = (startAt == hour && court._id == _court._id);
                 const className = cn('relative cursor-pointer border py-2 text-center h-12', 
                   hover && ( open ? 'bg-green' : 'bg-grey-light'), 
                   status == 2 && '!bg-green', status == 1 && '!bg-grey',
-                  status > 0 && hover && '!bg-opacity-50'
+                  status > 0 && hover && '!bg-opacity-50',
+                  hour <= current_hour && '!bg-grey-dark'
                   );
                 return (
-                <td key={key} 
+                <td key={i} 
                   className={className}
                   onMouseEnter={() => { setCourt(_court), setStartAt(openAt + i)}}
                   onClick={() => { if(getReservationStatus(_court, i) == 0) setOpen(true)}} >
-                  <div className={cn('absolute select-none bottom-[4rem] w-max left-1/2 -translate-x-1/2 bg-white flex flex-col text-md text-black rounded-[0.5rem] px-2', (!hover || status == 0) && 'hidden')}>
-                    <span className='text-black font-bold'>Booked</span>
+                  <span className={hour > current_hour && 'hidden'}>X</span>
+                  <div className={cn('absolute select-none bottom-[4rem] w-max left-1/2 -translate-x-1/2 bg-white flex flex-col text-md text-black rounded-[0.5rem] px-2', (!hover || (status == 0 && hour > current_hour)) && 'hidden')}>
+                    <span className='text-black font-bold'>{ hour <= current_hour ? 'Time Passed' : 'Booked' }</span>
                     <span className='text-black'>{court.name}</span>
                     <span className='text-black'>{openAt + i}:00 - {openAt + i + 1}:00</span>
                   </div>
