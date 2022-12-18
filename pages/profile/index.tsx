@@ -131,17 +131,21 @@ const Summary = ({name, avatar, rate}) => {
     )
 }
 
-const FavoriteCard = ({image, name, address}) => (
-    <div className='flex space-x-5 p-[1rem] text-white items-center'>
+const FavoriteCard = ({_id, image, name, address}) => (
+    <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
         <div className='w-[3rem] h-[3rem] border-1 items-center'>
-            <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
+            <Link href={`https://192.168.0.110:3000/centers/${_id}/today`}>
+                <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
+            </Link>
         </div>
         <div className='flex flex-col'>
-            <span>{name}</span>
-            <span className='flex space-x-2 items-center'>
+            <Link href={`https://192.168.0.110:3000/centers/${_id}/today`}>
+                <span>{name}</span>
+            </Link>
+            {address && <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
                 <span>{address}</span>
-            </span>
+            </span>}
         </div>
     </div>
 )
@@ -160,6 +164,7 @@ const Matchings = () => {
 
 const Favorites = () => {
     const { data: favoriteVenues } = useApi('/api/profile/favorite-centers');
+    console.log(favoriteVenues);
 
     return (
         <div>
@@ -181,10 +186,10 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
                 {/* <EmailIcon className='justify-end' /> */}
             </div>
-            <span className='flex space-x-2 items-center'>
+            {address && (<span className='flex space-x-2 items-center'>
                 <LocationIcon className='!w-[1rem]'/>
                 <span className='whitespace-wrap'>{address}</span>
-            </span>
+            </span>)}
             <Progress.Line percent={level * 10} showInfo={false} className='px-0' />
             {/* <span className='0.875rem'>Match score: {matching}%</span> */}
         </div>
@@ -269,10 +274,10 @@ const TeamMember = ({image, firstname, lastname, address, level, team}) => (
                 <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>Level : {level}</span>
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
             </div>
-            <span className='flex space-x-2 items-center'>
+            {address !== undefined && <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
                 <span>{address}</span>
-            </span>
+            </span>}
         </div>
         <span className='flex flex-grow justify-end'>{team}</span>
         {/* <Button appearance='ghost' className='flex rounded-xl border border-green text-green px-[1.5rem] py-[0.75rem] items-center space-x-2'>
@@ -298,7 +303,7 @@ const TeamMembers = () => {
                     image: m.image,
                     firstname: m.firstname,
                     lastname: m.lastname,
-                    address: m.address + ', ' + m.city + ', ' + m.country,
+                    address: (!m.address) ? undefined : (m.address + ', ' + m.city + ', ' + m.country),
                     level: m.level,
                     team: d.name
                 }
