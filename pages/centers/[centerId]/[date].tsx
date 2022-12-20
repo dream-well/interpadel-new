@@ -14,6 +14,7 @@ import useApi from "hooks/useApi";
 import Link from "next/link";
 import PageNextIcon from '@rsuite/icons/PageNext';
 import PagePreviousIcon from '@rsuite/icons/PagePrevious';
+import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 
 // moment.tz.setDefault('CET');
 
@@ -106,7 +107,7 @@ export default function Center() {
             </Link>
           </div>
           <div className='px-6 text-light'>
-            <SlotTable openAt={openAt} hours={hours} courts={center?.courts} date={date} reservations={reservations}/>
+            <SlotTable openAt={openAt} hours={hours} courts={center?.courts} date={date} reservations={reservations} refreshReservations={refreshReservations}/>
             <div className='flex justify-end items-center text-sm mt-6 space-x-4'>
               <div className='flex items-center'>
                 <div className='bg-dark border rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
@@ -128,8 +129,9 @@ export default function Center() {
   )
 }
 
-function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
+function SlotTable({ openAt, hours = 0, courts = [], date, reservations={}, refreshReservations }) {
   const [open, setOpen] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(0);
   const [court, setCourt] = useState<any>({});
   const [startAt, setStartAt] = useState();
 
@@ -137,12 +139,24 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
     if(!reservations[court._id]) return 0;
     return reservations[court._id][offset];
   }  
-  let current_hour = 0;
-  if(moment(date).days() == moment().days()){
+  let current_hour = -1;
+  const diff = moment(date).startOf('day').diff(moment().startOf('day'), 'second');
+  if(diff == 0) {
     current_hour = moment().hour();
-    // alert(current_hour);
+  }
+  else if(diff < 0)
+  {
+    current_hour = 24;
   }
   const hour_array = (new Array(hours)).fill(0).map((_, i) => i + openAt);
+
+  const onSlotClick = (status, hour) => {
+    if(status == 2 && hour > current_hour) {
+      setDetailOpen(status);
+      return;
+    }
+    if(hour > current_hour && status == 0) setOpen(true)
+  };
   // alert(openAt);
   return (
     <div>
@@ -169,15 +183,17 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
                 const hover = (startAt == hour && court._id == _court._id);
                 const className = cn('relative cursor-pointer border py-2 text-center h-12', 
                   hover && ( open ? 'bg-green' : 'bg-grey-light'), 
-                  status == 2 && '!bg-green', status == 1 && '!bg-grey',
+                  (status != 1 && status != 0) && '!bg-green', status == 1 && '!bg-grey',
                   status > 0 && hover && '!bg-opacity-50',
-                  hour <= current_hour && '!bg-grey-dark'
+                  hour <= current_hour && '!bg-grey-dark',
+                  current_hour == hour && 'border-r-2 border-r-[#a2f917]'
                   );
                 return (
                 <td key={i} 
                   className={className}
                   onMouseEnter={() => { setCourt(_court), setStartAt(openAt + i)}}
-                  onClick={() => { if(getReservationStatus(_court, i) == 0) setOpen(true)}} >
+                  onClick={() => onSlotClick(status, hour)}
+                >
                   <span className={hour > current_hour && 'hidden'}>X</span>
                   <div className={cn('absolute select-none bottom-[4rem] w-max left-1/2 -translate-x-1/2 bg-white flex flex-col text-md text-black rounded-[0.5rem] px-2', (!hover || (status == 0 && hour > current_hour)) && 'hidden')}>
                     <span className='text-black font-bold'>{ hour <= current_hour ? 'Time Passed' : 'Booked' }</span>
@@ -193,12 +209,13 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={} }) {
           }
         </tbody>
       </table>
-      <DurationDialog open={open} setOpen={setOpen} court={court} startAt={startAt} date={date}/>
+      <DurationSelectDialog open={open} setOpen={setOpen} court={court} startAt={startAt} date={date}/>
+      <DetailDialog bookingId={detailOpen} setOpen={setDetailOpen} court={court} startAt={startAt} date={date} refreshReservations={refreshReservations}/>
     </div>
   )
 }
 
-function DurationDialog({ open, setOpen, court, startAt, date}) {
+function DurationSelectDialog({ open, setOpen, court, startAt, date}) {
   const [duration, setDuration] = useState(60);
   const router = useRouter();
   const gotoPayment = () => {
@@ -247,3 +264,119 @@ function DurationSelector({ value, setValue, duration, price }) {
 }
 
 const durations = [60,120,180];
+
+
+
+const data = ['Eugenia', 'Bryan', 'Linda', 'Nancy', 'Lloyd', 'Alice', 'Julia', 'Albert'].map(
+  item => ({ label: item, value: item })
+);
+
+function PlayerSelector({ value, readOnly = false }) {
+const [players, setPlayers] = React.useState([]);
+
+const renderMenu = menu => {
+  if (players.length === 0) {
+    return (
+      <p style={{ padding: 4, color: '#999', textAlign: 'center' }}>
+        <SpinnerIcon spin /> Loading...
+      </p>
+    );
+  }
+  return menu;
+};
+
+const updateData = () => {
+  if (players.length === 0) {
+    setPlayers(data);
+  }
+};
+
+return (
+  <SelectPicker
+  readOnly={readOnly}
+  data={players}
+  value={value}
+  style={{ width: '16rem' }}
+  onOpen={updateData}
+  onSearch={updateData}
+  renderMenu={renderMenu}
+/>
+);
+}
+
+function DetailDialog({ bookingId, setOpen, court, startAt, date, refreshReservations}) {
+const { data: bookingDetail, loading } = useApi(bookingId ? `/api/bookings/${bookingId}` : null);
+const [players, setPlayers] = useState([]);
+const router = useRouter();
+
+useEffect(() => {
+  if(!bookingDetail) return;
+  setPlayers(bookingDetail.players);
+}, [bookingDetail?.players]);
+
+const cancelBooking = () => {
+  axios.put(`/api/bookings/cancel/${bookingId}`).then((resp) => {
+    console.log('cancel', resp);
+    setOpen(false);
+    refreshReservations();
+  })
+}
+if(!bookingId || !bookingDetail) return;
+const m_duration = moment.duration(bookingDetail.duration, 'minutes');
+const duration_txt = `${m_duration.hours()}h ${m_duration.minutes()}min`;
+return (
+  <Modal open={bookingId != 0} onClose={() => setOpen(0)} size='sm' dialogClassName={styles.durationSelector}>
+    <Modal.Header as={() => (
+      <div className='w-full'>
+          <div className='flex justify-between text-white text-md'>
+            <span>Update booking</span>
+            <span className='flex items-center'>
+              {court.name}
+            </span>
+          </div>
+          <div className='text-white text-2xl pt-2'>
+            { moment(date).startOf('day').format('dddd (D MMMM)') }&nbsp;
+            { moment(bookingDetail.startAt).format('h:mm A') } -&nbsp;
+            { moment(bookingDetail.startAt).add(bookingDetail.duration, 'm').format('h:mm A') }
+          </div>
+      </div>
+    )}/>
+    <Modal.Body className='space-y-5'>
+      <div className='flex p-4 bg-grey-dark justify-between'>
+        <div className='flex'>
+          <Image src={bookingDetail.user.image} className='w-[5rem] h-[5rem] bg-white border object-cover'/>
+          <div className='flex flex-col'>
+            <span className='text-white pl-4 text-lg font-bold'>{bookingDetail.user.firstname} {bookingDetail.user.lastname}</span>
+            <span className='text-white pl-4 '>{bookingDetail.user.email}</span>
+            <span className='text-white pl-4 '>{bookingDetail.user.phone}</span>
+          </div>
+        </div>
+        <div className='flex flex-col text-white items-end'>
+          <span className='font-bold pt-3'>Paid</span>
+          <span className='font-bold text-lg pt-3'>{bookingDetail.price}</span>
+        </div>
+      </div>
+      <div className='flex mt-2 p-4 bg-grey-dark justify-between text-white'>
+        <div className='flex flex-col  w-full'>
+          <span className='pb-2'>Players</span>
+          <PlayerSelector value={'Martin'} readOnly={true} />
+          {
+            players.map((player, key) => (
+              <PlayerSelector value={'Martin'} key={key} />
+            ))
+          }
+        </div>
+      </div>
+      <div className='w-full flex space-x-4 justify-between'>
+        <div className='flex space-x-4'>
+          <Button color='green' className='bg-green text-dark' onClick={() => setOpen(false)}>Save</Button>
+          <Button color='green' className='bg-red text-dark' onClick={cancelBooking}>Cancel</Button>
+        </div>
+        <div>
+          <Button color='green' className='bg-green w-full text-dark' onClick={() => setOpen(false)}>Close</Button>
+        </div>
+      </div>
+    </Modal.Body>
+  </Modal>
+)
+}
