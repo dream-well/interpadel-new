@@ -86,7 +86,8 @@ export default function Center() {
   }
 
   return (
-    <div className='bg-cover bg-center' style={{backgroundImage: `url(${center?.image})`}}>
+    <div className='relative bg-cover bg-center bg-dark'>
+      <Image className='w-full h-full !absolute blur-sm' src={center?.image}/>
       <div className='py-[4rem] px-[6rem] flex flex-col justify-center w-full flex flex-col bg-white/10 backdrop-blur'>
         <div className='rounded-t-[1.5rem] w-full bg-green h-[4rem] flex items-center justify-center'>
           <span className='text-[2rem] font-bold saira text-dark'>{center?.name}</span>
