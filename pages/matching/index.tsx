@@ -10,6 +10,7 @@ import { fetcher, notification } from 'utils/helpers';
 import NoItems from 'components/NoItems';
 import useApi from 'hooks/useApi';
 import axios from 'axios';
+import Loader from 'components/Loader';
 
 const ROW_PER_PAGE = 3;
 
@@ -20,7 +21,7 @@ export default function Matching() {
     const [currentUser, setCurrentUser] = useState(0)
     const [matchings, setMatchings] = useState([])
 
-    const {data: matchingsData} = useApi('/api/profile/matchings', { query });
+    const {data: matchingsData, loading} = useApi('/api/profile/matchings', { query });
     
     const toaster = useToaster();
 
@@ -43,6 +44,11 @@ export default function Matching() {
     }
     const handleSearch = (q) => {
         setQuery(q);
+    }
+
+
+    if(loading) {
+        return <Loader />
     }
 
     return (

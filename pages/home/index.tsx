@@ -10,13 +10,22 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'components/Image';
 import { useRouter } from 'next/router';
+import useApi from 'hooks/useApi';
+import Loader from 'components/Loader';
 
 export default function Home() {
+
+  const { data: centers, loading } = useApi(`/api/centers?search=Taktika`);
+
+  if(loading) {
+    return <Loader />
+  }
+
   return (
-    <div className='text-dark'>
+    <div className='text-dark bg-white'>
       <Search />
       <SectionText />
-      <Section />
+      <Section centers={centers} />
       <EasierForYou />
       <Trustedbythousands />
       <Testimonial />
@@ -90,11 +99,10 @@ function SectionText() {
     </div>
   );
 }
-function Section() {
-  const { data: center } = useSWR(`/api/centers?search=Taktika`, fetcher);
+function Section({ centers }) {
   return (
     <div>
-      {center?.map((item, key) =>
+      {centers?.map((item, key) =>
         key < 3 ?
         key % 2 == 0 ? (
           <div className='text-white flex my-[2.5rem] px-[8.5rem]' key={key}>

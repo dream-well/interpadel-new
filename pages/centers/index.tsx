@@ -16,6 +16,7 @@ import moment from "moment";
 import useApi from "hooks/useApi";
 import GoogleMapReact from 'google-map-react';
 import cn from 'classnames';
+import Loader from "components/Loader";
 
 // import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
@@ -55,6 +56,18 @@ export default function Centers() {
       ... (searchParams.date ? { date: moment(searchParams.date).format('yyyy-MM-DD') } : {}),
     }}, undefined, { shallow: true });
     
+  }
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if(loading && centers) {
+      setLoading(false);
+    }
+  }, [centers]);
+
+  if(loading) {
+      return <Loader />
   }
   
   return (

@@ -15,6 +15,7 @@ import Link from "next/link";
 import PageNextIcon from '@rsuite/icons/PageNext';
 import PagePreviousIcon from '@rsuite/icons/PagePrevious';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
+import { CircleLoader } from "react-spinners";
 
 // moment.tz.setDefault('CET');
 
@@ -23,8 +24,8 @@ export default function Center() {
   const router = useRouter();
   const { centerId, payment_intent_client_secret, redirect_status } = router.query;
   const [date, setDate] = useState(null);
-  const { data: center } = useApi(centerId ? `/api/centers/${centerId}` : null);
-  const { data: reservations, mutate: refreshReservations } = useApi(centerId && date ? `/api/reservations/${centerId}` : null, date && {date: date.toJSON()});
+  const { data: center, loading: center_loading } = useApi(centerId ? `/api/centers/${centerId}` : null);
+  const { data: reservations, mutate: refreshReservations, loading } = useApi(centerId && date ? `/api/reservations/${centerId}` : null, date && {date: date.toJSON()});
 
   const [calendarOpen, setCalendarOpen] = useState(false);
 
@@ -67,7 +68,7 @@ export default function Center() {
     }
   }, [payment_intent_client_secret, redirect_status]);
 
-  if(!center)
+  if(!center || center_loading)
     return <Loader />
   // useEffect(() => {
   //   setDate(moment(date).startOf('day').toDate());
@@ -108,7 +109,7 @@ export default function Center() {
             </Link>
           </div>
           <div className='px-6 text-light'>
-            <SlotTable openAt={openAt} hours={hours} courts={center?.courts} date={date} reservations={reservations} refreshReservations={refreshReservations}/>
+            <SlotTable openAt={openAt} hours={hours} courts={center?.courts} date={date} loading={loading} reservations={reservations} refreshReservations={refreshReservations}/>
             <div className='flex justify-end items-center text-sm mt-6 space-x-4'>
               <div className='flex items-center'>
                 <div className='bg-dark border rounded-[0.125rem] w-[0.8rem] h-[0.8rem] mr-1'></div>
@@ -130,7 +131,7 @@ export default function Center() {
   )
 }
 
-function SlotTable({ openAt, hours = 0, courts = [], date, reservations={}, refreshReservations }) {
+function SlotTable({ openAt, hours = 0, courts = [], date, reservations={}, refreshReservations, loading }) {
   const [open, setOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(0);
   const [court, setCourt] = useState<any>({});
@@ -160,7 +161,10 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={}, refr
   };
   // alert(openAt);
   return (
-    <div>
+    <div className='relative'>
+      <div className='absolute left-1/2 top-1/2 z-10'>
+        { loading && <CircleLoader color="#C2FF00" speedMultiplier={2} />}
+      </div>
       <table className='w-full saira table-fixed break-words'>
         <tbody>
           <tr>
