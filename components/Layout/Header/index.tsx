@@ -8,17 +8,12 @@ import LanguagePicker from "./LanguagePicker";
 
 export default function Header({banner, className = ''}) {
     return (
-        <div className={cn('flex flex-col px-[8.5rem] bg-dark text-white relative z-10', banner ? 'h-[38rem] bg-[url(/images/banner.png)] bg-cover': 'border-b border-[rgba(255,255,255,0.2)]', className)}>
+        <div className={cn('flex flex-col px-[8.5rem] bg-dark text-white relative z-10', banner ? 'bg-transparent': 'border-b border-[rgba(255,255,255,0.2)]', className)}>
             <div className='flex w-full justify-between h-[6rem]'>
                 <Menus />
                 <RightSide />
             </div>
-            {
-                banner && 
-                <div className='saira font-bold text-[4rem] mx-[12rem] absolute -translate-y-1/2 top-1/2 flex items-center text-center'>
-                    Find where &amp; with whom to play Padel &amp; Tennis instantly
-                </div>
-            }
+            
         </div>
     )
 }

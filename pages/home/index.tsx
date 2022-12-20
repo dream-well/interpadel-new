@@ -23,6 +23,7 @@ export default function Home() {
 
   return (
     <div className='text-dark bg-white'>
+      <Banner />
       <Search />
       <SectionText />
       <Section centers={centers} />
@@ -32,6 +33,17 @@ export default function Home() {
       <Download />
       <FAQ />
       {/* <GetStarted /> */}
+    </div>
+  );
+}
+
+function Banner() {
+  return (
+    <div className='relative text-white -mt-[6rem]'>
+      <Image className='h-[38rem] w-full object-cover' src='/images/banner.png' />
+      <div className='saira font-bold text-[4rem] mx-[12rem] absolute -translate-y-1/2 top-1/2 flex items-center text-center'>
+          Find where &amp; with whom to play Padel &amp; Tennis instantly
+      </div>
     </div>
   );
 }
