@@ -198,7 +198,7 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
 
 const Collection = ({name, children}) => (
     <div className='flex flex-col space-y-1 border border-grey bg-dark rounded-[1rem]'>
-        <span className='p-5 font-bold text-[1.25rem] bg-[#c2ff00] rounded-t-[1rem]'>{name}</span>
+        <span className='p-5 font-bold text-[1.25rem] bg-[#c2ff00] rounded-t-[1rem] text-dark'>{name}</span>
         {children}
     </div>
 )
