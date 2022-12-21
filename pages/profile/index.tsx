@@ -134,12 +134,12 @@ const Summary = ({name, avatar, rate}) => {
 const FavoriteCard = ({_id, image, name, address}) => (
     <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
         <div className='w-[3rem] h-[3rem] border-1 items-center'>
-            <Link href={`https://192.168.0.110:3000/centers/${_id}/today`}>
+            <Link href={`/centers/${_id}/today`}>
                 <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
             </Link>
         </div>
         <div className='flex flex-col'>
-            <Link href={`https://192.168.0.110:3000/centers/${_id}/today`}>
+            <Link href={`/centers/${_id}/today`}>
                 <span>{name}</span>
             </Link>
             {address && <span className='flex space-x-2 items-center'>
@@ -164,7 +164,6 @@ const Matchings = () => {
 
 const Favorites = () => {
     const { data: favoriteVenues } = useApi('/api/profile/favorite-centers');
-    console.log(favoriteVenues);
 
     return (
         <div>
