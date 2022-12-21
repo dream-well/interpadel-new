@@ -138,7 +138,7 @@ const FavoriteCard = ({_id, image, name, address}) => (
                 <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
             </Link>
         </div>
-        <div className='flex flex-col'>
+        <div className='flex flex-col text-left'>
             <Link href={`/centers/${_id}/today`}>
                 <span>{name}</span>
             </Link>
@@ -154,10 +154,16 @@ const Matchings = () => {
     const { data: matchingPlayers } = useApi('/api/profile/matchings');
 
     return (
-        <div>
+        <div className='text-center py-2'>
             {matchingPlayers?.slice(0, 3).map((matching, key) =>(
                 <MatchingCard {...matching} key={key}/>
-            ))}
+            ))}            
+            {matchingPlayers?.length === 0 && (
+                <span>No matching players</span>   
+            )}
+            {matchingPlayers?.length > 3 && (
+                <Link href={'/matching'}>More...</Link>
+            )}
         </div>
     )
 }
@@ -166,10 +172,16 @@ const Favorites = () => {
     const { data: favoriteVenues } = useApi('/api/profile/favorite-centers');
 
     return (
-        <div>
+        <div className='text-center py-2'>
             {favoriteVenues?.slice(0, 3).map((venues, key) =>(
                 <FavoriteCard {...venues} key={key}/>
             ))}
+            {favoriteVenues?.length === 0 && (
+                <span>No favorite centers</span>   
+            )}
+            {favoriteVenues?.length > 3 && (
+                <Link href={'/centers'}>More...</Link>
+            )}
         </div>
     )
 }
@@ -179,9 +191,9 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
         <div className='flex w-[2.5rem] h-[2.5rem]'>
             <Avatar src={image} className='w-[2.5rem] h-[2.5rem]' />
         </div>
-        <div className='flex flex-col flex-grow space-y-2'>
+        <div className='flex flex-col flex-grow space-y-2 text-left'>
             <div className='flex space-x-5'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level.toFixed(1)}</span>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level}</span>
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
                 {/* <EmailIcon className='justify-end' /> */}
             </div>
