@@ -181,7 +181,7 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
         </div>
         <div className='flex flex-col flex-grow space-y-2'>
             <div className='flex space-x-5'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level.toFixed(1)}</span>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level}</span>
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
                 {/* <EmailIcon className='justify-end' /> */}
             </div>
