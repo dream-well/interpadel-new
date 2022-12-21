@@ -7,6 +7,7 @@ import SendIcon from '@rsuite/icons/Send';
 import axios from 'axios';
 import { notification } from 'utils/helpers';
 import cn from 'classnames';
+import moment from 'moment';
 
 export default function Messages() {
     
@@ -150,10 +151,12 @@ const MessagePanel = ({ currentUser }) => {
     }
 
     const ChatElement = ( { chat, className='' } ) => {
+        const time = moment(chat.createdAt);
         if (chat?.message === '')   return <></>
         return (
-            <div className={cn('m-1 p-2 bg-grey rounded-[0.5rem] w-auto', chat?.to === currentUser?._id ? "text-right" : "text-left")}>
-                {chat.message}
+            <div className={cn('flex flex-col m-1 p-2 bg-grey rounded-[0.5rem] w-auto', chat?.to === currentUser?._id ? "text-right" : "text-left")}>
+                <i className='text-[0.8rem]'>{time.format("yyyy-MM-DD hh:mm:ss A")}</i>
+                <span className='text-[1rem]' >{chat.message}</span>
             </div>
         )
     }
@@ -167,7 +170,7 @@ const MessagePanel = ({ currentUser }) => {
                 </div>
             )}
             {messages?.length === 0 && (
-                <span>No Messages with this player</span>
+                <span className='p-3'>No Messages with this player</span>
             )}
             <div className='flex space-x-2 p-3 border-t-2'>
                 <Input 
