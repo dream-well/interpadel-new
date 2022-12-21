@@ -82,8 +82,8 @@ export default function Center() {
 
   const setNewDate = (date) => {
     const newDate = moment(date);
-    if(newDate < moment().startOf('day'))
-      return;
+    // if(newDate < moment().startOf('day'))
+    //   return;
     setDate(newDate.toDate());
   }
 
@@ -198,9 +198,9 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={}, refr
                 const hover = (startAt == hour && court._id == _court._id);
                 const className = cn('relative cursor-pointer border py-2 text-center h-12', 
                   hover && ( open ? 'bg-green' : 'bg-grey-light'), 
-                  (status != 1 && status != 0) && '!bg-green', status == 1 && '!bg-grey',
+                  (status != 1 && status != 0) && '!bg-green text-grey', status == 1 && '!bg-grey',
                   status > 0 && hover && '!bg-opacity-50',
-                  hour <= current_hour && '!bg-grey-dark',
+                  hour <= current_hour && 'bg-grey-dark',
                   current_hour == hour && 'border-r-2 border-r-[#a2f917]'
                   );
                 return (
@@ -353,11 +353,13 @@ const updateBooking = () => {
     comment
   }).then((resp: any) => {
     mutate();
+    setOpen(false);
   })
 }
 if(!bookingId || !bookingDetail) return;
 const m_duration = moment.duration(bookingDetail.duration, 'minutes');
 const duration_txt = `${m_duration.hours()}h ${m_duration.minutes()}min`;
+const canCancel = moment(bookingDetail.startAt).subtract(12, 'h').isBefore(moment());
 return (
   <Modal open={bookingId != 0} onClose={() => setOpen(0)} size='sm' dialogClassName={styles.durationSelector}>
     <Modal.Header as={() => (
@@ -408,7 +410,7 @@ return (
       <div className='w-full flex space-x-4 justify-between'>
         <div className='flex space-x-4'>
           <Button color='green' className='bg-green text-dark' onClick={updateBooking}>Save</Button>
-          <Button color='green' className='bg-red text-dark' onClick={cancelBooking}>Cancel</Button>
+          <Button color='green' className='bg-red text-dark' disabled={canCancel} onClick={cancelBooking}>Cancel</Button>
         </div>
         <div>
           <Button color='green' className='bg-green w-full text-dark' onClick={() => setOpen(false)}>Close</Button>
