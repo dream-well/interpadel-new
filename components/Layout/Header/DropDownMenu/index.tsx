@@ -58,11 +58,11 @@ const dropDownMenu = [
         icon: <UserBadgeIcon/>,
         href: '/profile'
     },
-    {
-        title: 'Help section',
-        icon: <HelpOutlineIcon/>,
-        href: '/help'
-    },
+    // {
+    //     title: 'Help section',
+    //     icon: <HelpOutlineIcon/>,
+    //     href: '/help'
+    // },
     {
         title: 'Favourite courts',
         icon: <PublicOpinionIcon/>,
