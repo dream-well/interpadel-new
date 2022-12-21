@@ -332,9 +332,13 @@ const router = useRouter();
 const [comment, setComment] = useState('');
 
 useEffect(() => {
-  if(!bookingDetail) return;
+  if(!bookingDetail) {
+    setComment("");
+    return;
+  }
+  setComment(bookingDetail.comment);
   setPlayers(bookingDetail.players);
-}, [bookingDetail?.players]);
+}, [bookingDetail]);
 
 const cancelBooking = () => {
   axios.put(`/api/bookings/cancel/${bookingId}`).then((resp: any) => {
@@ -345,7 +349,7 @@ const cancelBooking = () => {
   })
 }
 const updateBooking = () => {
-  axios.put(`/api/booking/${bookingId}`, {
+  axios.put(`/api/bookings/${bookingId}`, {
     comment
   }).then((resp: any) => {
     mutate();
