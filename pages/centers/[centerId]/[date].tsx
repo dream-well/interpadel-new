@@ -1,5 +1,5 @@
 import { fetcher } from "utils/helpers";
-import { Button, DatePicker, Modal, Placeholder, Radio, RadioGroup, SelectPicker, Tooltip } from "rsuite";
+import { Button, DatePicker, IconButton, Input, Modal, Placeholder, Radio, RadioGroup, SelectPicker, Tooltip } from "rsuite";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import moment from "moment";
@@ -16,7 +16,8 @@ import PageNextIcon from '@rsuite/icons/PageNext';
 import PagePreviousIcon from '@rsuite/icons/PagePrevious';
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { CircleLoader } from "react-spinners";
-
+import AddOutlineIcon from '@rsuite/icons/AddOutline';
+import { useAppSelector } from "store/hook";
 // moment.tz.setDefault('CET');
 
 export default function Center() {
@@ -136,6 +137,9 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={}, refr
   const [detailOpen, setDetailOpen] = useState(0);
   const [court, setCourt] = useState<any>({});
   const [startAt, setStartAt] = useState();
+  const _id = useAppSelector(state => state.auth._id);
+
+  const router = useRouter();
 
   const getReservationStatus = (court, offset) => {
     if(!reservations[court._id]) return 0;
@@ -153,11 +157,17 @@ function SlotTable({ openAt, hours = 0, courts = [], date, reservations={}, refr
   const hour_array = (new Array(hours)).fill(0).map((_, i) => i + openAt);
 
   const onSlotClick = (status, hour) => {
-    if(status == 2 && hour > current_hour) {
+    if((status != 0 && status != 1) && hour > current_hour) {
       setDetailOpen(status);
       return;
     }
-    if(hour > current_hour && status == 0) setOpen(true)
+    if(hour > current_hour && status == 0) {
+      if(!_id) {
+        router.push('/auth/login');
+        return;
+      }
+      setOpen(true)
+    }
   };
   // alert(openAt);
   return (
@@ -276,8 +286,14 @@ const data = ['Eugenia', 'Bryan', 'Linda', 'Nancy', 'Lloyd', 'Alice', 'Julia', '
   item => ({ label: item, value: item })
 );
 
-function PlayerSelector({ value, readOnly = false }) {
+function PlayerSelector({ user, readOnly = false }) {
 const [players, setPlayers] = React.useState([]);
+const [data, setData] = useState([]);
+
+useEffect(() => {
+  if(!readOnly) return;
+  setData([{ label: (user.firstname + ' ' + user.lastname), value: user._id}]);
+}, [readOnly])
 
 const renderMenu = menu => {
   if (players.length === 0) {
@@ -292,15 +308,15 @@ const renderMenu = menu => {
 
 const updateData = () => {
   if (players.length === 0) {
-    setPlayers(data);
+    // setPlayers(data);
   }
 };
 
 return (
   <SelectPicker
   readOnly={readOnly}
-  data={players}
-  value={value}
+  data={data}
+  value={user._id}
   style={{ width: '16rem' }}
   onOpen={updateData}
   onSearch={updateData}
@@ -310,9 +326,10 @@ return (
 }
 
 function DetailDialog({ bookingId, setOpen, court, startAt, date, refreshReservations}) {
-const { data: bookingDetail, loading } = useApi(bookingId ? `/api/bookings/${bookingId}` : null);
+const { data: bookingDetail, mutate } = useApi(bookingId ? `/api/bookings/${bookingId}` : null);
 const [players, setPlayers] = useState([]);
 const router = useRouter();
+const [comment, setComment] = useState('');
 
 useEffect(() => {
   if(!bookingDetail) return;
@@ -320,10 +337,18 @@ useEffect(() => {
 }, [bookingDetail?.players]);
 
 const cancelBooking = () => {
-  axios.put(`/api/bookings/cancel/${bookingId}`).then((resp) => {
+  axios.put(`/api/bookings/cancel/${bookingId}`).then((resp: any) => {
     console.log('cancel', resp);
-    setOpen(false);
+    if(resp == true)
+      setOpen(false);
     refreshReservations();
+  })
+}
+const updateBooking = () => {
+  axios.put(`/api/booking/${bookingId}`, {
+    comment
+  }).then((resp: any) => {
+    mutate();
   })
 }
 if(!bookingId || !bookingDetail) return;
@@ -362,19 +387,23 @@ return (
         </div>
       </div>
       <div className='flex mt-2 p-4 bg-grey-dark justify-between text-white'>
-        <div className='flex flex-col  w-full'>
-          <span className='pb-2'>Players</span>
-          <PlayerSelector value={'Martin'} readOnly={true} />
+        <div>
+          <div className='pb-2'>Players ({players.length + 1})</div>
+          <PlayerSelector user={bookingDetail.user} readOnly={true} />
           {
             players.map((player, key) => (
-              <PlayerSelector value={'Martin'} key={key} />
+              <PlayerSelector user={bookingDetail.user} key={key} />
             ))
           }
+          <IconButton icon={<AddOutlineIcon />} circle className='ml-4'/>
         </div>
+      </div>
+      <div className='flex mt-2 p-4 bg-grey-dark justify-between text-white'>
+        <Input as="textarea" rows={3} placeholder="Write a comment" value={comment} onChange={setComment} />
       </div>
       <div className='w-full flex space-x-4 justify-between'>
         <div className='flex space-x-4'>
-          <Button color='green' className='bg-green text-dark' onClick={() => setOpen(false)}>Save</Button>
+          <Button color='green' className='bg-green text-dark' onClick={updateBooking}>Save</Button>
           <Button color='green' className='bg-red text-dark' onClick={cancelBooking}>Cancel</Button>
         </div>
         <div>
