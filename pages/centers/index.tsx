@@ -23,8 +23,8 @@ import Loader from "components/Loader";
 export default function Centers() {
 
   const dispatch = useDispatch();
-  const [query, setQuery] = useState<any>({});
-  const { data: centers } = useApi('/api/centers', query);
+  const query = useAppSelector(state => state.app.query);
+  const { data: centers } = useApi('/api/centers', {address: query});
   const { favoriteCenters } = useAppSelector(state => state.auth);
   const [searchParams, setSearchParams] = useState<any>({});
   const router = useRouter();
@@ -45,7 +45,7 @@ export default function Centers() {
   useEffect(() => {
     if(!router.query) return;
     setSearchParams({ ...router.query });
-    setQuery({ ...router.query });
+    // setQuery({ ...router.query });
   }, [router.query]);
 
   const findCenters = () => {
@@ -71,12 +71,13 @@ export default function Centers() {
   }
   
   return (
-    <div className='rs-theme-light mt-[-6rem] bg-grey-dark'>
-      <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/>
+    <div className='rs-theme-light bg-grey-dark'>   {/* mt-[-6rem]  */}
+      {/* <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/> */}
       <div className='px-[8.5rem] '>
-        <SearchBar searchParams={searchParams} onChange={setSearchParams} onSearch={findCenters} />
+        {/* <SearchBar searchParams={searchParams} onChange={setSearchParams} onSearch={findCenters} /> */}
         <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
       </div>
+      {/* <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/> */}
     </div>
   );
 }
@@ -201,7 +202,7 @@ const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) =>
           </div>
         </div>
         <div className='text-[2rem] ml-2'>
-          {isFavorite && <AiFillHeart onClick={toggleFavorite} />}
+          {isFavorite && <AiFillHeart onClick={toggleFavorite} color={'#ff1122'} />}
           {!isFavorite && <AiOutlineHeart onClick={toggleFavorite} />}
         </div>
       </div>

@@ -5,6 +5,7 @@ import { useAppSelector } from "store/hook";
 import DropDownMenu from './DropDownMenu';
 import { Menus } from "./Menus";
 import LanguagePicker from "./LanguagePicker";
+import NavSearch from "./NavSearch";
 
 export default function Header({banner, className = ''}) {
     return (
@@ -23,6 +24,7 @@ const RightSide = () => {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
     return (
         <div className='flex items-center'>
+            <NavSearch />
             <LanguagePicker />
             {
                 firstname ?

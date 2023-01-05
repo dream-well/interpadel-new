@@ -6,12 +6,15 @@ import { fetcher } from 'utils/helpers';
 import Image from 'components/Image';
 import moment from 'moment';
 import useApi from 'hooks/useApi';
+import cn from 'classnames';
 
 export default function Books() {
 
   return (
-    <div className="px-[8.5rem] py-[2.5rem] bg-dark text-white">
-      <BookCalendar />
+    <div className="px-[8.5rem] py-[2.5rem] text-white">
+      <div className='bg-dark rounded-[1rem] py-4 px-8'>
+        <BookCalendar />
+      </div>
     </div>
   );
 }
@@ -38,7 +41,7 @@ const BookCalendar = () => {
 
   function renderCell(date) {
     const list = getTodoList(date) || [];
-    const displayList = list.filter((item, index) => index < 1);
+    const displayList = list.filter((item, index) => index < 2);
 
     const BookingItem = ({data}) => {
       const startTime =moment(data.startAt);
@@ -49,8 +52,8 @@ const BookCalendar = () => {
         <Link
           className='text-white text-sm'
           href={`/centers/${data.center?._id}/${startTime.format("YYYY-MM-DD")}`}>
-            <b>{moment(startTime).format('hh:mm A')}-{moment(endTime).format('hh:mm A')}</b>
-            <br/>
+            <b>{moment(startTime).format('HH:mm')} </b>
+            {/* <br/> */}
             <b>{data.center?.name}</b>
         </Link>
       )
@@ -79,10 +82,10 @@ const BookCalendar = () => {
       );
 
       return (
-        <ul className="calendar-todo-list">
+        <ul className="calendar-todo-list text-left">
           {displayList.map((item, index) => (
-          <li key={index} className='whitespace-nowrap'>
-            <Badge /> <BookingItem data={item} />
+          <li key={index} className={cn('whitespace-nowrap whitespace-pre truncate mb-[0.1rem]', index % 2 == 0? 'bg-[#003b78]': 'bg-[#5c7800]')}>
+            <BookingItem data={item} />
           </li>
           ))}
           {moreCount ? moreItem : null}
@@ -92,6 +95,16 @@ const BookCalendar = () => {
   }
 
   return (
-    <Calendar bordered renderCell={renderCell} onChange={handleSelect} value={currentDate} />
+    <Calendar bordered renderCell={renderCell} onChange={handleSelect} value={currentDate} locale={locale} />
   )
 }
+
+const locale = {
+  sunday: 'Sun',
+  monday: 'Mon',
+  tuesday: 'Tue',
+  wednesday: 'Wed',
+  thursday: 'Thu',
+  friday: 'Fri',
+  saturday: 'Sat',
+};

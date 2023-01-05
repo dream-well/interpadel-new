@@ -38,7 +38,7 @@ export default function Login({ providers }) {
         })
     }
     return (
-    <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] bg-cover min-h-screen py-[2rem]'  onClick={() => { router.replace('/home') }}>
+    <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] bg-cover min-h-screen py-[2rem]' >
         <div className='w-[48rem] flex flex-col items-center text-white bg-dark p-[4rem] rounded-[1.5rem] border border-grey' onClick={(e) => { setError(''); e.stopPropagation(); }}>
             <Link href='/home'>
                <Image src='/images/logo.svg' className='h-[2rem]'/>

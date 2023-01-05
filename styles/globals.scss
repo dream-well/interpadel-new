@@ -40,7 +40,7 @@ body {
 
 @media only screen and (max-width: 1900px) {
   html {
-    font-size: 20px;
+    font-size: 18 px;
   }
 }
 
@@ -169,4 +169,31 @@ a:active, a:focus, a:hover {
     -webkit-transform: rotate(359deg);
             transform: rotate(359deg);
   }
+}
+
+.rs-calendar-table-cell {
+  border: 1px solid var(--rs-border-secondary);
+}
+
+.rs-calendar-table-cell:first-child, .rs-calendar-table-cell:last-child {
+  background-color: rgba($color: white, $alpha: .02);
+}
+
+.rs-calendar-table-cell .rs-calendar-table-cell-content {
+  font-size: 1rem;
+}
+
+.rs-calendar-table-header-row .rs-calendar-table-cell-content{
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.rs-calendar-panel .rs-calendar-table-cell-day {
+  text-align: right;
+  margin-right: 1rem;
+}
+
+.rs-calendar-panel .rs-calendar-table-cell-is-today .rs-calendar-table-cell-day {
+  margin-right: 1rem;
+  text-align: center;
 }
