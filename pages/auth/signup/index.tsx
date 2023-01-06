@@ -38,8 +38,10 @@ export default function Signup() {
         axios.post('/api/auth/signup', {
             ...formData
         })
-        .then(res => {
-            router.replace('/auth/login');
+        .then((res: any) => {
+            localStorage.setItem('uId', res.id);
+            localStorage.setItem('signup_email', res.email);
+            router.replace('/auth/signup/verify');
         })
         .catch((e: AxiosError) => {
             if(e.response?.status == 400) {
