@@ -2,6 +2,7 @@ import { Dropdown, SelectPicker, Whisper, Popover } from 'rsuite';
 import { Badge } from 'rsuite';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import UserBadgeIcon from '@rsuite/icons/UserBadge';
+import CalendarIcon from '@rsuite/icons/Calendar';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
 import PublicOpinionIcon from '@rsuite/icons/PublicOpinion';
 import GearIcon from '@rsuite/icons/Gear';
@@ -53,6 +54,11 @@ const RenderMenu = ({ onClose, left, top, className }, ref) => {
   };
 
 const dropDownMenu = [
+    {
+        title: 'My bookings',
+        icon: <CalendarIcon/>,
+        href: '/books'
+    },
     {
         title: 'My profile',
         icon: <UserBadgeIcon/>,
