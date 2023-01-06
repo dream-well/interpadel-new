@@ -101,12 +101,12 @@ const Summary = ({name, avatar, rate}) => {
     return (
         <div className='flex p-[3rem] space-x-[3rem] bg-[#1d1829] justify-between rounded-[1rem] border border-grey'>
             <div className='flex flex-col w-1/3 space-y-[2rem]'>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-start items-center'>
                     <Badge content={rate.toFixed(1)} color={'green'}>
                         <Avatar src={avatar} className='w-[7.5rem] h-[7.5rem] cursor-pointer' onClick={() => uploaderRef?.current.click()}/>
                     </Badge>
                     <input type="file" hidden onChange={uploadPhoto} ref={uploaderRef}/>
-                    <span className='font-bold text-[2.5rem] ml-2 text-white'>{name}</span>
+                    <span className='font-bold text-[2.5rem] ml-8 text-white'>{name}</span>
                 </div>
                 <div className='flex flex-col rounded-3xl border-grey border-2 p-[2.5rem] space-y-[1rem]'>
                     <span className='font-bold text-white text-[1.5rem]'>Your next booking</span>
