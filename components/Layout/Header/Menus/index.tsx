@@ -22,6 +22,10 @@ export const Menus = () => (
 
 const menus = [
     {
+        title: 'Booking',
+        href: '/bookings'
+    },
+    {
         title: 'Centers',
         href: '/centers'
     },

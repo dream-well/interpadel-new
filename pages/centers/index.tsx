@@ -77,7 +77,7 @@ export default function Centers() {
         {/* <SearchBar searchParams={searchParams} onChange={setSearchParams} onSearch={findCenters} /> */}
         <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
       </div>
-      {/* <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/> */}
+      <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/>
     </div>
   );
 }
@@ -189,7 +189,7 @@ const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) =>
     onToggleFavorite(_id);
   }
   return (
-    <Link href={`/centers/${_id}/today`} className="mb-[1.5rem] flex flex-col px-4 w-1/3">
+    <Link href={`/centers/${_id}/today`} className="mb-[1.5r3em] flex flex-col px-4 w-1/3">
      <Image src={image} className='h-[20rem] object-center object-cover rounded-t-2xl'/>
       <div className="flex bg-dark text-white p-[1rem] rounded-b-2xl justify-between items-center">
         <div className="flex flex-col flex-grow min-w-[1rem]">

@@ -1,3 +1,4 @@
+import axios from "axios";
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 
@@ -16,6 +17,7 @@ export default NextAuth({
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       console.log(user);
+      axios.post('/api/signup/google', user)
       return true
     },
     async redirect({ url, baseUrl }) {
