@@ -1,11 +1,13 @@
 import Link from "next/link";
-import { Button } from 'rsuite';
+import { Button, DatePicker } from 'rsuite';
 import cn from 'classnames'
 import { useAppSelector } from "store/hook";
 import DropDownMenu from './DropDownMenu';
 import { Menus } from "./Menus";
 import LanguagePicker from "./LanguagePicker";
 import NavSearch from "./NavSearch";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Header({banner, className = ''}) {
     return (
@@ -22,8 +24,19 @@ export default function Header({banner, className = ''}) {
 
 const RightSide = () => {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
+    const router = useRouter();
+
     return (
         <div className='flex items-center'>
+            {
+                router.pathname == '/bookings' &&   
+                <DatePicker
+                    className='mr-4'
+                    appearance='subtle'
+                    format="yyyy-MM-dd"
+                    placeholder='Select date'
+                />
+            }
             <NavSearch />
             <LanguagePicker />
             {

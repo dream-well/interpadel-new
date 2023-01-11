@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import useApi from 'hooks/useApi';
 import { useAppSelector } from 'store/hook';
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { useRouter } from 'next/router';
 
 const ROW_PER_PAGE = 5;
 
@@ -24,7 +25,14 @@ export default function Bookings() {
     const [favorites, setFavorites] = useState([])
 
     const query = useAppSelector(state => state.app.query);
-    const {data: favoritesData, error, mutate} = useApi('/api/centers', {address: query});
+    const router = useRouter();
+    const q = router.query.q;
+    const {data: favoritesData, error, mutate} = useApi('/api/centers', {address: q});
+
+    useEffect(() => {
+        if(q == query) return;
+        router.replace('/bookings?q=' + query);
+    }, [query])
     
     const toaster = useToaster();    
 
@@ -91,10 +99,10 @@ const FavoriteCard = ({image, name, address, courts, description, _id, onRemove,
     }
     return (
     <div className='flex text-white items-center'>
-        <Link href={`/centers/${_id}/today`} className='w-[10rem] h-[10rem] absolute'>
+        <Link href={`/centers/${_id}/today`} className='w-[9rem] h-[9rem] absolute'>
            <Image src={image} alt={name} className='rounded-[1rem] object-cover h-full w-full' />
         </Link>
-        <div className='flex flex-col flex-grow bg-dark px-[5rem] py-[2rem] space-y-[0.5rem] ml-[6.5rem]'>
+        <div className='flex flex-col flex-grow bg-dark px-[5rem] py-[2rem] space-y-[0.5rem] ml-[6.5rem] border rounded-[0.5rem] border-grey-light'>
             <Link href={`/centers/${_id}/today`}  className='text-[2rem] font-bold saira'>
                 {name}
             </Link>

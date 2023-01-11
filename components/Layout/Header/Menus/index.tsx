@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Image from 'components/Image';
+import { useRouter } from "next/router";
 
-export const Menus = () => (
+export const Menus = () => {
+    const router = useRouter();
+    return (
     <div className='flex items-center'>
         <Link href={'/home'}>
            <Image src='/images/logo.svg' alt="logo" className='h-[1.5rem] select-none'/>
@@ -18,7 +21,7 @@ export const Menus = () => (
             }
         </ul>
     </div>
-)
+)}
 
 const menus = [
     {

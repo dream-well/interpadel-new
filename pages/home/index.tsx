@@ -6,12 +6,15 @@ import SearchIcon from '@rsuite/icons/Search';
 import LocationIcon from '@rsuite/icons/Location';
 import PlusIcon from '@rsuite/icons/Plus';
 import MinusIcon from '@rsuite/icons/Minus';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'components/Image';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 import useApi from 'hooks/useApi';
 import Loader from 'components/Loader';
+import { useAppSelector } from 'store/hook';
+import { useDispatch } from 'react-redux';
+import { setQuery } from 'store/slices/appSlice';
 
 export default function Home() {
 

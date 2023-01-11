@@ -53,8 +53,8 @@ export default function Login({ providers }) {
                     </Form.Group>
                     <Form.Group controlId="password">
                         <InputGroup inside>
-                            <Form.Control onPressEnter={signin} className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
-                            <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
+                            <Form.Control onPressEnter={signin} className='h-[3.75rem] px-[2rem] placeholder:text-grey7 bg-dark' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
+                            <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer !bg-grey' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
                                 {
                                     revealPassword ?
                                     <VisibleIcon width='1.5rem' height='1.5rem'/> :

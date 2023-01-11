@@ -6,29 +6,33 @@ import SearchIcon from '@rsuite/icons/Search';
 import { useAppSelector } from "store/hook";
 import { setQuery } from "store/slices/appSlice";
 
+
 export default function NavSearch() {
-    const query = useAppSelector(state => state.app.query);
     const dispatch = useDispatch();
     const router = useRouter();
-    const [searchTerm, setSearchTerm] = useState("");
+    const [query, setQueryValue] = useState("");
     const [focus, setFocus] = useState(false)
     const onKeyDown = (e) => {
       if( e.key === "Enter" ){
         // router.push("/search?q=" + searchTerm)
-        setSearchTerm("")
+        dispatch(setQuery(query));
+        if(router.pathname == '/home') {
+          router.push('/bookings?q=' + query);
+        }
       }
     }
-    
-    useEffect(() => {
-        if(!dispatch) return;
-        dispatch(setQuery(""));
-    }, [router.pathname]);
 
+    const onChange = (e) => {
+      setQueryValue(e.target.value)
+      if(e.target.value == "")
+        dispatch(setQuery(""));
+    };
+    
     return (
       <div className={classnames(`index-search bg-transparent items-center rounded-lg flex relative pl-3 overflow-hidden border border-grey h-[3rem] mr-4`, focus && 'flex-grow w-[20rem] border-[#43913e]') }>
         <SearchIcon />
-        <input type="search" value={query} onKeyDown={onKeyDown} onChange={(e) => dispatch(setQuery(e.target.value))} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
-          className={classnames("pl-3 pr-4 focus:outline-none bg-transparent", (focus?"flex-grow":""))} name="" placeholder="Search ..."  />
+        <input type="search" value={query} onKeyDown={onKeyDown} onChange={onChange} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
+          className={classnames("pl-3 pr-4 focus:outline-none bg-transparent", (focus?"flex-grow":""))} name="" placeholder="Search ..." />
       </div>
     );
   }
