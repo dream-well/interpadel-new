@@ -57,7 +57,7 @@ function Search() {
   const [address, setAddress] = useState('');
 
   const onSearch = () => {
-    router.push(`/centers?address=${address}`);
+    router.push(`/bookings?q=${address}`);
   }
 
   return (
