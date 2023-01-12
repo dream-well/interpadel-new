@@ -315,15 +315,13 @@ function Testimonial() {
          <Image src='/images/home/qutesMark.png' className='w-[3rem] h-[3rem]' />
         </div>
         <div className='mt-[1.375rem]'>
-          Great job on my Cakephp scraper script! Easy to communicate with and
-          even did a few additional tasks that were not apart of the project
-          that were greatly appreciated! Will be hiring again for sure. ;-)
+          Great new Padel center with good courses, helpful staff and great shop with lots of goodies
         </div>
         <div className='flex mt-[1.876rem]'>
          <Image src='/images/home/quoteWoman.png' />
           <div className='flex flex-col ml-6'>
             <div className='text-xl font-semibold'>Elenor Rose</div>
-            <div>Manager</div>
+            <div>Student</div>
           </div>
         </div>
       </div>
@@ -339,8 +337,8 @@ function Download() {
           Download our mobile app
         </div>
         <div className='w-[28.563rem] mt-6'>
-          Disposable temporary email protects your real email address from spam,
-          advertising mailings, malwares.
+          InterPadel is a complete booking system for padel world wide.
+          Download on Appstore
         </div>
         <div className='mt-[3.75rem] flex space-x-[2.215rem]'>
          <Image src='/images/home/googleBadge.png' />

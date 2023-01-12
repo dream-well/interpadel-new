@@ -74,11 +74,11 @@ const dropDownMenu = [
         icon: <PublicOpinionIcon/>,
         href: '/favorites'
     },
-    {
-        title: 'Account preferences',
-        icon: <GearIcon/>,
-        href: '/preferences'
-    },
+    // {
+    //     title: 'Account preferences',
+    //     icon: <GearIcon/>,
+    //     href: '/preferences'
+    // },
     {
         title: 'Log out',
         icon: <ExitIcon/>,

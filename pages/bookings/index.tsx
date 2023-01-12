@@ -102,7 +102,7 @@ const FavoriteCard = ({image, name, address, courts, description, _id, onRemove,
         <Link href={`/centers/${_id}/today`} className='w-[9rem] h-[9rem] absolute'>
            <Image src={image} alt={name} className='rounded-[1rem] object-cover h-full w-full' />
         </Link>
-        <div className='flex flex-col flex-grow bg-dark px-[5rem] py-[2rem] space-y-[0.5rem] ml-[6.5rem] border rounded-[0.5rem] border-grey-light'>
+        <div className='flex flex-col flex-grow bg-dark px-[5rem] py-[1.5rem] space-y-[0.5rem] ml-[6.5rem] border rounded-[0.5rem] border-grey-light'>
             <Link href={`/centers/${_id}/today`}  className='text-[2rem] font-bold saira'>
                 {name}
             </Link>
@@ -114,9 +114,8 @@ const FavoriteCard = ({image, name, address, courts, description, _id, onRemove,
                 <AbTestIcon/>
                 <span>{courts.length} Bookable courts</span>
             </span> */}
-            <div className='text-[2rem]'>
-                {isFavorite && <AiFillHeart onClick={toggleFavorite} color={'#ff1122'} />}
-                {!isFavorite && <AiOutlineHeart onClick={toggleFavorite} />}
+            <div className='text-sm'>
+                2 courts are available
             </div>
         </div>
     </div>
@@ -124,7 +123,7 @@ const FavoriteCard = ({image, name, address, courts, description, _id, onRemove,
 
 const FavoritesSection = ({ favorites, onRemove }) => {
     return (
-        <div className='flex flex-col space-y-[2.5rem]'>
+        <div className='flex flex-col space-y-[1.5rem]'>
             {favorites?.map((favorite, i) => (
                 <FavoriteCard
                     {...favorite}

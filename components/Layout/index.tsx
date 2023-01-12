@@ -36,7 +36,7 @@ export default function Layout({ children }) {
     return (
         <div className='open-sans flex flex-col min-h-screen'>
             {
-                showHeader && 
+                // showHeader && 
                 <Header banner={isHome} className={'bg-[rgba(0,0,0,0.3)]'}/>
             }
             <div className={cn('flex flex-col flex-grow', showHeader && !isHome && '')}>

@@ -53,16 +53,16 @@ export default function Signup() {
         })
     }
     return (
-    <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] bg-cover min-h-screen py-[2rem] cursor-pointer' >
-        <div className='w-[48rem] flex flex-col items-center text-white bg-dark p-[4rem] rounded-[1.5rem] border border-grey cursor-default	' onClick={(e) => { setError(''); e.stopPropagation(); }}>
-            <Link href='/home'>
+    <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] flex-grow bg-cover py-[2rem] cursor-pointer' >
+        <div className='w-[48rem] flex flex-col items-center text-white bg-dark py-[2rem] px-[3rem] rounded-[1.5rem] border border-grey cursor-default	' onClick={(e) => { setError(''); e.stopPropagation(); }}>
+            {/* <Link href='/home'>
                <Image src='/images/logo.svg' className='h-[2rem]'/>
-            </Link>
-            <span className='text-[3rem] mt-[2rem]'>
+            </Link> */}
+            <span className='text-[2.5rem]'>
                 Create an account
             </span>
             <div className='flex flex-col w-full'>
-                <Form className='mt-[2rem] w-full space-y-[2.5rem]' fluid formValue={formValue} onChange={setFormValue}>
+                <Form className='mt-[2rem] w-full space-y-[2rem]' fluid formValue={formValue} onChange={setFormValue}>
                     <Form.Group controlId="firstname">
                         <Form.Control errorMessage={error.type == 'firstname' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="firstname" type="text" placeholder="First Name"/>
                     </Form.Group>
@@ -118,12 +118,12 @@ export default function Signup() {
                     </Link>
                 </Form.Group>
             </div>
-            <div className='flex items-center text-grey w-full mt-[3rem]'>
+            {/* <div className='flex items-center text-grey w-full mt-[3rem]'>
                 <hr className='flex-grow' />
                 <span className='px-4'>Or</span>
                 <hr className='flex-grow' />
-            </div>
-            <div className='mt-[2.5rem] space-x-[1.25rem] flex'>
+            </div> */}
+            {/* <div className='mt-[2.5rem] space-x-[1.25rem] flex'>
                 <Button appearance='ghost' className='!text-grey7 !border-grey7 h-[3.6rem] flex items-center'>
                    <Image src='/images/icons/google.svg' className='mr-3' />
                     Continue with Google
@@ -132,7 +132,7 @@ export default function Signup() {
                    <Image src='/images/icons/apple.svg' className='mr-3' />
                     Continue with Apple
                 </Button>
-            </div>
+            </div> */}
         </div>
     </div>
     )

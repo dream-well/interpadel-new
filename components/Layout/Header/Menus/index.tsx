@@ -28,10 +28,10 @@ const menus = [
         title: 'Booking',
         href: '/bookings'
     },
-    {
-        title: 'Centers',
-        href: '/centers'
-    },
+    // {
+    //     title: 'Centers',
+    //     href: '/centers'
+    // },
     {
         title: 'Matching',
         href: '/matching'
