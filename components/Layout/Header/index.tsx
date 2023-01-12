@@ -12,7 +12,7 @@ import { useEffect } from "react";
 export default function Header({banner, className = ''}) {
     return (
         <div className={cn('flex flex-col px-[8.5rem] bg-dark text-white relative z-10', banner ? 'bg-transparent': 'border-b border-[rgba(255,255,255,0.2)]', className)}>
-            <div className='flex w-full justify-between h-[6rem]'>
+            <div className='flex w-full justify-between h-[5rem]'>
                 <Menus />
                 <RightSide />
             </div>

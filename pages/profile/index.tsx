@@ -21,7 +21,7 @@ export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
     
     return (
-        <div className='px-[8.5rem] flex flex-col py-[6rem] space-y-[3rem] bg-grey-dark'>
+        <div className='px-[8.5rem] flex flex-col py-[4rem] space-y-[3rem] bg-grey-dark'>
             <Summary
                 name={firstname + ' ' + lastname}
                 avatar={image}

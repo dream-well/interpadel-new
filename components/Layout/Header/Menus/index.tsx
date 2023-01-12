@@ -1,12 +1,14 @@
 import Link from "next/link";
 import Image from 'components/Image';
 import { useRouter } from "next/router";
+import { useAppSelector } from "store/hook";
 
 export const Menus = () => {
     const router = useRouter();
+    const { firstname, lastname, image } = useAppSelector(state => state.auth);
     return (
     <div className='flex items-center'>
-        <Link href={'/'}>
+        <Link href={firstname ? '/profile' : '/'}>
            <Image src='/images/logo.svg' alt="logo" className='h-[1.5rem] select-none'/>
         </Link>
         <ul className='ml-[5.5rem] flex space-x-12'>
