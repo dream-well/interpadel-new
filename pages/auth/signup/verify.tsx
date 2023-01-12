@@ -62,7 +62,7 @@ export default function Signup() {
     return (
     <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] bg-cover min-h-screen py-[2rem] cursor-pointer' >
         <div className='w-[48rem] flex flex-col items-center text-white bg-dark p-[4rem] rounded-[1.5rem] border border-grey cursor-default	'>
-            <Link href='/home'>
+            <Link href='/'>
                <Image src='/images/logo.svg' className='h-[2rem]'/>
             </Link>
             <span className='text-[2rem] mt-[2rem]'>

@@ -6,7 +6,7 @@ export const Menus = () => {
     const router = useRouter();
     return (
     <div className='flex items-center'>
-        <Link href={'/home'}>
+        <Link href={'/'}>
            <Image src='/images/logo.svg' alt="logo" className='h-[1.5rem] select-none'/>
         </Link>
         <ul className='ml-[5.5rem] flex space-x-12'>

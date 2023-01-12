@@ -34,7 +34,7 @@ const RenderMenu = ({ onClose, left, top, className }, ref) => {
       onClose();
       if(eventKey == '/logout') {
         dispatch(logout());
-        router.replace('/home');
+        router.replace('/');
       } 
       else{
         router.push(eventKey);

@@ -16,7 +16,7 @@ export default function NavSearch() {
       if( e.key === "Enter" ){
         // router.push("/search?q=" + searchTerm)
         dispatch(setQuery(query));
-        if(router.pathname == '/home') {
+        if(router.pathname == '/') {
           router.push('/bookings?q=' + query);
         }
       }

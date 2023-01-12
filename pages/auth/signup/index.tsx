@@ -54,27 +54,27 @@ export default function Signup() {
     }
     return (
     <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] flex-grow bg-cover py-[2rem] cursor-pointer' >
-        <div className='w-[48rem] flex flex-col items-center text-white bg-dark py-[2rem] px-[3rem] rounded-[1.5rem] border border-grey cursor-default	' onClick={(e) => { setError(''); e.stopPropagation(); }}>
-            {/* <Link href='/home'>
+        <div className='w-[36rem] flex flex-col items-center text-white bg-dark py-[2rem] px-[3rem] rounded-[1.5rem] border border-grey cursor-default	' onClick={(e) => { setError(''); e.stopPropagation(); }}>
+            {/* <Link href='/'>
                <Image src='/images/logo.svg' className='h-[2rem]'/>
             </Link> */}
             <span className='text-[2.5rem]'>
                 Create an account
             </span>
             <div className='flex flex-col w-full'>
-                <Form className='mt-[2rem] w-full space-y-[2rem]' fluid formValue={formValue} onChange={setFormValue}>
+                <Form className='mt-[2rem] w-full space-y-[1.5rem]' fluid formValue={formValue} onChange={setFormValue}>
                     <Form.Group controlId="firstname">
-                        <Form.Control errorMessage={error.type == 'firstname' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="firstname" type="text" placeholder="First Name"/>
+                        <Form.Control errorMessage={error.type == 'firstname' && error.msg } className='h-[3rem] px-[2rem] placeholder:text-grey7' name="firstname" type="text" placeholder="First Name"/>
                     </Form.Group>
                     <Form.Group controlId="lastname">
-                        <Form.Control errorMessage={error.type == 'lastname' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="lastname" type="text" placeholder="Last Name"/>
+                        <Form.Control errorMessage={error.type == 'lastname' && error.msg } className='h-[3rem] px-[2rem] placeholder:text-grey7' name="lastname" type="text" placeholder="Last Name"/>
                     </Form.Group>
                     <Form.Group controlId="email">
-                        <Form.Control errorMessage={error.type == 'email' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
+                        <Form.Control errorMessage={error.type == 'email' && error.msg } className='h-[3rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
                     </Form.Group>
                     <Form.Group controlId="password">
                         <InputGroup inside>
-                            <Form.Control errorMessage={error.type == 'password' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
+                            <Form.Control errorMessage={error.type == 'password' && error.msg } className='h-[3rem] px-[2rem] placeholder:text-grey7' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
                                                         <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
                                 {
                                     revealPassword ?
@@ -86,7 +86,7 @@ export default function Signup() {
                     </Form.Group>
                     <Form.Group controlId="repeat">
                         <InputGroup inside>
-                            <Form.Control errorMessage={error.type == 'repeat' && error.msg } className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="repeat" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Confirm Password"/>
+                            <Form.Control errorMessage={error.type == 'repeat' && error.msg } className='h-[3rem] px-[2rem] placeholder:text-grey7' name="repeat" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Confirm Password"/>
                                                         <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
                                 {
                                     revealPassword ?
@@ -104,7 +104,7 @@ export default function Signup() {
                         }
                     </Form.Group>
                     <Form.Group className='!mb-[1rem]'>
-                        <Button appearance="primary" color="green" className='h-[3.75rem] w-full !bg-green !text-dark'
+                        <Button appearance="primary" color="green" className='h-[3rem] w-full !bg-green !text-dark'
                             onClick={signup}
                         >
                             Sign Up

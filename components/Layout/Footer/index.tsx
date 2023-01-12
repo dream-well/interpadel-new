@@ -21,7 +21,7 @@ export default function Footer() {
                             <div className='text-light mt-[1.5rem] flex flex-col'>
                                 {
                                     category.links.map((link, key) => (
-                                        <Link href={link.href} key={key} target={link.href.startsWith('/home') ? '_self' : '_blank'}>
+                                        <Link href={link.href} key={key} target={link.href.startsWith('/') ? '_self' : '_blank'}>
                                             {link.title}
                                         </Link>
                                     ))

@@ -40,22 +40,22 @@ body {
 
 @media only screen and (max-width: 1900px) {
   html {
-    font-size: 16 px;
+    font-size: 14 px;
   }
 }
 
-@media only screen and (max-width: 1600px) {
-  html {
-    font-size: 14px;
-  }
-}
-@media only screen and (max-width: 1400px) {
+@media only screen and (max-width: 1700px) {
   html {
     font-size: 12px;
   }
 }
+@media only screen and (max-width: 1500px) {
+  html {
+    font-size: 11px;
+  }
+}
 
-@media only screen and (max-width: 1200px) {
+@media only screen and (max-width: 1300px) {
   html {
     font-size: 10px;
   }

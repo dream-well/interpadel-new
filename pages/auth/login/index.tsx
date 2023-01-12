@@ -29,7 +29,7 @@ export default function Login({ providers }) {
         })
         .then(res => {            
             dispatch(login(res));
-            router.replace('/home');
+            router.replace('/');
         })
         .catch((e: AxiosError) => {
             if(e?.response?.status == 401) {
@@ -39,21 +39,21 @@ export default function Login({ providers }) {
     }
     return (
     <div className='flex items-center justify-center bg-[url(/images/auth/back.png)] bg-cover flex-grow py-[2rem]' >
-        <div className='w-[48rem] flex flex-col items-center text-white bg-dark p-[4rem] rounded-[1.5rem] border border-grey' onClick={(e) => { setError(''); e.stopPropagation(); }}>
-            {/* <Link href='/home'>
+        <div className='w-[36rem] flex flex-col items-center text-white bg-dark py-[2rem] px-[3rem] rounded-[1.5rem] border border-grey' onClick={(e) => { setError(''); e.stopPropagation(); }}>
+            {/* <Link href='/'>
                <Image src='/images/logo.svg' className='h-[2rem]'/>
             </Link> */}
-            <span className='text-[3rem]'>
+            <span className='text-[2rem]'>
                 Welcome to Interpadel
             </span>
             <div className='flex flex-col w-full'>
-                <Form className='mt-[2rem] w-full space-y-[2rem]' fluid formValue={formValue} onChange={setFormValue}>
+                <Form className='mt-[2rem] w-full space-y-[1.5rem]' fluid formValue={formValue} onChange={setFormValue}>
                     <Form.Group controlId="email">
-                        <Form.Control className='h-[3.75rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
+                        <Form.Control className='h-[3rem] px-[2rem] placeholder:text-grey7' name="email" type="email" placeholder="Email Address"/>
                     </Form.Group>
                     <Form.Group controlId="password">
                         <InputGroup inside>
-                            <Form.Control onPressEnter={signin} className='h-[3.75rem] px-[2rem] placeholder:text-grey7 bg-dark' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
+                            <Form.Control onPressEnter={signin} className='h-[3rem] px-[2rem] placeholder:text-grey7 bg-dark' name="password" type={revealPassword ? "text" : "password"} autoComplete="off" placeholder="Password"/>
                             <InputGroup.Addon className='h-full mr-[1rem] cursor-pointer' onMouseDown={() => setRevealPassword(true)} onMouseUp={() => setRevealPassword(false)} onMouseLeave={() => setRevealPassword(false)}>
                                 {
                                     revealPassword ?
@@ -71,7 +71,7 @@ export default function Login({ providers }) {
                         </Form.HelpText>
                     </Form.Group>
                     <Form.Group className='!mb-[1rem]'>
-                        <Button appearance="primary" color="green" className='h-[3.75rem] w-full !bg-green !text-dark'
+                        <Button appearance="primary" color="green" className='h-[3rem] w-full !bg-green !text-dark'
                             onClick={signin}
                         >
                             Sign In

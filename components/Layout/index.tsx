@@ -12,7 +12,7 @@ export default function Layout({ children }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const showHeader = !router.pathname.startsWith('/auth');
-    const isHome = router.pathname == '/home';
+    const isHome = router.pathname == '/';
     const isCenter = router.pathname == '/centers';
     const { data: session, status } = useSession();
     
