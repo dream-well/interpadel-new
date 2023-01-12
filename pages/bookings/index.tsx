@@ -99,7 +99,7 @@ const FavoriteCard = ({image, name, address, courts, description, _id, onRemove,
     }
     return (
     <div className='flex text-white items-center'>
-        <Link href={`/centers/${_id}/today`} className='w-[9rem] h-[9rem] absolute'>
+        <Link href={`/centers/${_id}/today`} className='w-[8rem] h-[8rem] absolute'>
            <Image src={image} alt={name} className='rounded-[1rem] object-cover h-full w-full' />
         </Link>
         <div className='flex flex-col flex-grow bg-dark px-[5rem] py-[1.5rem] space-y-[0.5rem] ml-[6.5rem] border rounded-[0.5rem] border-grey-light'>

@@ -6,6 +6,18 @@ import { useAppSelector } from "store/hook";
 export const Menus = () => {
     const router = useRouter();
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
+    const menus = [
+        {
+            title: 'Booking',
+            href: '/bookings'
+        },
+    ]
+    if(firstname)
+        menus.push(
+            {
+                title: 'Matching',
+                href: '/matching'
+            });
     return (
     <div className='flex items-center'>
         <Link href={firstname ? '/profile' : '/'}>
@@ -24,22 +36,3 @@ export const Menus = () => {
         </ul>
     </div>
 )}
-
-const menus = [
-    {
-        title: 'Booking',
-        href: '/bookings'
-    },
-    // {
-    //     title: 'Centers',
-    //     href: '/centers'
-    // },
-    {
-        title: 'Matching',
-        href: '/matching'
-    },
-    // {
-    //     title: 'Books',
-    //     href: '/books'
-    // },
-]
