@@ -23,7 +23,7 @@ export default function Header({banner, className = ''}) {
 
 
 const RightSide = () => {
-    const { firstname, lastname, image } = useAppSelector(state => state.auth);
+    const { _id, firstname, lastname, image } = useAppSelector(state => state.auth);
     const router = useRouter();
 
     return (
@@ -40,7 +40,7 @@ const RightSide = () => {
             <NavSearch />
             <LanguagePicker />
             {
-                firstname ?
+                _id ?
                 <DropDownMenu name={firstname + ' ' + lastname} image={image} />
                 :
                 <div className='flex items-center'>
