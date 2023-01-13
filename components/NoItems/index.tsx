@@ -4,9 +4,9 @@ import cn from 'classnames';
 
 export default function NoItems({ href, text, className='' }) {
   return (
-    <div className='flex flex-col items-center space-y-4'>
+    <div className={cn('flex flex-col items-center space-y-4', className)} >
        <Image src='/images/no-items.svg' alt='Not Items Found' />
-        <Link href={href}  className={cn('font-bold', className)}>{text}</Link>
+        <Link href={href} className='font-bold text-white'>{text}</Link>
     </div>
   )
 }

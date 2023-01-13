@@ -10,17 +10,20 @@ import { fetcher, notification } from 'utils/helpers';
 import NoItems from 'components/NoItems';
 import useApi from 'hooks/useApi';
 import axios from 'axios';
+import Loader from 'components/Loader';
+import { useAppSelector } from 'store/hook';
 
 const ROW_PER_PAGE = 3;
 
 export default function Matching() {
-    const [query, setQuery] = useState('')
+    // const [query, setQuery] = useState('')
+    const query = useAppSelector(state => state.app.query)
     const [activePage, setActivePage] = useState(1)
     const [open, setOpen] = useState(false)
     const [currentUser, setCurrentUser] = useState(0)
     const [matchings, setMatchings] = useState([])
 
-    const {data: matchingsData} = useApi('/api/profile/matchings', { query });
+    const {data: matchingsData, loading} = useApi('/api/profile/matchings', { query });
     
     const toaster = useToaster();
 
@@ -41,16 +44,21 @@ export default function Matching() {
     const handleClose = () => {
         setOpen(false);
     }
-    const handleSearch = (q) => {
-        setQuery(q);
+    // const handleSearch = (q) => {
+    //     setQuery(q);
+    // }
+
+
+    if(loading && !matchingsData) {
+        return <Loader />
     }
 
     return (
         <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] py-[4.375rem] bg-grey-dark'>
-            <SearchSection
+            {/* <SearchSection
                 value={query}
                 onSearch={handleSearch}
-            />
+            /> */}
             {matchingsData?.length > 0 && (
                 <Matchings
                     matchings={matchings}
@@ -64,7 +72,7 @@ export default function Matching() {
                     rows={matchingsData?.length}
                 />
             )}
-            {matchingsData?.length === 0 && <NoItems className='text-white' href={'/profile/edit'} text='Complete your profile to see your matchings' />}
+            {matchingsData?.length === 0 && <NoItems className='text-white my-[10rem]' href={'/profile/edit'} text='No matchings' />}
             <AddToTeamModal open={open} onClose={handleClose} user={currentUser} />
         </div>
     )
@@ -124,7 +132,7 @@ const SearchSection = ({value, onSearch}) => {
 }
 const Matchings = ({ matchings, onOpenModal }) => {
     return (
-        <div className='flex flex-col space-y-[2.5rem]'>
+        <div className='flex flex-col space-y-[1.5rem]'>
             {matchings?.map((match, i) => (
                 <MatchingCard
                     {...match}

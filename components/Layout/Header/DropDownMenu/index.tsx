@@ -2,6 +2,8 @@ import { Dropdown, SelectPicker, Whisper, Popover } from 'rsuite';
 import { Badge } from 'rsuite';
 import ArrowDownLineIcon from '@rsuite/icons/ArrowDownLine';
 import UserBadgeIcon from '@rsuite/icons/UserBadge';
+import HomeIcon from '@rsuite/icons/Page';
+import CalendarIcon from '@rsuite/icons/Calendar';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
 import PublicOpinionIcon from '@rsuite/icons/PublicOpinion';
 import GearIcon from '@rsuite/icons/Gear';
@@ -33,7 +35,7 @@ const RenderMenu = ({ onClose, left, top, className }, ref) => {
       onClose();
       if(eventKey == '/logout') {
         dispatch(logout());
-        router.replace('/home');
+        router.replace('/');
       } 
       else{
         router.push(eventKey);
@@ -54,25 +56,35 @@ const RenderMenu = ({ onClose, left, top, className }, ref) => {
 
 const dropDownMenu = [
     {
-        title: 'My profile',
-        icon: <UserBadgeIcon/>,
+        title: 'Home',
+        icon: <HomeIcon/>,
         href: '/profile'
     },
     {
-        title: 'Help section',
-        icon: <HelpOutlineIcon/>,
-        href: '/help'
+        title: 'My profile',
+        icon: <UserBadgeIcon/>,
+        href: '/profile/edit'
     },
+    {
+        title: 'My bookings',
+        icon: <CalendarIcon/>,
+        href: '/books'
+    },
+    // {
+    //     title: 'Help section',
+    //     icon: <HelpOutlineIcon/>,
+    //     href: '/help'
+    // },
     {
         title: 'Favourite courts',
         icon: <PublicOpinionIcon/>,
         href: '/favorites'
     },
-    {
-        title: 'Account preferences',
-        icon: <GearIcon/>,
-        href: '/preferences'
-    },
+    // {
+    //     title: 'Account preferences',
+    //     icon: <GearIcon/>,
+    //     href: '/preferences'
+    // },
     {
         title: 'Log out',
         icon: <ExitIcon/>,

@@ -1,36 +1,52 @@
 import Link from "next/link";
-import { Button } from 'rsuite';
+import { Button, DatePicker } from 'rsuite';
 import cn from 'classnames'
 import { useAppSelector } from "store/hook";
 import DropDownMenu from './DropDownMenu';
 import { Menus } from "./Menus";
 import LanguagePicker from "./LanguagePicker";
+import NavSearch from "./NavSearch";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setDate } from "store/slices/appSlice";
 
 export default function Header({banner, className = ''}) {
     return (
-        <div className={cn('flex flex-col px-[8.5rem] bg-dark text-white relative z-10', banner ? 'h-[38rem] bg-[url(/images/banner.png)] bg-cover': 'border-b border-[rgba(255,255,255,0.2)]', className)}>
-            <div className='flex w-full justify-between h-[6rem]'>
+        <div className={cn('flex flex-col px-[8.5rem] bg-dark text-white relative z-10', banner ? 'bg-transparent': 'border-b border-[rgba(255,255,255,0.2)]', className)}>
+            <div className='flex w-full justify-between h-[5rem]'>
                 <Menus />
                 <RightSide />
             </div>
-            {
-                banner && 
-                <div className='saira font-bold text-[4rem] mx-[12rem] absolute -translate-y-1/2 top-1/2 flex items-center text-center'>
-                    Find where &amp; with whom to play Padel &amp; Tennis instantly
-                </div>
-            }
+            
         </div>
     )
 }
 
 
 const RightSide = () => {
-    const { firstname, lastname, image } = useAppSelector(state => state.auth);
+    const { _id, firstname, lastname, image } = useAppSelector(state => state.auth);
+    const router = useRouter();
+    const date = useAppSelector(state => state.app.date);
+    const dispatch = useDispatch();
+
     return (
         <div className='flex items-center'>
+            {
+                router.pathname == '/bookings' &&   
+                <DatePicker
+                    className='mr-4'
+                    appearance='subtle'
+                    format="yyyy-MM-dd"
+                    placeholder='Select date'
+                    value={date}
+                    onChange={date => dispatch(setDate(date))}
+                />
+            }
+            <NavSearch />
             <LanguagePicker />
             {
-                firstname ?
+                _id ?
                 <DropDownMenu name={firstname + ' ' + lastname} image={image} />
                 :
                 <div className='flex items-center'>

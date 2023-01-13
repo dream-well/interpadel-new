@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useRouter } from "next/router";
 import { use, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -12,7 +13,6 @@ import {
 } from "rsuite";
 import { useAppSelector } from "store/hook";
 import { login } from "store/slices/authSlice";
-import { axios } from "utils/helpers";
 import countries from 'utils/counties'
 
 export default function ProfileEdit() {
@@ -76,11 +76,9 @@ export default function ProfileEdit() {
   };
 
   return (
-    <div className="flex flex-col my-[6.25rem] bg-[#1d1829]">
-      <span className="font-bold px-[4.375rem] py-[2.5rem] text-[#1D1829] text-[2rem] bg-[#c2ff00]">
-        My Profile Information
-      </span>
-      <div className="flex flex-col mx-[4.375rem] my-[2.75rem] space-y-[3.75rem] text-[white]">
+    <div className="'px-[8.5rem] flex flex-col p-[6.25rem] bg-grey-dark">
+      <span className='font-bold px-[4.375rem] py-[2.5rem] rounded-t-[1rem] text-[#1D1829] text-[2rem] bg-[#c2ff00]'>My Profile Information</span>
+            <div className='flex flex-col px-[4.375rem] py-[2.75rem] rounded-b-[1rem] space-y-[3.75rem] text-[white] bg-dark'>
         <div>
           <span className="text-[1.5rem] font-bold">Mandatory</span>
           <Mandatory

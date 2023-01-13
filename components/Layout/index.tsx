@@ -12,7 +12,7 @@ export default function Layout({ children }) {
     const router = useRouter();
     const dispatch = useDispatch();
     const showHeader = !router.pathname.startsWith('/auth');
-    const isHome = router.pathname == '/home';
+    const isHome = router.pathname == '/';
     const isCenter = router.pathname == '/centers';
     const { data: session, status } = useSession();
     
@@ -36,8 +36,8 @@ export default function Layout({ children }) {
     return (
         <div className='open-sans flex flex-col min-h-screen'>
             {
-                showHeader && 
-                <Header banner={isHome} className={isCenter && 'bg-[rgba(0,0,0,0.3)]'}/>
+                // showHeader && 
+                <Header banner={isHome} className={'bg-[rgba(0,0,0,0.3)]'}/>
             }
             <div className={cn('flex flex-col flex-grow', showHeader && !isHome && '')}>
                 {children}

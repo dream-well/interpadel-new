@@ -16,14 +16,15 @@ import moment from "moment";
 import useApi from "hooks/useApi";
 import GoogleMapReact from 'google-map-react';
 import cn from 'classnames';
+import Loader from "components/Loader";
 
 // import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export default function Centers() {
 
   const dispatch = useDispatch();
-  const [query, setQuery] = useState<any>({});
-  const { data: centers } = useApi('/api/centers', query);
+  const query = useAppSelector(state => state.app.query);
+  const { data: centers } = useApi('/api/centers', {address: query});
   const { favoriteCenters } = useAppSelector(state => state.auth);
   const [searchParams, setSearchParams] = useState<any>({});
   const router = useRouter();
@@ -44,7 +45,7 @@ export default function Centers() {
   useEffect(() => {
     if(!router.query) return;
     setSearchParams({ ...router.query });
-    setQuery({ ...router.query });
+    // setQuery({ ...router.query });
   }, [router.query]);
 
   const findCenters = () => {
@@ -56,14 +57,27 @@ export default function Centers() {
     }}, undefined, { shallow: true });
     
   }
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if(loading && centers) {
+      setLoading(false);
+    }
+  }, [centers]);
+
+  if(loading) {
+      return <Loader />
+  }
   
   return (
-    <div className='rs-theme-light mt-[-6rem] bg-grey-dark'>
-      <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/>
+    <div className='rs-theme-light bg-grey-dark'>   {/* mt-[-6rem]  */}
+      {/* <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/> */}
       <div className='px-[8.5rem] '>
-        <SearchBar searchParams={searchParams} onChange={setSearchParams} onSearch={findCenters} />
+        {/* <SearchBar searchParams={searchParams} onChange={setSearchParams} onSearch={findCenters} /> */}
         <CenterList favoriteCenters={favoriteCenters} centers={centers} onToggleFavorite={handleToggleFavorite}/>
       </div>
+      <Maps centers={centers} onCenterClick={(center) => setSearchParams({ ...searchParams, address: center.name})}/>
     </div>
   );
 }
@@ -126,34 +140,6 @@ function Maps({centers=[], onCenterClick}) {
   );
 }
 
-function SearchBar({searchParams, onChange, onSearch}) {
-  return (
-    <div className="z-10 flex mt-[-4rem] items-center space-x-4">
-      <Input placeholder="Find venue, city..." className="w-[20rem] z-10" 
-        value={searchParams.address} 
-        onChange={v => onChange({...searchParams, address: v})}
-        onPressEnter={onSearch}
-      />
-      <DatePicker 
-        className="w-[10rem] rs-theme-light" 
-        cleanable={true} 
-        value={searchParams.date} 
-        format="yyyy-MM-dd"
-        onChange={v => onChange({ ...searchParams, date: v})} 
-      />
-      <div>
-        <Button
-          appearance="primary"
-          className="!bg-green !text-black h-[2.5rem] w-[9rem]"
-          onClick={onSearch}
-        >
-          Search <SearchIcon className="ml-2"/>
-        </Button>
-      </div>
-    </div>
-  );
-}
-
 function CenterList({centers = [], onToggleFavorite, favoriteCenters = []}) {
   return (
     <div className='mt-[4rem]'>
@@ -188,7 +174,7 @@ const Center = ({_id, name, image, city, isFavorite=false, onToggleFavorite}) =>
           </div>
         </div>
         <div className='text-[2rem] ml-2'>
-          {isFavorite && <AiFillHeart onClick={toggleFavorite} />}
+          {isFavorite && <AiFillHeart onClick={toggleFavorite} color={'#ff1122'} />}
           {!isFavorite && <AiOutlineHeart onClick={toggleFavorite} />}
         </div>
       </div>

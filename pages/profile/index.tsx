@@ -21,7 +21,7 @@ export default function Profile() {
     const { firstname, lastname, image } = useAppSelector(state => state.auth);
     
     return (
-        <div className='px-[8.5rem] flex flex-col py-[6rem] space-y-[3rem] bg-grey-dark'>
+        <div className='px-[8.5rem] flex flex-col py-[4rem] space-y-[3rem] bg-grey-dark'>
             <Summary
                 name={firstname + ' ' + lastname}
                 avatar={image}
@@ -101,12 +101,12 @@ const Summary = ({name, avatar, rate}) => {
     return (
         <div className='flex p-[3rem] space-x-[3rem] bg-[#1d1829] justify-between rounded-[1rem] border border-grey'>
             <div className='flex flex-col w-1/3 space-y-[2rem]'>
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-start items-center'>
                     <Badge content={rate.toFixed(1)} color={'green'}>
                         <Avatar src={avatar} className='w-[7.5rem] h-[7.5rem] cursor-pointer' onClick={() => uploaderRef?.current.click()}/>
                     </Badge>
                     <input type="file" hidden onChange={uploadPhoto} ref={uploaderRef}/>
-                    <span className='font-bold text-[2.5rem] ml-2 text-white'>{name}</span>
+                    <span className='font-bold text-[2.5rem] ml-8 text-white'>{name}</span>
                 </div>
                 <div className='flex flex-col rounded-3xl border-grey border-2 p-[2.5rem] space-y-[1rem]'>
                     <span className='font-bold text-white text-[1.5rem]'>Your next booking</span>
@@ -134,12 +134,12 @@ const Summary = ({name, avatar, rate}) => {
 const FavoriteCard = ({_id, image, name, address}) => (
     <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
         <div className='w-[3rem] h-[3rem] border-1 items-center'>
-            <Link href={`https://192.168.0.110:3000/centers/${_id}/today`}>
+            <Link href={`/centers/${_id}/today`}>
                 <Image src={image} className='w-[3rem] h-[3rem]' alt={name} />
             </Link>
         </div>
-        <div className='flex flex-col'>
-            <Link href={`https://192.168.0.110:3000/centers/${_id}/today`}>
+        <div className='flex flex-col text-left'>
+            <Link href={`/centers/${_id}/today`}>
                 <span>{name}</span>
             </Link>
             {address && <span className='flex space-x-2 items-center'>
@@ -154,23 +154,34 @@ const Matchings = () => {
     const { data: matchingPlayers } = useApi('/api/profile/matchings');
 
     return (
-        <div>
+        <div className='text-center py-2'>
             {matchingPlayers?.slice(0, 3).map((matching, key) =>(
                 <MatchingCard {...matching} key={key}/>
-            ))}
+            ))}            
+            {matchingPlayers?.length === 0 && (
+                <span>No matching players</span>   
+            )}
+            {matchingPlayers?.length > 3 && (
+                <Link href={'/matching'}>More...</Link>
+            )}
         </div>
     )
 }
 
 const Favorites = () => {
     const { data: favoriteVenues } = useApi('/api/profile/favorite-centers');
-    console.log(favoriteVenues);
 
     return (
-        <div>
+        <div className='text-center py-2'>
             {favoriteVenues?.slice(0, 3).map((venues, key) =>(
                 <FavoriteCard {...venues} key={key}/>
             ))}
+            {favoriteVenues?.length === 0 && (
+                <span>No favorite centers</span>   
+            )}
+            {favoriteVenues?.length > 3 && (
+                <Link href={'/centers'}>More...</Link>
+            )}
         </div>
     )
 }
@@ -180,9 +191,9 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
         <div className='flex w-[2.5rem] h-[2.5rem]'>
             <Avatar src={image} className='w-[2.5rem] h-[2.5rem]' />
         </div>
-        <div className='flex flex-col flex-grow space-y-2'>
+        <div className='flex flex-col flex-grow space-y-2 text-left'>
             <div className='flex space-x-5'>
-                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level.toFixed(1)}</span>
+                <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level}</span>
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
                 {/* <EmailIcon className='justify-end' /> */}
             </div>
@@ -198,7 +209,7 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
 
 const Collection = ({name, children}) => (
     <div className='flex flex-col space-y-1 border border-grey bg-dark rounded-[1rem]'>
-        <span className='p-5 font-bold text-[1.25rem] bg-[#c2ff00] rounded-t-[1rem]'>{name}</span>
+        <span className='p-5 font-bold text-[1.25rem] bg-[#c2ff00] rounded-t-[1rem] text-dark'>{name}</span>
         {children}
     </div>
 )

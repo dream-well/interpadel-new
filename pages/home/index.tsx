@@ -6,17 +6,30 @@ import SearchIcon from '@rsuite/icons/Search';
 import LocationIcon from '@rsuite/icons/Location';
 import PlusIcon from '@rsuite/icons/Plus';
 import MinusIcon from '@rsuite/icons/Minus';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'components/Image';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
+import useApi from 'hooks/useApi';
+import Loader from 'components/Loader';
+import { useAppSelector } from 'store/hook';
+import { useDispatch } from 'react-redux';
+import { setQuery } from 'store/slices/appSlice';
 
 export default function Home() {
+
+  const { data: centers, loading } = useApi(`/api/centers?search=Taktika`);
+
+  if(loading) {
+    return <Loader />
+  }
+
   return (
-    <div className='text-dark'>
+    <div className='text-dark bg-white'>
+      <Banner />
       <Search />
       <SectionText />
-      <Section />
+      <Section centers={centers} />
       <EasierForYou />
       <Trustedbythousands />
       <Testimonial />
@@ -27,13 +40,24 @@ export default function Home() {
   );
 }
 
+function Banner() {
+  return (
+    <div className='relative text-white -mt-[6rem]'>
+      <Image className='h-[38rem] w-full object-cover' src='/images/banner.png' />
+      <div className='saira font-bold text-[4rem] mx-[12rem] absolute -translate-y-1/2 top-1/2 flex items-center text-center'>
+          Find where &amp; with whom to play Padel &amp; Tennis instantly
+      </div>
+    </div>
+  );
+}
+
 function Search() {
 
   const router = useRouter();
   const [address, setAddress] = useState('');
 
   const onSearch = () => {
-    router.push(`/centers?address=${address}`);
+    router.push(`/bookings?q=${address}`);
   }
 
   return (
@@ -90,11 +114,10 @@ function SectionText() {
     </div>
   );
 }
-function Section() {
-  const { data: center } = useSWR(`/api/centers?search=Taktika`, fetcher);
+function Section({ centers }) {
   return (
     <div>
-      {center?.map((item, key) =>
+      {centers?.map((item, key) =>
         key < 3 ?
         key % 2 == 0 ? (
           <div className='text-white flex my-[2.5rem] px-[8.5rem]' key={key}>
@@ -292,15 +315,13 @@ function Testimonial() {
          <Image src='/images/home/qutesMark.png' className='w-[3rem] h-[3rem]' />
         </div>
         <div className='mt-[1.375rem]'>
-          Great job on my Cakephp scraper script! Easy to communicate with and
-          even did a few additional tasks that were not apart of the project
-          that were greatly appreciated! Will be hiring again for sure. ;-)
+          Great new Padel center with good courses, helpful staff and great shop with lots of goodies
         </div>
         <div className='flex mt-[1.876rem]'>
          <Image src='/images/home/quoteWoman.png' />
           <div className='flex flex-col ml-6'>
             <div className='text-xl font-semibold'>Elenor Rose</div>
-            <div>Manager</div>
+            <div>Student</div>
           </div>
         </div>
       </div>
@@ -316,8 +337,8 @@ function Download() {
           Download our mobile app
         </div>
         <div className='w-[28.563rem] mt-6'>
-          Disposable temporary email protects your real email address from spam,
-          advertising mailings, malwares.
+          InterPadel is a complete booking system for padel world wide.
+          Download on Appstore
         </div>
         <div className='mt-[3.75rem] flex space-x-[2.215rem]'>
          <Image src='/images/home/googleBadge.png' />

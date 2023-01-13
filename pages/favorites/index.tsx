@@ -64,7 +64,7 @@ export default function Favorites() {
     }
     
     return (
-        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
+        <div className='px-[8.5rem] flex flex-col space-y-[2rem] my-[3rem]'>
             <span className='flex text-[3rem] font-bold saira justify-center'>Your Favorite List</span>
             {favoritesData?.length > 0 && (
                 <FavoritesSection favorites={favorites} onRemove={handleRemove} />
