@@ -140,34 +140,6 @@ function Maps({centers=[], onCenterClick}) {
   );
 }
 
-function SearchBar({searchParams, onChange, onSearch}) {
-  return (
-    <div className="z-10 flex mt-[-4rem] items-center space-x-4">
-      <Input placeholder="Find venue, city..." className="w-[20rem] z-10" 
-        value={searchParams.address} 
-        onChange={v => onChange({...searchParams, address: v})}
-        onPressEnter={onSearch}
-      />
-      <DatePicker 
-        className="w-[10rem] rs-theme-light" 
-        cleanable={true} 
-        value={searchParams.date} 
-        format="yyyy-MM-dd"
-        onChange={v => onChange({ ...searchParams, date: v})} 
-      />
-      <div>
-        <Button
-          appearance="primary"
-          className="!bg-green !text-black h-[2.5rem] w-[9rem]"
-          onClick={onSearch}
-        >
-          Search <SearchIcon className="ml-2"/>
-        </Button>
-      </div>
-    </div>
-  );
-}
-
 function CenterList({centers = [], onToggleFavorite, favoriteCenters = []}) {
   return (
     <div className='mt-[4rem]'>

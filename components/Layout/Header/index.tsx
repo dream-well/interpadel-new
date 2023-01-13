@@ -8,6 +8,8 @@ import LanguagePicker from "./LanguagePicker";
 import NavSearch from "./NavSearch";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setDate } from "store/slices/appSlice";
 
 export default function Header({banner, className = ''}) {
     return (
@@ -25,6 +27,8 @@ export default function Header({banner, className = ''}) {
 const RightSide = () => {
     const { _id, firstname, lastname, image } = useAppSelector(state => state.auth);
     const router = useRouter();
+    const date = useAppSelector(state => state.app.date);
+    const dispatch = useDispatch();
 
     return (
         <div className='flex items-center'>
@@ -35,6 +39,8 @@ const RightSide = () => {
                     appearance='subtle'
                     format="yyyy-MM-dd"
                     placeholder='Select date'
+                    value={date}
+                    onChange={date => dispatch(setDate(date))}
                 />
             }
             <NavSearch />
