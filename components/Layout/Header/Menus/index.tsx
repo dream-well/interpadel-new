@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from 'components/Image';
 import { useRouter } from "next/router";
 import { useAppSelector } from "store/hook";
+import classNames from "classnames";
 
 export const Menus = () => {
     const router = useRouter();
@@ -26,8 +27,8 @@ export const Menus = () => {
         <ul className='ml-[5.5rem] flex space-x-12'>
             {
                 menus.map((menu, i) => (
-                    <li key={i}>
-                        <Link href={menu.href}>
+                    <li key={i} className={classNames('hover:text-green', router.pathname.startsWith(menu.href) && 'text-green')}>
+                        <Link href={menu.href} className='active:text-green'>
                             {menu.title}
                         </Link>
                     </li>

@@ -30,7 +30,7 @@ export default function Bookings() {
     const query = useAppSelector(state => state.app.query);
     const router = useRouter();
     const q = router.query.q;
-    const {data: favoritesData, error, mutate} = useApi('/api/centers', {address: q});
+    const {data: favoritesData, error, mutate} = useApi('/api/centers', {address: q ?? ''});
 
     useEffect(() => {
         if(q == query) return;
@@ -132,7 +132,7 @@ const Center = ({image, name, address, courts, description, _id, onRemove, isFav
            <Image src={image} alt={name} className='rounded-[1rem] object-cover h-full w-full' />
         </Link>
         <div className='flex bg-dark w-full px-[3rem] py-[1.5rem] space-y-[0.5rem] ml-[6rem] border rounded-[0.5rem] border-grey-light justify-between'>
-            <div className='flex flex-col'>
+            <div className='flex flex-col min-w-[30rem]'>
                 <Link href={`/centers/${_id}/today`}  className='text-[2rem] font-bold saira'>
                     {name}
                 </Link>
