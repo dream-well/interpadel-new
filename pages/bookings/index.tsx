@@ -282,8 +282,6 @@ function Maps({centers=[], onCenterClick}) {
             centers.map((center, key) => 
               <MapPin
                 key={key}
-                lat={center.latitude}
-                lng={center.longitude}
                 text={center.name}
                 onClick={() => onCenterClick(center)}
               />
