@@ -16,9 +16,10 @@ import { useDispatch } from 'react-redux';
 import { updateProfile } from 'store/slices/authSlice';
 import useApi from 'hooks/useApi';
 import moment from 'moment';
+import BookingChart from 'components/BookingChart';
 
 export default function Profile() {
-    const { firstname, lastname, image } = useAppSelector(state => state.auth);
+    const { firstname, lastname, image, level } = useAppSelector(state => state.auth);
     
     return (
         <div className='px-[8.5rem] flex flex-col py-[4rem] space-y-[3rem] bg-grey-dark'>
@@ -26,6 +27,7 @@ export default function Profile() {
                 name={firstname + ' ' + lastname}
                 avatar={image}
                 rate={5.0}
+                level={level}
             />
             <div className='flex justify-between space-x-[3.813rem] '>
                 {/* left space */}
@@ -53,7 +55,7 @@ export default function Profile() {
     )
 }
 
-const Summary = ({name, avatar, rate}) => {
+const Summary = ({name, avatar, rate, level}) => {
     const { data } = useSWR(`/api/profile/bookings?month=${moment(new Date()).format("YYYY-MM")}`, fetcher);
 
     const uploaderRef = useRef<HTMLInputElement>();
@@ -106,9 +108,12 @@ const Summary = ({name, avatar, rate}) => {
                         <Avatar src={avatar} className='w-[7.5rem] h-[7.5rem] cursor-pointer' onClick={() => uploaderRef?.current.click()}/>
                     </Badge>
                     <input type="file" hidden onChange={uploadPhoto} ref={uploaderRef}/>
-                    <span className='font-bold text-[2.5rem] ml-8 text-white'>{name}</span>
+                    <div className='flex flex-col ml-8 space-y-2'>
+                        <span className='font-bold text-[2.5rem] text-white'>{name}</span>
+                        <span className='px-4 px-2 bg-red w-min rounded'>{Number(level).toFixed(1)}</span>
+                    </div>
                 </div>
-                <div className='flex flex-col rounded-3xl border-grey border-2 p-[2.5rem] space-y-[1rem]'>
+                <div className='flex flex-col rounded-3xl border-grey border-2 p-[1.5rem] space-y-[1rem]'>
                     <span className='font-bold text-white text-[1.5rem]'>Your next booking</span>
                     <span className='text-white flex items-center space-x-2'>
                         {/* <CalendarIcon className='text-[1.5rem]' /> */}
@@ -121,6 +126,9 @@ const Summary = ({name, avatar, rate}) => {
                 <Button appearance="ghost" className='w-[15rem] h-[3rem] rounded-xl bg-[#c2ff00] !border-green text-black'>
                     <Link href='/centers'>+ Book New Time Slot</Link>
                 </Button>
+            </div>
+            <div>
+                <BookingChart />
             </div>
             <div className='flex flex-col items-end'>
                 <Button appearance="ghost" className='flex h-[3rem] w-[7.5rem] rounded-xl !border-green !text-green items-center justify-center'>
@@ -177,7 +185,7 @@ const Favorites = () => {
                 <FavoriteCard {...venues} key={key}/>
             ))}
             {favoriteVenues?.length === 0 && (
-                <span>No favorite centers</span>   
+                <div className='h-[5rem] flex items-center justify-center'>No favorite centers</div>   
             )}
             {favoriteVenues?.length > 3 && (
                 <Link href={'/centers'}>More...</Link>
@@ -209,7 +217,7 @@ const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}
 
 const Collection = ({name, children}) => (
     <div className='flex flex-col space-y-1 border border-grey bg-dark rounded-[1rem]'>
-        <span className='p-5 font-bold text-[1.25rem] bg-[#c2ff00] rounded-t-[1rem] text-dark'>{name}</span>
+        <span className='p-5 font-bold text-[1.25rem] bg-green-dark rounded-t-[1rem] text-dark'>{name}</span>
         {children}
     </div>
 )

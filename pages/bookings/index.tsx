@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Avatar, Button, Form, Pagination, Progress, SelectPicker, useToaster } from 'rsuite'
+import React, { useEffect, useRef, useState } from 'react'
+import { Avatar, Button, Form, Pagination, Progress, SelectPicker, useToaster, Tooltip } from 'rsuite'
 import AbTestIcon from '@rsuite/icons/AbTest';
 import LocationIcon from '@rsuite/icons/Location';
 import useSWR from 'swr';
@@ -14,9 +14,10 @@ import useApi from 'hooks/useApi';
 import { useAppSelector } from 'store/hook';
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { useRouter } from 'next/router';
-import classNames from 'classnames';
+import cn from 'classnames';
 import moment from 'moment';
-import { setDate } from 'store/slices/appSlice';
+import { setDate, setQuery } from 'store/slices/appSlice';
+import GoogleMapReact from 'google-map-react';
 
 const ROW_PER_PAGE = 5;
 
@@ -30,7 +31,7 @@ export default function Bookings() {
     const query = useAppSelector(state => state.app.query);
     const router = useRouter();
     const q = router.query.q;
-    const {data: favoritesData, error, mutate} = useApi('/api/centers', {address: q ?? ''});
+    const {data: centers, error, mutate} = useApi('/api/centers', {address: q ?? ''});
 
     useEffect(() => {
         if(q == query) return;
@@ -44,13 +45,13 @@ export default function Bookings() {
     const toaster = useToaster();    
 
     useEffect(() => {
-        setFavorites(favoritesData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
-        if (favoritesData?.length <= (activePage-1) * ROW_PER_PAGE)
+        setFavorites(centers?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+        if (centers?.length <= (activePage-1) * ROW_PER_PAGE)
             setActivePage(1);
-    }, [favoritesData])
+    }, [centers])
 
     useEffect(() => {
-        setFavorites(favoritesData?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
+        setFavorites(centers?.slice((activePage-1) * ROW_PER_PAGE, activePage * ROW_PER_PAGE));
     }, [activePage])
 
     const handleRemove = (id) => {
@@ -67,7 +68,7 @@ export default function Bookings() {
             )
             mutate();
             dispatch(updateFavorites(
-                favoritesData?.map(d => d._id)
+                centers?.map(d => d._id)
                     .filter(_id => _id != id)
             ));
         }).catch(() => {
@@ -83,18 +84,21 @@ export default function Bookings() {
     }
     
     return (
-        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
-            {favoritesData?.length > 0 && (
-                <CenterSection favorites={favorites} onRemove={handleRemove} />
-            )}
-            {favoritesData?.length > 0 && (
-                <Paginator
-                    activePage={activePage}
-                    setActivePage={setActivePage}
-                    rows={favoritesData?.length}
-                />
-            )}
-            {favoritesData?.length === 0 && <NoItems className='text-black' href={'/centers'} text='No Favorite centers yet' />}
+        <div>
+            <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>
+                {centers?.length > 0 && (
+                    <CenterSection favorites={favorites} onRemove={handleRemove} />
+                )}
+                {centers?.length > 0 && (
+                    <Paginator
+                        activePage={activePage}
+                        setActivePage={setActivePage}
+                        rows={centers?.length}
+                    />
+                )}
+                {centers?.length === 0 && <NoItems className='text-black' href={'/centers'} text='No Favorite centers yet' />}
+            </div>
+            <Maps centers={centers} onCenterClick={(center) => dispatch(setQuery(center.name))} />
         </div>
     )
 }
@@ -126,6 +130,8 @@ const Center = ({image, name, address, courts, description, _id, onRemove, isFav
         router.push('/payment?' + searchParams.toString());
     }
 
+    const date = useAppSelector(state => state.app.date);
+
     return (
     <div className='flex text-white items-center relative'>
         <Link href={`/centers/${_id}/today`} className='w-[8rem] h-[8rem] absolute top-2'>
@@ -145,7 +151,7 @@ const Center = ({image, name, address, courts, description, _id, onRemove, isFav
                     <span>{courts.length} Bookable courts</span>
                 </span> */}
                 <div className='text-sm'>
-                    2 courts are available
+                    {courts.length} courts are available
                 </div>
             </div>
             <div className='flex flex-col ml-8'>
@@ -155,15 +161,15 @@ const Center = ({image, name, address, courts, description, _id, onRemove, isFav
                             <div 
                                 key={key}
                                 onClick={() => { if(isActive && currentSlot == slot) setFold(!isFold); else setFold(false); setCurrentSlot(slot); onActive(); }}
-                                className={classNames('select-none w-[3rem] h-[3rem] bg-grey-light border border-grey flex justify-center items-center mr-2 cursor-pointer hover:bg-grey', isActive && slot == currentSlot && 'bg-green text-black')}>
+                                className={cn('select-none w-[3rem] h-[3rem] bg-grey-light border border-grey flex justify-center items-center mr-2 cursor-pointer hover:bg-grey', isActive && slot == currentSlot && 'bg-green text-black')}>
                                 {slot}
                             </div>
                         ))
                     }
                 </div>
                 <div className='overflow-hidden'>
-                    <div className={classNames('flex flex-col pt-4 transition-all overflow-hidden', isActive && !isFold ? 'translate-y-0' : '-translate-y-full h-0')}>
-                        <span className='py-4'>Available courts</span>
+                    <div className={cn('flex flex-col pt-4 transition-all overflow-hidden', isActive && !isFold ? 'translate-y-0' : '-translate-y-full h-0')}>
+                        <span className='py-4'>Available courts &nbsp; <b>{moment(date).format('dddd, Do MMMM YYYY')} {currentSlot}:00</b></span>
                         {
                             center?.courts.map((court, key) => {
                                 return (
@@ -229,3 +235,62 @@ const Paginator = ({activePage, setActivePage, rows}) => {
         />
     )
 }
+
+const MapPin = ({ text, onClick }) => {
+    const [hover, setHover] = useState(false);
+    return (
+      <div className='cursor-pointer relative' onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+        <Image src='/images/centers/padel.png' className='w-[2rem]'/>
+        <Tooltip visible={hover} className={cn('absolute left-[2rem] bottom-0', hover && '!opacity-70 bg-green !text-[#1a424a] font-bold')}>
+          <span className='text-black text-md'>{text}</span>
+          <br/>
+          <Link href={`https://www.google.com/maps/search/${text.replace(' ', '+')}`} target='_blank' className='font-bold text-sm'>GoogleMap</Link>
+        </Tooltip>
+      </div>
+  )};
+  
+function Maps({centers=[], onCenterClick}) {
+    const defaultProps = {
+      center: {
+        lat: 59.950272862410756,
+        lng: 10.880461887376
+      },
+      zoom: 6
+    };
+  
+    const ref = useRef<GoogleMapReact>();
+  
+    useEffect(() => {
+      if(!ref.current) return;
+      const fullscreenBtn = document.querySelector(".gm-control-active.gm-fullscreen-control");
+      if(fullscreenBtn) {
+        fullscreenBtn.setAttribute('hidden', 'hidden');
+      }
+    }, [ref]);
+  
+    return (
+      // Important! Always set the container height explicitly
+      <div style={{ height: '32rem', width: '100%' }}>
+        <GoogleMapReact
+          ref={ref}
+          bootstrapURLKeys={{key:''}}
+          defaultCenter={defaultProps.center}
+          defaultZoom={defaultProps.zoom}
+          options={{gestureHandling: 'greedy', fullscreenControlOptions: {position:9}}}
+        >
+          {
+            centers.map((center, key) => 
+              <MapPin
+                key={key}
+                lat={center.latitude}
+                lng={center.longitude}
+                text={center.name}
+                onClick={() => onCenterClick(center)}
+              />
+            )
+          }
+        </GoogleMapReact>
+      </div>
+    );
+}
+  

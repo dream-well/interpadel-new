@@ -41,13 +41,14 @@ const RightSide = () => {
                     placeholder='Select date'
                     value={date}
                     onChange={date => dispatch(setDate(date))}
+                    cleanable={false}
                 />
             }
             <NavSearch />
             <LanguagePicker />
             {
                 _id ?
-                <DropDownMenu name={firstname + ' ' + lastname} image={image} />
+                <DropDownMenu name={firstname} image={image} />
                 :
                 <div className='flex items-center'>
                     <Link href='/auth/login' className='ml-[2.5rem]'>Log in</Link>

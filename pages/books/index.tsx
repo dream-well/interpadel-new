@@ -7,6 +7,7 @@ import Image from 'components/Image';
 import moment from 'moment';
 import useApi from 'hooks/useApi';
 import cn from 'classnames';
+import GoogleMapReact from 'google-map-react';
 
 export default function Books() {
 
