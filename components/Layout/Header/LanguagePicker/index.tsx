@@ -9,7 +9,7 @@ export default function LanguagePicker() {
             appearance='subtle'
             cleanable={false}
             searchable={false}
-            className='w-[7rem] mr-2' 
+            className='w-[8rem] mr-2' 
         />
     )
 }

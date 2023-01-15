@@ -18,6 +18,7 @@ import cn from 'classnames';
 import moment from 'moment';
 import { setDate, setQuery } from 'store/slices/appSlice';
 import GoogleMapReact from 'google-map-react';
+import Loader from 'components/Loader';
 
 const ROW_PER_PAGE = 5;
 
@@ -31,7 +32,7 @@ export default function Bookings() {
     const query = useAppSelector(state => state.app.query);
     const router = useRouter();
     const q = router.query.q;
-    const {data: centers, error, mutate} = useApi('/api/centers', {address: q ?? ''});
+    const {data: centers, loading, mutate} = useApi('/api/centers', {address: q ?? ''});
 
     useEffect(() => {
         if(q == query) return;
@@ -82,7 +83,9 @@ export default function Bookings() {
             )
         });
     }
-    
+    if(loading && !centers) {
+        return <Loader />
+    }
     return (
         <div>
             <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] my-[4.375rem]'>

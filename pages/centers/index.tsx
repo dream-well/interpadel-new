@@ -1,7 +1,5 @@
 import LocationIcon from "@rsuite/icons/Location";
 import { Input, Button, DatePicker, SelectPicker, DateRangePicker, Tooltip, Whisper } from "rsuite";
-import SearchIcon from "@rsuite/icons/Search";
-import useSWR from "swr";
 import axios from 'axios';
 import { fetcher } from "utils/helpers";
 import Link from 'next/link';
