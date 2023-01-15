@@ -12,6 +12,10 @@ export const Menus = () => {
             title: 'Booking',
             href: '/bookings'
         },
+        {
+            title: 'Activity',
+            href: '/activities'
+        },
     ]
     if(_id)
         menus.push(

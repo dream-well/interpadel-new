@@ -12,6 +12,8 @@ import useApi from 'hooks/useApi';
 import axios from 'axios';
 import Loader from 'components/Loader';
 import { useAppSelector } from 'store/hook';
+import EmailFillIcon from '@rsuite/icons/EmailFill';
+import MessageBox from 'components/MessageBox';
 
 const ROW_PER_PAGE = 3;
 
@@ -54,7 +56,7 @@ export default function Matching() {
     }
 
     return (
-        <div className='px-[8.5rem] flex flex-col space-y-[3.5rem] py-[4.375rem] bg-grey-dark'>
+        <div className='px-[8.5rem] flex flex-col space-y-[2rem] py-[2rem] bg-grey-dark'>
             {/* <SearchSection
                 value={query}
                 onSearch={handleSearch}
@@ -78,31 +80,43 @@ export default function Matching() {
     )
 }
 
-const MatchingCard = ({_id, image, firstname, lastname, address, matching = 45, level, onOpenModal}) => (
-    <div className='flex bg-dark space-x-[2.5rem] px-[3rem] py-[2.5rem] text-white items-center rounded-[1rem] border border-grey'>
+const MatchingCard = ({_id, image, firstname, lastname, address, matching = 45, level, onOpenModal}) => {
+
+    const [isOpen, setOpen] = useState(false);
+    return (
+    <div className='flex bg-dark space-x-[1rem] px-[3rem] py-[2rem] text-white items-center rounded-[1rem] border border-grey'>
         <Avatar src={image} alt={`Player ${firstname}`}  className='w-[6rem] h-[6rem]' />
-        <div className='flex flex-col flex-grow space-y-2'>
+        <div className='flex flex-col flex-grow space-y-2 w-[4rem]'>
             <div className='flex space-x-2'>
                 {/* <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{rate.toFixed(1)}</span> */}
                 <span className='text-[#F4F3F4] items-center text-xl saira font-bold'>{firstname + ' ' + lastname}</span>
             </div>
-            <span className='flex space-x-2 items-center'>
+            <span className='flex space-x-2 items-center text-sm'>
                 <LocationIcon/>
-                <span>{address}</span>
+                <span>{address ? address : 'Unknown'}</span>
             </span>
             <Progress.Line percent={matching} showInfo={false} className='px-0' />
-            <span className='0.875rem'>{firstname} Matches your profile {matching}%</span>
+            <span className='text-sm'>{firstname} Matches your profile {matching}%</span>
         </div>
-        <span className='flex flex-grow justify-end'>Plays Padel at Level {level}</span>
+        <div className='flex-grow'></div>
         <Button 
+            className='flex rounded-xl h-[3rem] px-[1.5rem] py-[0.75rem] items-center justify-center space-x-2 text-[1.5rem]'
+            onClick={() => setOpen(true)}
+            appearance='ghost'
+        >
+            <EmailFillIcon className='text-lg cursor-pointer' onClick={() => {setOpen(true)}}/>
+        </Button>
+        {/* <Button 
             className='flex rounded-xl bg-green text-black w-[12rem] h-[3rem] px-[1.5rem] py-[0.75rem] items-center justify-center space-x-2 text-[1.5rem]'
             onClick={() => onOpenModal(_id)}
         >
             <span>Make a team</span>
             <CreditCardPlusIcon />
-        </Button>
+        </Button> */}
+        <MessageBox isOpen={isOpen} onClose={() => setOpen(false)} to={_id} name={firstname}/>
     </div>
-)
+)}
+
 const SearchSection = ({value, onSearch}) => {
     const [query, setQuery] = useState(value);
 
@@ -132,7 +146,7 @@ const SearchSection = ({value, onSearch}) => {
 }
 const Matchings = ({ matchings, onOpenModal }) => {
     return (
-        <div className='flex flex-col space-y-[1.5rem]'>
+        <div className='flex flex-col space-y-[2rem]'>
             {matchings?.map((match, i) => (
                 <MatchingCard
                     {...match}

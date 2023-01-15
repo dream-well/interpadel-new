@@ -10,6 +10,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setDate } from "store/slices/appSlice";
+import EmailIcon from '@rsuite/icons/Email';
+import SpeakerIcon from '@rsuite/icons/Speaker';
+import { FaBell } from 'react-icons/fa'
 
 export default function Header({banner, className = ''}) {
     return (
@@ -48,7 +51,13 @@ const RightSide = () => {
             <LanguagePicker />
             {
                 _id ?
-                <DropDownMenu name={firstname} image={image} />
+                <div className='flex items-center space-x-2'>
+                    <Link href='/messages' className={router.pathname == '/messages' && 'text-green'}>
+                        <EmailIcon className='cursor-pointer text-xl mr-4' />
+                    </Link>
+                    <FaBell className='cursor-pointer text-xl' />
+                    <DropDownMenu name={firstname} image={image} />
+                </div>
                 :
                 <div className='flex items-center'>
                     <Link href='/auth/login' className='ml-[2.5rem]'>Log in</Link>

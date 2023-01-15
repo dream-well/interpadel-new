@@ -17,6 +17,8 @@ import { updateProfile } from 'store/slices/authSlice';
 import useApi from 'hooks/useApi';
 import moment from 'moment';
 import BookingChart from 'components/BookingChart';
+import EmailFillIcon from '@rsuite/icons/EmailFill';
+import MessageBox from 'components/MessageBox';
 
 export default function Profile() {
     const { firstname, lastname, image, level } = useAppSelector(state => state.auth);
@@ -29,26 +31,22 @@ export default function Profile() {
                 rate={5.0}
                 level={level}
             />
-            <div className='flex justify-between space-x-[3.813rem] '>
-                {/* left space */}
-                <div className='flex flex-col space-y-[2.5rem] w-[18.75rem] rounded-[1rem]'>
+            <div className='flex-col space-y-[2rem] '>
+                <div className='flex justify-between'>
                     <Collection name='Favorite Centers'>
                         <Favorites />
                     </Collection>
-                    {/* <Collection name='Memberships'>
-                        <span className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white'>
-                            You are not a member at any venue.
-                        </span>
-                    </Collection> */}
+                    <UpcomingBooking />
+                </div>
+                {/* left space */}
+                <div className='flex justify-between space-x-12'>
                     <Collection name='Matching Players'>
                         <Matchings />
                     </Collection>
-                </div>
-                {/* right space */}
-                <div className='flex flex-col space-y-[2.5rem] flex-grow'>
-                    <UpcomingBooking />
-                    <UpcomingActivity />
-                    <TeamMembers />
+                    <div className='flex flex-col space-y-[2rem] flex-grow'>
+                        <UpcomingActivity />
+                        <TeamMembers />
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,7 +137,7 @@ const Summary = ({name, avatar, rate, level}) => {
     )
 }
 
-const FavoriteCard = ({_id, image, name, address}) => (
+const FavoriteCard = ({_id, image, name, city}) => (
     <div className='flex bg-[#1d1829] space-x-5 p-[1rem] text-white items-center'>
         <div className='w-[3rem] h-[3rem] border-1 items-center'>
             <Link href={`/centers/${_id}/today`}>
@@ -150,10 +148,10 @@ const FavoriteCard = ({_id, image, name, address}) => (
             <Link href={`/centers/${_id}/today`}>
                 <span>{name}</span>
             </Link>
-            {address && <span className='flex space-x-2 items-center'>
+            <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
-                <span>{address}</span>
-            </span>}
+                <span>{city ?? "Unknown"}</span>
+            </span>
         </div>
     </div>
 )
@@ -170,7 +168,7 @@ const Matchings = () => {
                 <span>No matching players</span>   
             )}
             {matchingPlayers?.length > 3 && (
-                <Link href={'/matching'}>More...</Link>
+                <Link href={'/matching'} className='mt-4'>More...</Link>
             )}
         </div>
     )
@@ -194,29 +192,36 @@ const Favorites = () => {
     )
 }
 
-const MatchingCard = ({image, firstname, lastname, address, level/*, matching*/}) => (
-    <div className='flex space-x-5 p-[1rem] text-white items-center'>
+const MatchingCard = ({_id, image, firstname, lastname, city, level/*, matching*/}) => {
+    const [isOpen, setOpen] = useState(false);
+    return (
+    <div className='flex space-x-5 p-[1rem] text-white items-center border-b border-grey'>
         <div className='flex w-[2.5rem] h-[2.5rem]'>
             <Avatar src={image} className='w-[2.5rem] h-[2.5rem]' />
         </div>
         <div className='flex flex-col flex-grow space-y-2 text-left'>
-            <div className='flex space-x-5'>
+            <div className='flex space-x-2'>
                 <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>{level}</span>
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
                 {/* <EmailIcon className='justify-end' /> */}
             </div>
-            {address && (<span className='flex space-x-2 items-center'>
+            <span className='flex space-x-2 items-center'>
                 <LocationIcon className='!w-[1rem]'/>
-                <span className='whitespace-wrap'>{address}</span>
-            </span>)}
+                <span className='whitespace-wrap'>{city ?? "Unknown"}</span>
+            </span>
             <Progress.Line percent={level * 10} showInfo={false} className='px-0' />
             {/* <span className='0.875rem'>Match score: {matching}%</span> */}
         </div>
+        <div className='pr-2'>
+            <EmailFillIcon className='text-lg cursor-pointer' onClick={() => {setOpen(true)}}/>
+        </div>
+        <MessageBox isOpen={isOpen} onClose={() => setOpen(false)} to={_id} name={firstname}/>
     </div>
-)
+    )
+}
 
 const Collection = ({name, children}) => (
-    <div className='flex flex-col space-y-1 border border-grey bg-dark rounded-[1rem]'>
+    <div className='flex flex-col space-y-1 border border-grey bg-dark rounded-[1rem] w-[20rem]'>
         <span className='p-5 font-bold text-[1.25rem] bg-green-dark rounded-t-[1rem] text-dark'>{name}</span>
         {children}
     </div>
@@ -250,7 +255,7 @@ const UpcomingBooking = () => {
     }
     
     return (
-        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[2rem] border border-grey rounded-[1rem]'>
+        <div className='ml-12 flex-grow flex flex-col p-[2.5rem] bg-dark space-y-[2rem] border border-grey rounded-[1rem]'>
             <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
                 <CalendarIcon />
                 <span>Upcoming Booking</span>
@@ -285,7 +290,7 @@ const UpcomingActivity = () => {
     )
 }
 
-const TeamMember = ({image, firstname, lastname, address, level, team}) => (
+const TeamMember = ({image, firstname, lastname, city, level, team}) => (
     <div className='flex bg-[#2c303a] space-x-[1rem] p-[2rem] text-white items-center rounded-xl'>
         <Avatar src={image} className='w-[5rem] h-[5rem]'/>
         <div className='flex flex-col space-y-2'>
@@ -293,9 +298,9 @@ const TeamMember = ({image, firstname, lastname, address, level, team}) => (
                 <span className='rounded-md bg-green text-black px-[0.5rem] py-[0.2rem] text-[0.75rem]'>Level : {level}</span>
                 <span className='text-[#F4F3F4] items-center'>{firstname + ' ' + lastname}</span>
             </div>
-            {address !== undefined && <span className='flex space-x-2 items-center'>
+            {city !== undefined && <span className='flex space-x-2 items-center'>
                 <LocationIcon/>
-                <span>{address}</span>
+                <span>{city}</span>
             </span>}
         </div>
         <span className='flex flex-grow justify-end'>{team}</span>
@@ -322,7 +327,7 @@ const TeamMembers = () => {
                     image: m.image,
                     firstname: m.firstname,
                     lastname: m.lastname,
-                    address: (!m.address) ? undefined : (m.address + ', ' + m.city + ', ' + m.country),
+                    city: (!m.city) ? 'Unknown' : m.city,
                     level: m.level,
                     team: d.name
                 }

@@ -17,6 +17,11 @@ const nextConfig = {
         destination: process.env.API_HOST + '/images/:path*',
         permanent: true,
       },
+      {
+        source: '/api/:path*',
+        destination: process.env.API_HOST + '/:path*',
+        permanent: true,
+      },
     ]
   },
 }

@@ -18,10 +18,11 @@ import cn from 'classnames';
 import moment from 'moment';
 import { setDate, setQuery } from 'store/slices/appSlice';
 import GoogleMapReact from 'google-map-react';
+import PeoplesIcon from '@rsuite/icons/Peoples';
 
 const ROW_PER_PAGE = 5;
 
-export default function Bookings() {
+export default function Activities() {
 
     const dispatch = useDispatch();
 
@@ -35,7 +36,7 @@ export default function Bookings() {
 
     useEffect(() => {
         if(q == query) return;
-        // router.replace('/bookings?q=' + query);
+        // router.replace('/activities?q=' + query);
     }, [query])
 
     useEffect(() => {
@@ -98,12 +99,11 @@ export default function Bookings() {
                 )}
                 {centers?.length === 0 && <NoItems className='text-black' href={'/centers'} text='No Favorite centers yet' />}
             </div>
-            <Maps centers={centers} onCenterClick={(center) => dispatch(setQuery(center.name))} />
         </div>
     )
 }
 
-const Center = ({image, name, address, courts, description, _id, onRemove, isFavorite=false, onToggleFavorite, isActive, onActive}) => {
+const Center = ({image, name, city, courts, description, _id, onRemove, isFavorite=false, onToggleFavorite, isActive, onActive}) => {
     const toggleFavorite = (evt) => {
       evt.preventDefault();
       onToggleFavorite(_id);
@@ -142,59 +142,37 @@ const Center = ({image, name, address, courts, description, _id, onRemove, isFav
                 <Link href={`/centers/${_id}/today`}  className='text-[2rem] font-bold saira'>
                     {name}
                 </Link>
-                <span className='flex space-x-2 items-center'>
+                <span className='flex space-x-1 items-center'>
                     <LocationIcon/>
-                    <span>{address}</span>
+                    <span>{city}</span>
                 </span>
-                {/* <span className='flex space-x-2 items-center'>
-                    <AbTestIcon/>
-                    <span>{courts.length} Bookable courts</span>
-                </span> */}
-                <div className='text-sm'>
-                    {courts.length} courts are available
-                </div>
             </div>
-            <div className='flex flex-col ml-8'>
-                <div className='flex items-start justify-start flex-grow flex-wrap'>
-                    {
-                        timeSlots.map((slot, key) => (
-                            <div 
-                                key={key}
-                                onClick={() => { if(isActive && currentSlot == slot) setFold(!isFold); else setFold(false); setCurrentSlot(slot); onActive(); }}
-                                className={cn('select-none w-[3rem] h-[3rem] bg-grey-light border border-grey flex justify-center items-center mr-2 cursor-pointer hover:bg-grey', isActive && slot == currentSlot && 'bg-green text-black')}>
-                                {slot}
-                            </div>
-                        ))
-                    }
+            <div className='flex flex-col ml-8 flex-grow'>
+                <div className='flex justify-between text-xl font-bold'>
+                    <span>Beat the Boss</span>
+                    <span>Level 4 - 8</span>
                 </div>
-                <div className='overflow-hidden'>
-                    <div className={cn('flex flex-col pt-4 transition-all overflow-hidden', isActive && !isFold ? 'translate-y-0' : '-translate-y-full h-0')}>
-                        <span className='py-4'>Available courts &nbsp; <b>{moment(date).format('dddd, Do MMMM YYYY')} {currentSlot}:00</b></span>
-                        {
-                            center?.courts.map((court, key) => {
-                                return (
-                                    <div key={key} className='flex border py-2 px-4 justify-between items-center text-sm'>
-                                        <span className='w-[20rem]'>
-                                        { court.name }
-                                        </span>
-                                        {/* <span className='flex-grow'>
-                                        </span> */}
-                                        <div className='pr-8'>
-                                            60 min
-                                        </div>
-                                        <div className='pr-8'>
-                                            {court.type}
-                                        </div>
-                                        <div className='flex flex-col space-y-1'>
-                                            <span>{ court.price } NOK</span>
-                                            <Button className='bg-green' color='green' appearance='ghost' onClick={() => {gotoPayment(court, currentSlot)}}>
-                                                Book
-                                            </Button>
-                                        </div>
-                                    </div>
-                                )
-                            })
-                        }
+                <div className='text-sm py-2 flex justify-between items-end'>
+                    <div className={cn('flex-shrink w-[20rem] flex-grow', isFold ? 'truncate': '')}>
+                        <span className={isFold ? 'whitespace-pre': ''}>
+                            Vem älskar inte en Vinnarbana? Konceptet är enkelt men väldigt roligt. Vinner ni så avancerar ni upp mot Vinnarbanan, förlorar ni så kommer ni närmare Träskbanan. Som en extra morot står Marcus Lindmark och Joakim Andersson på Träskbanan från start. Står du och din partner som segrare när tiden är slut får ni tillbaka anmälningsavgiften! Ni anmäler er individuellt men om ni önskar att spela med en viss person så skriver ni detta i kommentarsfältet när ni bokar. Har du ingen partner så paras du ihop med någon på plats. Ni hänger ihop med er partner under hela aktiviteten. Platserna var man startar lottas förutom för Marcus och Joakim som börjar på Träskbanan. - Det här är ingen aktivitet för dåliga förlorare, hälsar Joakim.
+                        </span>
+                    </div>
+                    <span className='w-[5rem] text-right cursor-pointer text-green-dark' onClick={() => { setFold(!isFold) }}>
+                        {isFold ? 'Read more' : 'Show less'}
+                    </span>
+                </div>
+                <div className='flex justify-between items-center'>
+                    <div className='font-bold w-[14rem]'>
+                        { '01-15-2023' } 13:00 - 15:00
+                    </div>
+                    <div className='font-bold space-x-1 flex items-center px-3 py-1 rounded rounded-[4rem] bg-green-dark'>
+                        <PeoplesIcon />
+                        <span className=''>7 / 10</span>
+                    </div>
+                    <div className='flex-grow'></div>
+                    <div className='font-bold'>
+                        {175} SEK
                     </div>
                 </div>
             </div>
@@ -235,60 +213,3 @@ const Paginator = ({activePage, setActivePage, rows}) => {
         />
     )
 }
-
-const MapPin = ({ text, onClick }) => {
-    const [hover, setHover] = useState(false);
-    return (
-      <div className='cursor-pointer relative' onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-        <Image src='/images/centers/padel.png' className='w-[2rem]'/>
-        <Tooltip visible={hover} className={cn('absolute left-[2rem] bottom-0', hover && '!opacity-70 bg-green !text-[#1a424a] font-bold')}>
-          <span className='text-black text-md'>{text}</span>
-          <br/>
-          <Link href={`https://www.google.com/maps/search/${text.replace(' ', '+')}`} target='_blank' className='font-bold text-sm'>GoogleMap</Link>
-        </Tooltip>
-      </div>
-  )};
-  
-function Maps({centers=[], onCenterClick}) {
-    const defaultProps = {
-      center: {
-        lat: 59.950272862410756,
-        lng: 10.880461887376
-      },
-      zoom: 6
-    };
-  
-    const ref = useRef<GoogleMapReact>();
-  
-    useEffect(() => {
-      if(!ref.current) return;
-      const fullscreenBtn = document.querySelector(".gm-control-active.gm-fullscreen-control");
-      if(fullscreenBtn) {
-        fullscreenBtn.setAttribute('hidden', 'hidden');
-      }
-    }, [ref]);
-  
-    return (
-      // Important! Always set the container height explicitly
-      <div style={{ height: '32rem', width: '100%' }}>
-        <GoogleMapReact
-          ref={ref}
-          bootstrapURLKeys={{key:''}}
-          defaultCenter={defaultProps.center}
-          defaultZoom={defaultProps.zoom}
-          options={{gestureHandling: 'greedy', fullscreenControlOptions: {position:9}}}
-        >
-          {
-            centers.map((center, key) => 
-              <MapPin
-                key={key}
-                text={center.name}
-                onClick={() => onCenterClick(center)}
-              />
-            )
-          }
-        </GoogleMapReact>
-      </div>
-    );
-}
-  

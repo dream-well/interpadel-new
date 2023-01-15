@@ -1,7 +1,7 @@
 import SearchIcon from '@rsuite/icons/Search';
 import Avatar from 'components/Avatar';
 import useApi from 'hooks/useApi';
-import {  useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { Button, Input, InputGroup, List, useToaster } from 'rsuite'
 import SendIcon from '@rsuite/icons/Send';
 import axios from 'axios';
@@ -11,14 +11,18 @@ import moment from 'moment';
 
 export default function Messages() {
     
-    const [currentUser, setCurrentUser] = useState({})
+    const [currentUser, setCurrentUser] = useState<any>({})
     const [query, setQuery] = useState('')
 
     const { data: users } = useApi('/api/chats/contacts', { query: query || '' })
-
+    useEffect(() => {
+        if(users && !currentUser._id) {
+            setCurrentUser(users[0]);
+        }
+    }, [users])
     return (
-        <div className='flex px-[8.5rem] bg-grey-dark'>
-            <div className='flex flex-col w-1/4 border-r-2 p-[1rem]'>
+        <div className='flex px-[16em] bg-grey-dark py-9'>
+            <div className='flex flex-col w-1/4 p-[1rem]'>
                 <SearchBox
                     query={query}
                     onSearch={setQuery}
@@ -75,11 +79,14 @@ const Users = ({users, currentUser, onUserChange, className=''}) => {
 
         return (
             <List.Item 
-                className={cn('flex p-[1rem] items-center', className, isSelected ? "bg-grey border-r-white border-r-[1rem]" : "")}
+                className={cn('flex p-[1rem] items-center cursor-pointer select-none', className, isSelected ? "bg-grey" : "")}
                 onClick={() => onClick(user)}
             >
                 <Avatar src={user.image} alt={name} className='w-[2rem] h-[2rem]' />
-                <span className='pl-[1rem]'>{name}</span>
+                <div className='flex flex-col ml-4'>
+                    <span className=''>{name}</span>
+                    <span className='text-xs'>{user.email}</span>
+                </div>
             </List.Item>
         )
     }
@@ -100,7 +107,8 @@ const Users = ({users, currentUser, onUserChange, className=''}) => {
 
 const MessagePanel = ({ currentUser }) => {
 
-    const { data: messages, mutate } = useApi(`/api/chats/${currentUser._id}`)
+    const { data, mutate } = useApi(`/api/chats/${currentUser._id}`)
+    const messages = data ? [...data].reverse() : [];
     const [message, setMessage] = useState('')
 
     const toaster = useToaster();
@@ -128,7 +136,7 @@ const MessagePanel = ({ currentUser }) => {
 
     const InfoPanel = ({user}) => {
         
-        const name = user.firstname + ' ' + user.lastname;
+        const name = user ? user.firstname + ' ' + user.lastname : '';
 
         const Info = ({detail, value}) => (
             <span>
@@ -137,15 +145,21 @@ const MessagePanel = ({ currentUser }) => {
         )
         
         return (
-            <div className='flex flex-col border-b-2 p-[1rem] justify-center'>
-                <div className='flex space-x-[1rem] items-center'>
-                    <Avatar alt={name} src={user.image} className='w-[2rem] h-[2rem]' />
-                    <span>{name}</span>
-                </div>
-                <div className='flex space-x-[2rem]'>
-                    <Info detail='Email' value={user.email} />
-                    <Info detail='Address' value={user.address} />
-                </div>
+            <div className='flex flex-col border-b-2 border-grey p-[1rem] justify-center'>
+                {
+                    user.image ? 
+                    <div>
+                        <div className='flex space-x-[1rem] items-center'>
+                            <Avatar alt={name} src={user?.image} className='w-[2rem] h-[2rem]' />
+                            <span>{name}</span>
+                        </div>
+                        <div className='flex space-x-[2rem]'>
+                            <Info detail='Email' value={user?.email} />
+                            <Info detail='Address' value={user?.address} />
+                        </div>
+                    </div> :
+                    <div className='pt-6 font-bold'> Messages </div>
+                }
             </div>
         )
     }
@@ -154,25 +168,23 @@ const MessagePanel = ({ currentUser }) => {
         const time = moment(chat.createdAt);
         if (chat?.message === '')   return <></>
         return (
-            <div className={cn('flex flex-col m-1 p-2 bg-grey rounded-[0.5rem] w-auto', chat?.to === currentUser?._id ? "text-right" : "text-left")}>
-                <i className='text-[0.8rem]'>{time.format("yyyy-MM-DD hh:mm:ss A")}</i>
-                <span className='text-[1rem]' >{chat.message}</span>
+            <div className={cn('flex m-1 w-min min-w-[16rem] items-center', chat?.to === currentUser?._id && "ml-auto flex-row-reverse")}>
+                {/* { chat?.to !== currentUser?._id &&<img src={`/api/users/avatar/${chat?.from}`} className='w-[4rem] h-[4rem] rounded-full'/>} */}
+                <div className='flex flex-col mx-2 bg-grey rounded-[0.5rem] p-2'>
+                    <i className='text-xs'>{time.format("yyyy-MM-DD hh:mm:ss A")}</i>
+                    <div >{chat.message}</div>
+                </div>
             </div>
         )
     }
 
     return (
         <div className='flex flex-col text-white'>
-            {currentUser?._id && <InfoPanel user={currentUser} />}
-            {messages?.length > 0 && (
-                <div className='p-2'>
-                    {messages.map((msg, index) => <ChatElement key={index} chat={msg} />)}
-                </div>
-            )}
-            {messages?.length === 0 && (
-                <span className='p-3'>No Messages with this player</span>
-            )}
-            <div className='flex space-x-2 p-3 border-t-2'>
+            <InfoPanel user={currentUser} />
+            <div className='p-2 justify-start flex flex-col-reverse overflow-auto h-[30rem] h-pull'>
+                {messages?.map((msg, index) => <ChatElement key={index} chat={msg} />)}
+            </div>
+            <div className='flex space-x-2 p-3'>
                 <Input 
                     as="textarea"
                     rows={3}
