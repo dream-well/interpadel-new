@@ -45,7 +45,7 @@ export default function Profile() {
                     </Collection>
                     <div className='flex flex-col space-y-[2rem] flex-grow'>
                         <UpcomingActivity />
-                        <TeamMembers />
+                        {/* <TeamMembers /> */}
                     </div>
                 </div>
             </div>
@@ -278,7 +278,7 @@ const UpcomingBooking = () => {
 
 const UpcomingActivity = () => {
     return (
-        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[3.313rem]  border border-grey rounded-[1rem]'>
+        <div className='flex flex-col p-[2.5rem] bg-dark space-y-[3.313rem]  border border-grey rounded-[1rem] flex-grow'>
             <span className='text-white flex items-center space-x-2 text-[1.75rem] font-bold'>
                 <CalendarIcon />
                 <span>Upcoming Activities</span>

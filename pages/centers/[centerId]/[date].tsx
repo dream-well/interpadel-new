@@ -380,11 +380,11 @@ return (
     <Modal.Body className='space-y-5'>
       <div className='flex p-4 bg-grey-dark justify-between'>
         <div className='flex'>
-          <Image src={bookingDetail.user.image} className='w-[5rem] h-[5rem] bg-white border object-cover'/>
+          <Image src={bookingDetail.customer.image} className='w-[5rem] h-[5rem] bg-white border object-cover'/>
           <div className='flex flex-col'>
-            <span className='text-white pl-4 text-lg font-bold'>{bookingDetail.user.firstname} {bookingDetail.user.lastname}</span>
-            <span className='text-white pl-4 '>{bookingDetail.user.email}</span>
-            <span className='text-white pl-4 '>{bookingDetail.user.phone}</span>
+            <span className='text-white pl-4 text-lg font-bold'>{bookingDetail.customer.firstname} {bookingDetail.customer.lastname}</span>
+            <span className='text-white pl-4 '>{bookingDetail.customer.email}</span>
+            <span className='text-white pl-4 '>{bookingDetail.customer.phone}</span>
           </div>
         </div>
         <div className='flex flex-col text-white items-end'>

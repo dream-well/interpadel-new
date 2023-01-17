@@ -149,6 +149,7 @@ const Optional = ({ formValue, setFormValue }) => (
       <Form.ControlLabel>Gender</Form.ControlLabel>
       <SelectPicker
         size="lg"
+        classPrefix='selector'
         name="gender"
         placeholder="Select Gender"
         data={genderData}
