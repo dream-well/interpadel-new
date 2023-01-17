@@ -107,7 +107,7 @@ const Users = ({users, currentUser, onUserChange, className=''}) => {
 
 const MessagePanel = ({ currentUser }) => {
 
-    const { data, mutate } = useApi(`/api/chats/${currentUser._id}`)
+    const { data, mutate } = useApi(currentUser?._id ? `/api/chats/${currentUser._id}`: null);
     const messages = data ? [...data].reverse() : [];
     const [message, setMessage] = useState('')
 
